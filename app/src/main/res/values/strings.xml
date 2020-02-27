@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">NurseCallApp</string>
+
+    <string name="delete_text">Are you sure you want to delete your selection?</string>
+</resources>
