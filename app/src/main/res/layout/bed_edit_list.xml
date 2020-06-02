@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/bed_edit_list"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:background="#C7C7C7"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/bed_cancel"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.2"
+
+        android:contentDescription="Cancel button"
+        android:padding="15dp"
+        android:src="@drawable/cancel_edit_default" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.4" />
+
+    <ImageView
+        android:id="@+id/bed_select_all"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.2"
+        android:padding="15dp"
+        android:src="@drawable/select_all_default" />
+
+    <ImageView
+        android:id="@+id/bed_deselect_all"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:padding="15dp"
+        android:src="@drawable/deselect_all_default"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/bed_delete_item"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.2"
+        android:padding="15dp"
+        android:src="@drawable/delete_default" />
+
+</LinearLayout>

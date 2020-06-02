@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/back_aqua_splash">
+
+    <TextView
+        android:id="@+id/call_where"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="2000"
+        android:textSize="30sp"
+        app:layout_constraintTop_toBottomOf="@id/call_where_bed" />
+
+    <TextView
+        android:id="@+id/call_where_bed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/nanum_bold"
+        android:gravity="center"
+        android:text="12병동 101호실 1번 병상"
+        android:textColor="@color/white"
+        android:textSize="40sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias=".3" />
+
+
+    <!--    <RelativeLayout-->
+    <!--        android:id="@+id/top_bar_incoming"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="60dp"-->
+    <!--        app:layout_constraintTop_toTopOf="parent"-->
+    <!--        android:background="#58237A">-->
+
+    <!--        <TextView-->
+    <!--            style="@style/toolbar1_title_font"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:gravity="center"-->
+    <!--            android:paddingLeft="10dp"-->
+    <!--            android:text="CALL INCOMING !!!" />-->
+
+
+    <!--    </RelativeLayout>-->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageButton
+            android:id="@+id/offCall"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:background="@drawable/button_red_circle_in"
+            android:paddingTop="40dp"
+            android:paddingBottom="40dp"
+            android:src="@drawable/ic_close_black_60dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias=".3"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias=".8" />
+
+        <ImageButton
+            android:id="@+id/onCall"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:background="@drawable/button_green_circle_in"
+            android:paddingTop="40dp"
+            android:paddingBottom="40dp"
+            android:src="@drawable/ic_call_white_60dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias=".7"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias=".8" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <!--    <TextView-->
+    <!--        style="@style/toolbar_title_font"-->
+    <!--        android:id="@+id/in_name"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:gravity="center"-->
+    <!--        android:paddingLeft="10dp"-->
+    <!--        android:text="Name"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/menu" />-->
+
+    <!--    <TextView-->
+    <!--        style="@style/toolbar_title_font"-->
+    <!--        android:id="@+id/in_num"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:gravity="center"-->
+    <!--        android:paddingLeft="10dp"-->
+    <!--        android:text="Number"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/in_name" />-->
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

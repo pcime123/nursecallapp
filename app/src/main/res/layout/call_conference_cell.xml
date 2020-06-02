@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layout_margin="10dp">
+
+<!--        <RelativeLayout-->
+<!--            android:id="@+id/avatar"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="center_vertical"-->
+<!--            android:gravity="center">-->
+
+<!--            <include layout="@layout/contact_avatar" />-->
+
+<!--        </RelativeLayout>-->
+
+        <LinearLayout
+            android:id="@+id/contact"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:paddingLeft="5dp"
+            android:paddingRight="10dp"
+            android:orientation="vertical">
+
+            <com.sscctv.nursecallapp.ui.utils.MarqueeTextView
+                android:id="@+id/contact_name"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_vertical|left"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:singleLine="true"
+                android:paddingLeft="20dp"
+                android:paddingRight="10dp" />
+
+            <Chronometer
+                android:id="@+id/call_timer"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|right" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/remove_from_conference"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginRight="10dp"
+            android:layout_gravity="center_vertical"
+            android:adjustViewBounds="true"
+            android:gravity="center_vertical"
+            android:src="@drawable/conference_exit_default" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/white" />
+
+</LinearLayout>

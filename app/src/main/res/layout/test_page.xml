@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/intro_background"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/firstCall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1011"/>
+
+        <Button
+            android:id="@+id/btnFirstCall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="First Call"
+            />
+
+        <EditText
+            android:id="@+id/secondCall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1006"/>
+
+        <Button
+            android:id="@+id/btnSecondCall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Second Call"
+            />
+
+        <EditText
+            android:id="@+id/thirdCall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="110011"/>
+
+        <Button
+            android:id="@+id/btnThirdCall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Third Call"
+            />
+
+        <Button
+            android:id="@+id/btnResume"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Go Conference"
+            />
+
+        <Button
+            android:id="@+id/btnPause"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add Conference"
+            />
+    </LinearLayout>
+
+</layout>

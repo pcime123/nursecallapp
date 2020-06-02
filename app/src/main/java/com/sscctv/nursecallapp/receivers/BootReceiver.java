@@ -34,8 +34,8 @@ public class BootReceiver extends BroadcastReceiver {
 //            context.stopService(
 //                    new Intent(Intent.ACTION_MAIN).setClass(context, LinphoneService.class));
 //        } else if (intent.getAction().equalsIgnoreCase(Intent.ACTION_BOOT_COMPLETED)) {
-//            LinphonePreferences.instance().setContext(context);
-//            boolean autostart = LinphonePreferences.instance().isAutoStartEnabled();
+//            SettingsPreferences.instance().setContext(context);
+//            boolean autostart = SettingsPreferences.instance().isAutoStartEnabled();
 //            android.util.Log.i(
 //                    "Linphone", "[Boot Receiver] Device is starting, auto_start is " + autostart);
 //
@@ -43,9 +43,9 @@ public class BootReceiver extends BroadcastReceiver {
 //                startService(context);
 //            }
 //        } else if (intent.getAction().equalsIgnoreCase(Intent.ACTION_MY_PACKAGE_REPLACED)) {
-//            LinphonePreferences.instance().setContext(context);
+//            SettingsPreferences.instance().setContext(context);
 //            boolean foregroundService =
-//                    LinphonePreferences.instance().getServiceNotificationVisibility();
+//                    SettingsPreferences.instance().getServiceNotificationVisibility();
 //            android.util.Log.i(
 //                    "Linphone",
 //                    "[Boot Receiver] App has been updated, foreground service is "

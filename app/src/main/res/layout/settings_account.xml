@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:seeeyes="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:orientation="vertical">
+
+        <com.sscctv.nursecallapp.ui.utils.TextSetting
+            android:id="@+id/pref_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            seeeyes:subtitle="SubTitle Username"
+            seeeyes:hint="Username"
+            seeeyes:title="Username" >
+
+            <com.sscctv.nursecallapp.ui.utils.TextSetting
+                android:id="@+id/pref_auth_userid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                seeeyes:hint="Auth userid"
+                seeeyes:subtitle="Enter authentication userid"
+                seeeyes:title="Auth userid" />
+        </com.sscctv.nursecallapp.ui.utils.TextSetting>
+
+        <com.sscctv.nursecallapp.ui.utils.TextSetting
+            android:id="@+id/pref_passwd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            seeeyes:subtitle="SubTitle PassWord"
+            seeeyes:hint="PassWord"
+            seeeyes:title="PassWord" />
+
+        <com.sscctv.nursecallapp.ui.utils.TextSetting
+            android:id="@+id/pref_domain"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            seeeyes:subtitle="PBX Domain"
+            seeeyes:hint="Domain"
+            seeeyes:title="Domain" />
+
+        <com.sscctv.nursecallapp.ui.utils.TextSetting
+            android:id="@+id/pref_display_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            seeeyes:subtitle="Enter display name"
+            seeeyes:hint="Display name"
+            seeeyes:title="Display name" />
+
+        <TextView
+            style="@style/settings_category_font"
+            android:text="Advanced"
+            android:paddingTop="15dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <com.sscctv.nursecallapp.ui.utils.ListSetting
+            android:id="@+id/pref_transport"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            seeeyes:title="Transport" />
+
+        <com.sscctv.nursecallapp.ui.utils.TextSetting
+            android:id="@+id/pref_proxy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            seeeyes:hint="Proxy"
+            seeeyes:title="Proxy" />
+
+    </LinearLayout>
+
+</ScrollView>

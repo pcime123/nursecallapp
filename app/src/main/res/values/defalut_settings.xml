@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <bool name="first_call_mode">false</bool>
+    <bool name="first_speaker_button">false</bool>
+    <bool name="first_hook_button">false</bool>
+
+
+</resources>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/bed_list_select"
+    android:clickable="true"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="8dp"
+    android:focusable="true">
+
+    <CheckBox
+        android:id="@+id/list_checkbox"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.1"
+        android:button="@drawable/checkbox"
+        />
+
+    <TextView
+        android:id="@+id/bed_list_num"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.1"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:text="1011" />
+
+    <TextView
+        android:id="@+id/bed_list_name"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.3"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:text="간호사 호출기" />
+
+    <TextView
+        android:id="@+id/bed_list_ward"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.2"
+        android:gravity="center"
+        android:textColor="@color/black"
+
+        android:text="101" />
+
+    <TextView
+        android:id="@+id/bed_list_room"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.2"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:text="1001" />
+
+    <TextView
+        android:id="@+id/bed_list_bed"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.2"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:text="01" />
+
+
+</LinearLayout>

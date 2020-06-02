@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/White_EA">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="170dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/main_background"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+
+            >
+
+            <ImageView
+                android:id="@+id/main_logo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/asan_log"
+                app:layout_constraintTop_toTopOf="parent"
+
+                />
+
+            <View
+                android:id="@+id/line1"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@color/gray"
+                app:layout_constraintTop_toBottomOf="@id/main_logo" />
+
+            <LinearLayout
+                android:id="@+id/time_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/line1">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:id="@+id/time_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/nanum_normal"
+                        android:text="06:10"
+                        android:textColor="@color/White_EA"
+                        android:textSize="30sp" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/date_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="0dp"
+                    android:text="4월 16일 목요일"
+                    android:textColor="@color/White_EA"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <View
+                android:id="@+id/line2"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="10dp"
+                android:background="@color/gray"
+                app:layout_constraintTop_toBottomOf="@id/time_layout" />
+
+            <LinearLayout
+                android:id="@+id/ward_station"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@id/line2">
+
+                <TextView
+                    android:id="@+id/txtWard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginEnd="8dp"
+                    android:gravity="center"
+                    android:text="12 병동"
+                    android:textColor="@color/orange"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtStation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="3dp"
+                    android:gravity="center"
+                    android:text="간호사 스테이션"
+                    android:textColor="@color/White_EA"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/stat_number"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/background_number"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@id/ward_station">
+
+                <ImageView
+                    android:id="@+id/imgStat"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.4"
+                    android:padding="10dp"
+                    android:src="@drawable/led_connected" />
+
+                <TextView
+                    android:id="@+id/txtNumber"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.7"
+                    android:gravity="center"
+                    android:text="설정 안됨"
+                    android:textColor="@color/White_EA"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_dash_dashboard"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/button_home"
+                android:drawableStart="@drawable/icon_dash"
+                android:paddingStart="30dp"
+                android:paddingEnd="0dp"
+                android:text="대쉬보드"
+                app:layout_constraintTop_toBottomOf="@id/stat_number">
+
+                <requestFocus />
+            </Button>
+
+            <Button
+                android:id="@+id/btn_dash_call"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+
+                android:background="@drawable/button_home"
+                android:drawableStart="@drawable/icon_call"
+
+                android:paddingStart="30dp"
+                android:paddingEnd="0dp"
+                android:text="병상호출"
+                app:layout_constraintTop_toBottomOf="@id/btn_dash_dashboard" />
+
+            <Button
+                android:id="@+id/btn_dash_normal"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+
+                android:background="@drawable/button_home"
+                android:drawableStart="@drawable/icon_etc"
+                android:paddingStart="30dp"
+                android:paddingEnd="0dp"
+                android:text="일반호출"
+                app:layout_constraintTop_toBottomOf="@id/btn_dash_call"
+
+                />
+
+            <Button
+                android:id="@+id/btn_dash_list"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+
+                android:background="@drawable/button_home"
+                android:drawableStart="@drawable/icon_list"
+                android:paddingStart="30dp"
+                android:paddingEnd="0dp"
+                android:text="호출목록"
+                app:layout_constraintTop_toBottomOf="@id/btn_dash_normal"
+
+                />
+
+            <Button
+                android:id="@+id/btn_dash_notice"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+
+                android:background="@drawable/button_home"
+                android:drawableStart="@drawable/icon_notice"
+                android:paddingStart="30dp"
+                android:paddingEnd="0dp"
+                android:text="게시판"
+                app:layout_constraintTop_toBottomOf="@id/btn_dash_list"
+
+                />
+
+            <Button
+                android:id="@+id/btn_dash_setup"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+
+                android:background="@drawable/button_home"
+
+                android:drawableStart="@drawable/icon_setup"
+                android:paddingStart="30dp"
+                android:paddingEnd="0dp"
+                android:text="설정"
+                app:layout_constraintTop_toBottomOf="@id/btn_dash_notice" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="170dp"
+            android:background="@color/WhiteSmoke">
+
+            <FrameLayout
+                android:id="@+id/main_frame"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

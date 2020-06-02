@@ -1,0 +1,105 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/pcap_open_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/White_EA"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/layout_csv"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#E1F5FE"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="18dp"
+                android:text="CSV 파일 가져오기"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/scanning"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="20dp"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:visibility="invisible" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                >
+
+
+                <Button
+                    android:id="@+id/btnInternal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/button_home"
+                    android:drawableStart="@drawable/ic_storage_24dp"
+                    android:drawablePadding="20dp"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:text="내부 저장소"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
+
+                <Button
+                    android:id="@+id/btnSd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/button_home"
+                    android:drawableStart="@drawable/ic_sd_storage_24dp"
+                    android:drawablePadding="20dp"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:text="SD 카드"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
+
+                <Button
+                    android:id="@+id/btnUSB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/button_home"
+                    android:drawableStart="@drawable/ic_usb_24dp"
+                    android:drawablePadding="20dp"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:text="USB 메모리"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <ListView
+            android:id="@+id/scanListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="40dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layout_csv" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

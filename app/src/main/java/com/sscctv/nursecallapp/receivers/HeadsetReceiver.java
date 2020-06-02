@@ -24,9 +24,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 
-import com.sscctv.nursecallapp.service.MainAudioManager;
-import com.sscctv.nursecallapp.service.MainCallService;
-
 import org.linphone.core.tools.Log;
 
 public class HeadsetReceiver extends BroadcastReceiver {
@@ -56,12 +53,12 @@ public class HeadsetReceiver extends BroadcastReceiver {
                 Log.w("[Headset] Unknown headset plugged state: " + state);
             }
 
-            MainCallService.getAudioManager().routeAudioToEarPiece();
+//            MainCallService.getAudioManager().routeAudioToEarPiece();
 //            MainCallService.getCallManager().refreshInCallActions();
         } else if (action.equals(AudioManager.ACTION_AUDIO_BECOMING_NOISY)) {
             // This happens when the user disconnect a headset, so we shouldn't play audio loudly
             Log.i("[Headset] Noisy state detected, most probably a headset has been disconnected");
-            MainCallService.getAudioManager().routeAudioToEarPiece();
+//            MainCallService.getAudioManager().routeAudioToEarPiece();
 //            MainCallService.getCallManager().refreshInCallActions();
         } else {
             Log.w("[Headset] Unknown action: " + action);

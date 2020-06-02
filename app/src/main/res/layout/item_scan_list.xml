@@ -1,0 +1,53 @@
+<androidx.constraintlayout.widget.ConstraintLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/scan_list_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/fileIconImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:contentDescription="File"
+        android:src="@drawable/ic_insert_drive_file_36dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/fileName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:fontFamily="@font/nanum_normal"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="14dp"
+        android:ellipsize="end"
+        android:textColor="@color/black"
+        android:maxLines="1"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@id/fileIconImage"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/filePath"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/fileName"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/nanum_light"
+        android:ellipsize="end"
+        android:textColor="@color/black"
+        android:maxLines="1"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/fileIconImage"
+        app:layout_constraintTop_toBottomOf="@+id/fileName" />
+
+</androidx.constraintlayout.widget.ConstraintLayout >
+

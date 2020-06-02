@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/White_EA"
+        android:orientation="vertical">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:id="@+id/Bar_bed_config"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="#E0F2F1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="18dp"
+                    android:text="병상 검색 &amp; 추가"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+
+                    <Button
+                        android:id="@+id/btn_search"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/button_home"
+                        android:drawableStart="@drawable/ic_search_black_24dp"
+                        android:drawablePadding="20dp"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="20dp"
+                        android:text="서버 검색"
+                        android:textColor="@color/black"
+                        android:textSize="12sp" />
+
+                    <Button
+                        android:id="@+id/btn_import"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/button_home"
+                        android:drawableStart="@drawable/ic_file_download_black_24dp"
+                        android:drawablePadding="20dp"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="20dp"
+                        android:text="CSV 가져오기"
+                        android:textColor="@color/black"
+                        android:textSize="12sp" />
+
+                    <Button
+                        android:id="@+id/btn_server"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/button_home"
+                        android:drawableStart="@drawable/ic_settings_20dp"
+                        android:drawablePadding="20dp"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="20dp"
+                        android:text="설정"
+                        android:textColor="@color/black"
+                        android:textSize="12sp"
+                        android:visibility="gone" />
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/mainView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="50dp"
+                android:layout_marginBottom="60dp"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@id/Bar_bed_config">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="18dp"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/list_checkbox"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.1"
+                        android:button="@drawable/checkbox" />
+
+                    <Button
+                        android:id="@+id/sort_num"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.1"
+                        android:background="@color/transparent"
+                        android:drawableEnd="@drawable/ic_arrow_drop_down_24dp"
+                        android:gravity="center"
+                        android:paddingStart="10dp"
+                        android:text="번호"
+                        android:textColor="@color/DeepGray" />
+
+                    <Button
+                        android:id="@+id/sort_name"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.3"
+                        android:background="@color/transparent"
+                        android:drawableEnd="@drawable/ic_arrow_drop_down_24dp"
+                        android:gravity="center"
+                        android:paddingStart="10dp"
+                        android:text="모델명"
+                        android:textColor="@color/DeepGray" />
+
+                    <Button
+                        android:id="@+id/sort_ward"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.2"
+                        android:background="@color/transparent"
+                        android:drawableEnd="@drawable/ic_arrow_drop_down_24dp"
+                        android:gravity="center"
+                        android:paddingStart="10dp"
+                        android:text="병동"
+                        android:textColor="@color/DeepGray" />
+
+                    <Button
+                        android:id="@+id/sort_room"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.2"
+                        android:background="@color/transparent"
+                        android:drawableEnd="@drawable/ic_arrow_drop_down_24dp"
+                        android:gravity="center"
+                        android:paddingStart="10dp"
+                        android:text="병실"
+                        android:textColor="@color/DeepGray" />
+
+                    <Button
+                        android:id="@+id/sort_bed"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.2"
+                        android:background="@color/transparent"
+                        android:drawableEnd="@drawable/ic_arrow_drop_down_24dp"
+                        android:gravity="center"
+                        android:paddingStart="10dp"
+                        android:text="병상"
+                        android:textColor="@color/DeepGray" />
+
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="#838383" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/bed_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:paddingEnd="10dp" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/bed_add"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_margin="6dp"
+                android:background="@drawable/button_default"
+                android:text="추가"
+                app:layout_constraintTop_toBottomOf="@id/mainView" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

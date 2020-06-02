@@ -1,17 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">@color/black</color>
+    <color name="colorPrimary">#4DB6AC</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
 
     <color name="main">#00897B</color>
-
+    <color name="temp">#7CC70101</color>
 
     <!-- Gradient Background -->
     <color name="GradientStart">#7F5A83</color>
     <color name="GradientMiddle">#ffffff</color>
     <color name="GradientEnd">#0D324D</color>
 
+    <color name="White_EA">#EAEAEA</color>
+    <color name="Brown_high">#2E1D1E</color>
+    <color name="Brown_middle">#694834</color>
+    <color name="Brown_low">#B18C70</color>
+    <color name="Brown_light_low">#B6A79C</color>
+    <color name="JMint">#018B91</color>
+    <color name="JMint_push">#006064</color>
+    <color name="JBlue">#2d5fac</color>
+    <color name="JGray">#C9C9C9</color>
+
+    <color name="DeepGray">#303030</color>
+    <color name="LightGray">#C4C4C4</color>
+    <color name="homeSub">#2f3233</color>
+    <color name="homeMain">#1f2425</color>
+    <color name="tiRed">#FF2424</color>
 
     <!-- Standard colors -->
     <color name="dark_sky">#7bc2bb</color>

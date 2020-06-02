@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/mainView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/WhiteSmoke">
+
+
+        <LinearLayout
+            android:id="@+id/top_bar"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/WhiteSmoke"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:text="병상 호출"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/btn_call_add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/button_home"
+                android:drawableStart="@drawable/ic_widgets_24dp"
+                android:drawablePadding="20dp"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:text="관리"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/line1"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/JGray"
+            app:layout_constraintTop_toBottomOf="@id/top_bar" />
+
+        <View
+            android:id="@+id/line2"
+            android:layout_width="2dp"
+            android:layout_marginStart="10dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="50dp"
+            android:background="@color/JGray"
+            app:layout_constraintStart_toEndOf="@id/btnAllList" />
+
+
+            <Button
+                android:id="@+id/btnAllList"
+                android:layout_width="134dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/button_all_list"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/line1"/>
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/call_room_list"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="125dp"
+                android:paddingStart="2dp"
+                android:paddingEnd="2dp"
+                android:layout_weight="0.2"
+                android:cacheColorHint="#00000000"
+                android:divider="@color/main"
+                android:dividerHeight="1dp"
+                android:scrollbarFadeDuration="0"
+                android:scrollbarSize="5dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btnAllList" />
+
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/call_bed_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="150dp"
+            android:layout_marginTop="50dp"
+            android:padding="5dp"
+            android:layout_weight="0.8"
+            android:cacheColorHint="#00000000"
+            android:divider="@color/main"
+            android:dividerHeight="1dp"
+            android:scrollbarFadeDuration="0"
+            android:scrollbarSize="5dp"
+            app:layout_constraintStart_toEndOf="@id/call_bed_list"
+            app:layout_constraintTop_toBottomOf="@id/line1" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

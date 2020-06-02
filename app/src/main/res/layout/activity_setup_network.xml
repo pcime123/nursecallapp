@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/network_title_layout"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:background="@drawable/intro_background"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/network_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="132dp"
+                android:fontFamily="@font/nanum_light"
+                android:text="@string/network_title"
+                android:textColor="#F3F3F3"
+                android:textSize="25sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layoutResult"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="180dp"
+            android:background="@color/white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/network_title_layout">
+
+            <TextView
+                android:id="@+id/result_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/network_result_title"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/result_error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/nanum_normal"
+                android:textColor="@color/tiRed"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/result_title" />
+
+
+            <RadioGroup
+                android:id="@+id/select_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="44dp"
+                android:layout_marginEnd="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/result_title">
+
+                <RadioButton
+                    android:id="@+id/btnDhcp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="0dp"
+                    android:buttonTint="@color/orange"
+                    android:checked="true"
+                    android:text="자동으로 IP 주소 받기"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+
+                <TextView
+                    android:id="@+id/dhcp_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="64dp"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/dhcp_content"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+                <RadioButton
+                    android:id="@+id/btnStatic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="28dp"
+                    android:buttonTint="@color/orange"
+                    android:nextFocusDown="@id/setup_ip"
+                    android:text="고정된 IP 주소 사용"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+
+                <TextView
+                    android:id="@+id/static_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="64dp"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/static_content"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+                <LinearLayout
+                    android:id="@+id/layout_static"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="64dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true">
+
+                        <TextView
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/ip_address"
+                            android:textColor="@color/black"
+                            android:textSize="17sp"
+                            android:textStyle="bold" />
+
+                        <EditText
+
+                            android:id="@+id/setup_ip"
+                            android:layout_width="300dp"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/gray"
+                            android:digits="0123456789."
+                            android:inputType="number|numberDecimal"
+                            android:nextFocusDown="@id/setup_subnet"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="10dp"
+                            android:singleLine="true"
+                            android:textColor="@color/black"
+                            android:textSize="17sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="64dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true">
+
+                        <TextView
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:text="서브넷마스크"
+                            android:textColor="@color/black"
+
+                            android:textSize="17sp"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/setup_subnet"
+                            android:layout_width="300dp"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/gray"
+                            android:digits="0123456789."
+                            android:inputType="number|numberDecimal"
+                            android:nextFocusDown="@id/setup_gate"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="10dp"
+                            android:singleLine="true"
+                            android:textColor="@color/black"
+                            android:textSize="17sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="64dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true">
+
+                        <TextView
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:text="게이트웨이"
+                            android:textColor="@color/black"
+
+                            android:textSize="17sp"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/setup_gate"
+                            android:layout_width="300dp"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/gray"
+                            android:digits="0123456789."
+                            android:inputType="number|numberDecimal"
+                            android:nextFocusDown="@id/btnNext"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="10dp"
+                            android:singleLine="true"
+                            android:textColor="@color/black"
+                            android:textSize="17sp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+            </RadioGroup>
+
+            <Button
+                android:id="@+id/btnNext"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:layout_marginEnd="40dp"
+                android:layout_marginBottom="40dp"
+                android:background="@drawable/button_next"
+                android:text="@string/btn_next"
+                android:textColor="@color/text_basic"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <Button
+                android:id="@+id/btnPrev"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginBottom="40dp"
+                android:background="@drawable/button_prev"
+                android:text="@string/btn_prev"
+                android:textColor="@color/text_basic"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/btnNext" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

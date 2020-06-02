@@ -1,5 +1,85 @@
 <resources>
-    <string name="app_name">NurseCallApp</string>
+    <string name="app_name">Nurse Call</string>
 
     <string name="delete_text">Are you sure you want to delete your selection?</string>
+    <string name="outgoing" translatable="false">OutGoing</string>
+    <string name="missed" translatable="false">Missed</string>
+    <string name="incoming" translatable="false">InComing</string>
+    <string name="today_date_format" translatable="false">HH:mm</string>
+    <string name="history_detail_date_format" translatable="false">yyyy/MM/dd - HH:mm</string>
+    <string name="pref_preferences_title" translatable="false">Preferences</string>
+    <string name="pref_transport_udp">UDP</string>
+    <string name="pref_transport_tcp">TCP</string>
+    <string name="pref_transport_tls">TLS</string>
+    <string name="ec_calibrating">Calibrating…</string>
+    <string name="ec_calibrated">Calibrated in %s ms</string>
+    <string name="no_echo">No echo</string>
+    <string name="failed">Failed</string>
+    <string name="pref_none">None</string>
+    <string name="please_wait">Please Wait......</string>
+    <string name="not_ip">Please check IP address again.</string>
+    <string name="not_mask">Please check NetMask again.</string>
+    <string name="not_dns">Please check DNS address again.</string>
+    <string name="not_gate">Please check GateWay again.</string>
+    <string name="time_out">Network timeout occurred. Please check the connection and try again.</string>
+    <string name="enter_room_number">Enter the room number to create.</string>
+    <string name="setup_hello">환영합니다 :D</string>
+    <string name="setup_hello_content">초기 설정 도우미 입니다.</string>
+    <string name="setup_hello_next">다음 버튼을 누르면 설정화면으로 이동됩니다.</string>
+    <string name="btn_next">다음</string>
+    <string name="type_title">장비 설정 확인</string>
+    <string name="main_device">Main Device</string>
+    <string name="setup">Setup</string>
+    <string name="type_result_title">장비 설정을 위한 확인 준비 단계입니다. 해당하는 단계를 선택 후 다음 버튼을 눌러주세요.</string>
+    <string name="type_result_first">최초 설치 장비</string>
+    <string name="type_result_first_content">최초 설치 시 네트워크 설정 단계로 이동됩니다.</string>
+    <string name="type_result_second">기존 사용 장비</string>
+    <string name="type_result_second_content">네트워크를 설정하지 않고 장비 유형 단계로 이동됩니다.</string>
+    <string name="network_title">네트워크 설정</string>
+    <string name="network_result_title">네트워크가 IP 자동 설정 기능을 지원하면 IP 설정이 자동으로 할당됩니다. 지원하지 않으면, 네트워크 관리자에게 적절한 IP 설정값을 문의해야 합니다.</string>
+    <string name="dhcp_content">DHCP 서버가 네트워크에 구성되어 있을 경우 선택 시 자동으로 네트워크 정보를 할당 받습니다.</string>
+    <string name="btn_static">고정 IP 주소</string>
+    <string name="static_content">직접 IP 주소를 입력하여 설정합니다.</string>
+    <string name="ip_address">IP 주소</string>
+    <string name="network_disable">네트워크가 연결되지 않았습니다. 케이블이 연결되어 있는지 확인하세요.</string>
+    <string name="btn_prev">이전</string>
+    <string name="device_title">장비 유형 설정</string>
+    <string name="btnNurse">간호사 스테이션</string>
+    <string name="nurse_content">병상 호출 송수신용으로 사용합니다.</string>
+    <string name="btnSecurity">보안 스테이션</string>
+    <string name="security_content">보안 호출 수신 용으로 사용합니다.</string>
+    <string name="btnPath">병리실 스테이션</string>
+    <string name="path_content">병리실 호출 송수신용으로 사용합니다.</string>
+    <string name="btnEtc">공용 또는 기타</string>
+    <string name="etc_content">공동 또는 기타 용도로 사용합니다.</string>
+    <string name="btn_finish">완료</string>
+    <string name="use_ward">설치 장소</string>
+    <string name="station">장소</string>
+    <string name="etc">기타</string>
+    <string name="use_place">사용 장소</string>
+    <string name="detail_nurse">간호사 스테이션</string>
+    <string name="detail_security">보안 스테이션</string>
+    <string name="detail_path">병리실 스테이션</string>
+    <string name="detail_etc">공용 또는 기타</string>
+    <string name="detail_setup">설정</string>
+    <string name="detail_content">사용 장소를 입력해주세요. 추후 변경 가능합니다.</string>
+    <bool name="disable_all_security_features_for_markets">false </bool>
+
+
+    <string-array name="limit_bitrate_entry_values">
+        <item>10</item>
+        <item>15</item>
+        <item>20</item>
+        <item>36</item>
+        <item>64</item>
+        <item>128</item>
+    </string-array>
+    <string-array name="limit_bitrate_entries">
+        <item>10 kbits/s</item>
+        <item>15 kbits/s</item>
+        <item>20 kbits/s</item>
+        <item>36 kbits/s</item>
+        <item>64 kbits/s</item>
+        <item>128 kbits/s</item>
+    </string-array>
 </resources>

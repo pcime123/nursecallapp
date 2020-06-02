@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:seeeyes="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:orientation="vertical">
+
+        <com.sscctv.nursecallapp.ui.utils.SwitchSetting
+            android:id="@+id/pref_wifi_only"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            seeeyes:title="Use WiFi only" />
+
+        <com.sscctv.nursecallapp.ui.utils.SwitchSetting
+            android:id="@+id/pref_ipv6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            seeeyes:title="Allow IPv6" />
+
+<!--        <com.sscctv.nursecallapp.ui.utils.SwitchSetting-->
+<!--            android:id="@+id/pref_push_notification"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            seeeyes:title="Enable push notifications" />-->
+
+<!--        <com.sscctv.nursecallapp.ui.utils.BasicSetting-->
+<!--            android:id="@+id/pref_android_battery_protected_settings"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            seeeyes:subtitle="This app must be enable din order to receive push notifications"-->
+<!--            seeeyes:title="Battery protected apps settings" />-->
+
+        <com.sscctv.nursecallapp.ui.utils.SwitchSetting
+            android:id="@+id/pref_transport_use_random_ports"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            seeeyes:title="Use random ports" />
+
+        <com.sscctv.nursecallapp.ui.utils.TextSetting
+            android:id="@+id/pref_sip_port"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            seeeyes:hint="SIP port to use"
+            seeeyes:title="SIP Port to use" />
+
+        <com.sscctv.nursecallapp.ui.utils.TextSetting
+            android:id="@+id/pref_stun_server"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            seeeyes:hint="STUN / TURN server"
+            seeeyes:title="STUN / TURN server" />
+
+        <com.sscctv.nursecallapp.ui.utils.SwitchSetting
+            android:id="@+id/pref_ice_enable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            seeeyes:title="Enable ICE" />
+
+        <com.sscctv.nursecallapp.ui.utils.SwitchSetting
+            android:id="@+id/pref_turn_enable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            seeeyes:title="Enable TURN" />
+
+        <com.sscctv.nursecallapp.ui.utils.TextSetting
+            android:id="@+id/pref_turn_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            seeeyes:hint="STUN / TURN username (optional)"
+            seeeyes:title="STUN / TURN username (optional)" />
+
+        <com.sscctv.nursecallapp.ui.utils.TextSetting
+            android:id="@+id/pref_turn_passwd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            seeeyes:hint="STUN / TURN password (optional)"
+            seeeyes:title="STUN / TURN password (optional)" />
+
+    </LinearLayout>
+
+</ScrollView>

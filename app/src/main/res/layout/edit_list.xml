@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/edit_list1"
+    android:id="@+id/edit_list"
     android:layout_width="match_parent"
     android:layout_height="60dp"
     android:background="#C7C7C7"
@@ -11,8 +11,6 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="0.2"
-
-        android:contentDescription="Cancel button"
         android:padding="15dp"
         android:src="@drawable/cancel_edit_default" />
 

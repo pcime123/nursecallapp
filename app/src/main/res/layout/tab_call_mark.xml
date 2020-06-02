@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/mainView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/WhiteSmoke">
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/tab_mark_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+<!--        <LinearLayout-->
+<!--            android:layout_margin="8dp"-->
+<!--            android:id="@+id/layout1"-->
+<!--            android:background="#79B4DFB2"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            android:orientation="horizontal"-->
+<!--            >-->
+
+<!--            <ImageView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:padding="8dp"-->
+<!--                android:src="@drawable/main_device"/>-->
+
+<!--            <TextView-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_weight="0.5"-->
+<!--                android:padding="8dp"-->
+<!--                android:text="2층 10병동 간호사 스테이션"-->
+<!--                android:textColor="@color/black"-->
+<!--                />-->
+
+<!--        </LinearLayout>-->
+
+<!--        <LinearLayout-->
+<!--            android:layout_margin="8dp"-->
+<!--            android:background="#79B4DFB2"-->
+
+<!--            android:id="@+id/layout2"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/layout1"-->
+<!--            android:orientation="horizontal"-->
+<!--            >-->
+
+<!--            <ImageView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:padding="8dp"-->
+<!--                android:src="@drawable/main_device"/>-->
+
+<!--            <TextView-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_weight="0.5"-->
+<!--                android:padding="8dp"-->
+<!--                android:text="2층 10병동 간호사 스테이션"-->
+<!--                android:textColor="@color/black"-->
+<!--                />-->
+
+<!--        </LinearLayout>-->
+
+<!--        <LinearLayout-->
+<!--            android:id="@+id/layout3"-->
+<!--            android:layout_margin="8dp"-->
+<!--            android:background="#79B4DFB2"-->
+
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/layout2"-->
+<!--            android:orientation="horizontal"-->
+<!--            >-->
+
+<!--            <ImageView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:padding="8dp"-->
+<!--                android:src="@drawable/main_device"/>-->
+
+<!--            <TextView-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_weight="0.5"-->
+<!--                android:padding="8dp"-->
+<!--                android:text="2층 10병동 간호사 스테이션"-->
+<!--                android:textColor="@color/black"-->
+<!--                />-->
+
+<!--        </LinearLayout>-->
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

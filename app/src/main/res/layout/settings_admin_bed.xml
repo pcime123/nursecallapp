@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/White_EA">
+
+        <LinearLayout
+            android:id="@+id/bar_settings"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="#434450"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="18dp"
+                android:text="병상호출 관리"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/settings_bed_color_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:background="@color/white"
+            android:elevation="2dp"
+            android:padding="10dp"
+            app:layout_constraintTop_toBottomOf="@id/bar_settings">
+
+            <TextView
+                android:id="@+id/bed_color_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="10dp"
+                android:fontFamily="@font/nanum_bold"
+                android:text="목록 색상 관리"
+                android:textColor="@color/main"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/bed_color_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="10dp"
+                android:fontFamily="@font/nanum_normal"
+                android:text="전체 목록 선택 시 아래 색상이 반복되어 표시됩니다."
+                android:textColor="@color/black"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/bed_color_title" />
+
+
+            <LinearLayout
+                android:id="@+id/settings_color_1"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="10dp"
+                app:layout_constraintTop_toTopOf="@id/bed_color_content">
+
+                <com.jaredrummler.android.colorpicker.ColorPanelView
+                    android:id="@+id/colorView_1"
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    android:padding="15dp"
+                    app:cpv_colorShape="square" />
+
+                <Button
+                    android:id="@+id/btnColor_1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_home"
+                    android:gravity="center_vertical"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:text="1번 색상"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@color/gray"
+                app:layout_constraintTop_toBottomOf="@id/settings_color_1" />
+
+            <LinearLayout
+                android:id="@+id/settings_color_2"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                app:layout_constraintTop_toBottomOf="@id/settings_color_1">
+
+                <com.jaredrummler.android.colorpicker.ColorPanelView
+                    android:id="@+id/colorView_2"
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    android:padding="15dp"
+                    app:cpv_colorShape="square" />
+
+                <Button
+                    android:id="@+id/btnColor_2"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_home"
+                    android:gravity="center_vertical"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:text="2번 색상"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@color/gray"
+                app:layout_constraintTop_toBottomOf="@id/settings_color_2" />
+
+            <LinearLayout
+                android:id="@+id/settings_color_3"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                app:layout_constraintTop_toBottomOf="@id/settings_color_2">
+
+                <com.jaredrummler.android.colorpicker.ColorPanelView
+                    android:id="@+id/colorView_3"
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    android:padding="15dp"
+                    app:cpv_colorShape="square" />
+
+                <Button
+                    android:id="@+id/btnColor_3"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_home"
+                    android:gravity="center_vertical"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:text="3번 색상"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@color/gray"
+                app:layout_constraintTop_toBottomOf="@id/settings_color_3" />
+
+            <LinearLayout
+                android:id="@+id/settings_color_4"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                app:layout_constraintTop_toBottomOf="@id/settings_color_3">
+
+                <com.jaredrummler.android.colorpicker.ColorPanelView
+                    android:id="@+id/colorView_4"
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    android:padding="15dp"
+                    app:cpv_colorShape="square" />
+
+                <Button
+                    android:id="@+id/btnColor_4"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_home"
+                    android:gravity="center_vertical"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:text="4번 색상"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@color/gray"
+                app:layout_constraintTop_toBottomOf="@id/settings_color_4" />
+
+            <LinearLayout
+                android:id="@+id/settings_color_5"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                app:layout_constraintTop_toBottomOf="@id/settings_color_4">
+
+                <com.jaredrummler.android.colorpicker.ColorPanelView
+                    android:id="@+id/colorView_5"
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    android:padding="15dp"
+                    app:cpv_colorShape="square" />
+
+                <Button
+                    android:id="@+id/btnColor_5"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_home"
+                    android:gravity="center_vertical"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:text="5번 색상"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/settings_bed_list_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@color/white"
+            android:elevation="2dp"
+            android:padding="10dp"
+            app:layout_constraintTop_toBottomOf="@id/settings_bed_color_layout">
+
+            <TextView
+                android:id="@+id/bed_list_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="10dp"
+                android:fontFamily="@font/nanum_bold"
+                android:text="병상 목록 관리"
+                android:textColor="@color/main"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/bed_list_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:fontFamily="@font/nanum_normal"
+                android:text="목록에 표시되는 병상의 행 개수를 설정합니다."
+                android:textColor="@color/black"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/bed_list_title" />
+
+            <LinearLayout
+                android:id="@+id/layout_bed_list_1"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="10dp"
+                app:layout_constraintTop_toBottomOf="@id/bed_list_title">
+
+                <Button
+                    android:id="@+id/btn_all_list"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_home"
+                    android:drawableStart="@drawable/ic_settings_20dp"
+                    android:drawablePadding="20dp"
+                    android:gravity="center_vertical"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:text="전체 목록 보기 설정"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@color/gray"
+                app:layout_constraintTop_toBottomOf="@id/layout_bed_list_1" />
+
+            <LinearLayout
+                android:id="@+id/layout_bed_list_2"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                app:layout_constraintTop_toBottomOf="@id/layout_bed_list_1">
+
+                <Button
+                    android:id="@+id/btn_select_list"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_home"
+                    android:drawableStart="@drawable/ic_settings_20dp"
+                    android:drawablePadding="20dp"
+                    android:gravity="center_vertical"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:text="선택 목록 보기 설정"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

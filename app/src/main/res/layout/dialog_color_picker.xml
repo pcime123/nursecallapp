@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/dialog_add_room"
+    android:layout_width="600dp"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:padding="10dp"
+   >
+
+
+    <com.jaredrummler.android.colorpicker.ColorPickerView
+        android:id="@+id/colorPicker"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        app:cpv_alphaChannelVisible="true"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/layout"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/colorPicker">
+
+        <com.jaredrummler.android.colorpicker.ColorPanelView
+            android:id="@+id/oldColorView"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            app:cpv_borderColor="#0099cc"
+            app:cpv_colorShape="square" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:gravity="center"
+            android:text="→"
+            android:textSize="20sp" />
+
+        <com.jaredrummler.android.colorpicker.ColorPanelView
+            android:id="@+id/newColorView"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            app:cpv_colorShape="square" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/buttonbar"
+        style="?android:attr/buttonBarStyle"
+        android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout">
+
+        <Button
+            android:id="@+id/cancelButton"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@android:string/cancel" />
+
+        <Button
+            android:id="@+id/okButton"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@android:string/ok" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
