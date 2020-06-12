@@ -31,7 +31,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 
-import com.sscctv.nursecallapp.ui.activity._SettingsActivity;
 import com.sscctv.nursecallapp.service.MainCallService;
 import com.sscctv.nursecallapp.service.MainPreferences;
 
@@ -130,10 +129,6 @@ public class CallSettingsFragment extends SettingsFragment {
                                                 getActivity().getPackageName());
                         if (readExternalStorage == PackageManager.PERMISSION_GRANTED) {
                             mPrefs.enableDeviceRingtone(newValue);
-                        } else {
-                            ((_SettingsActivity) getActivity())
-                                    .requestPermissionIfNotGranted(
-                                            Manifest.permission.READ_EXTERNAL_STORAGE);
                         }
                     }
                 });

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <string-array name="device_where">
+        <item>병동</item>
+        <item>층</item>
+    </string-array>
+
+    <string-array name="device_setup">
+        <item>간호사 스테이션</item>
+        <item>보안 스테이션</item>
+        <item>병리실 스테이션</item>
+        <item>기타 스테이션</item>
+    </string-array>
+
+    <string-array name="display_time">
+        <item>사용 안함</item>
+        <item>15초</item>
+        <item>30초</item>
+        <item>1분</item>
+        <item>2분</item>
+        <item>5분</item>
+        <item>10분</item>
+        <item>15분</item>
+        <item>20분</item>
+        <item>30분</item>
+    </string-array>
+    
+</resources>

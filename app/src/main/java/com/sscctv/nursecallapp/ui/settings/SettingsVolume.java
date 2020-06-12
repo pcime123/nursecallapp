@@ -3,6 +3,7 @@ package com.sscctv.nursecallapp.ui.settings;
 import android.content.Context;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.SeekBar;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +14,11 @@ import com.sscctv.nursecallapp.databinding.SettingsVolumeBinding;
 import com.sscctv.nursecallapp.ui.utils.TinyDB;
 
 import org.linphone.core.Core;
+
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 import static android.media.AudioManager.STREAM_ALARM;
 import static android.media.AudioManager.STREAM_DTMF;
@@ -30,6 +36,7 @@ public class SettingsVolume extends AppCompatActivity {
     private TinyDB tinyDB;
     private SettingsVolumeBinding mBinding;
     private AudioManager mAudioManager;
+    private DataOutputStream opt;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,6 +45,78 @@ public class SettingsVolume extends AppCompatActivity {
         mAudioManager = ((AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE));
 
         setVolumeBar();
+        gpioPortSet();
+        Log.d(TAG, "Echo Bypass: " + getEchoBypass());
+
+        try {
+            opt.writeBytes("echo 0300 c00a > /proc/hbi/dev_145/write_reg\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        mBinding.btnEcOn.setOnClickListener(view -> {
+//            try {
+//                opt.writeBytes("echo 0300 c00a > /proc/hbi/dev_145/write_reg\n");
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+            readyEchoBypass();
+        });
+
+        mBinding.btnEcOff.setOnClickListener(view -> {
+//            try {
+//                opt.writeBytes("echo 0300 c008 > /proc/hbi/dev_145/write_reg\n");
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+            getEchoBypass();
+        });
+    }
+
+    private void gpioPortSet() {
+        try {
+            Runtime command = Runtime.getRuntime();
+            Process proc;
+
+            proc = command.exec("su");
+            opt = new DataOutputStream(proc.getOutputStream());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new SecurityException();
+        }
+    }
+
+    private void readyEchoBypass() {
+        try {
+            opt.writeBytes("echo 0300 2 > /proc/hbi/dev_145/read_reg\n");
+            Thread.sleep(300);
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public String getEchoBypass() {
+        readyEchoBypass();
+
+        String line = "";
+        String reLine = null;
+        try {
+            Process p = Runtime.getRuntime().exec("cat /proc/hbi/dev_145/read_reg\n");
+            BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            while ((line = input.readLine()) != null) {
+                reLine = line;
+            }
+            input.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if(reLine != null) {
+            return reLine;
+        } else {
+            return "Failed";
+        }
     }
 
     private void setVolumeBar() {

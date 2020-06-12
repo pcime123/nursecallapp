@@ -20,7 +20,7 @@
 <!--                android:layout_width="match_parent"-->
 <!--                android:layout_height="wrap_content"-->
 <!--                android:layout_margin="10dp"-->
-<!--                android:background="@drawable/button_circle_arrow"-->
+<!--                android:background="@drawable/button_background_gray"-->
 <!--                android:fontFamily="sans-serif-light"-->
 <!--                android:text="Bed Call"-->
 <!--                android:textSize="20sp"-->
@@ -32,7 +32,7 @@
 <!--                android:layout_width="match_parent"-->
 <!--                android:layout_height="wrap_content"-->
 <!--                android:layout_margin="10dp"-->
-<!--                android:background="@drawable/button_circle_arrow"-->
+<!--                android:background="@drawable/button_background_gray"-->
 <!--                android:fontFamily="sans-serif-light"-->
 <!--                android:text="Etc Call"-->
 <!--                android:textSize="20sp"-->
@@ -45,7 +45,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:background="@drawable/button_circle_arrow"
+                android:background="@drawable/button_background_gray"
                 android:fontFamily="sans-serif-light"
                 android:text="Account Setting"
                 android:textSize="20sp"
@@ -58,7 +58,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:background="@drawable/button_circle_arrow"
+                android:background="@drawable/button_background_gray"
                 android:fontFamily="sans-serif-light"
                 android:text="Settings"
                 android:textSize="20sp"
@@ -70,7 +70,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:background="@drawable/button_circle_arrow"
+                android:background="@drawable/button_background_gray"
                 android:fontFamily="sans-serif-light"
                 android:text="PBX Enter"
                 android:textSize="20sp"
@@ -82,7 +82,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:background="@drawable/button_circle_arrow"
+                android:background="@drawable/button_background_gray"
                 android:fontFamily="sans-serif-light"
                 android:text="GET CSV LIST"
                 android:textSize="20sp"

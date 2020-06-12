@@ -1,40 +1,27 @@
 package com.sscctv.nursecallapp.ui.fragment.adapter;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.util.Log;
 import android.util.SparseBooleanArray;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sscctv.nursecallapp.R;
 import com.sscctv.nursecallapp.ui.adapter.AllExtItem;
-import com.sscctv.nursecallapp.ui.adapter.ExtItem;
 import com.sscctv.nursecallapp.ui.adapter.OnSelectCall;
-import com.sscctv.nursecallapp.ui.adapter.RoomItem;
 import com.sscctv.nursecallapp.ui.utils.KeyList;
 import com.sscctv.nursecallapp.ui.utils.NurseCallUtils;
 import com.sscctv.nursecallapp.ui.utils.TinyDB;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class TabListAdapter extends RecyclerView.Adapter<TabListAdapter.ViewHolder> {
@@ -123,15 +110,15 @@ public class TabListAdapter extends RecyclerView.Adapter<TabListAdapter.ViewHold
         });
 
 
-        if (selectedItem == position) {
-            if (!holder.num.getText().toString().equals("")) {
-
-
-                NurseCallUtils.newOutgoingCall(context, holder.num.getText().toString());
-            } else {
-                NurseCallUtils.printShort(context, "번호를 입력해주세요");
-            }
-        }
+//        if (selectedItem == position) {
+//            if (!holder.num.getText().toString().equals("")) {
+//
+//
+//                NurseCallUtils.newOutgoingCall(context, holder.num.getText().toString());
+//            } else {
+//                NurseCallUtils.printShort(context, "번호를 입력해주세요");
+//            }
+//        }
 
 
         holder.itemView.setTag(items.get(position));
@@ -149,12 +136,13 @@ public class TabListAdapter extends RecyclerView.Adapter<TabListAdapter.ViewHold
         return this.items.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder  {
+    class ViewHolder extends RecyclerView.ViewHolder {
         private TextView num;
         private TextView name;
         private CardView cardView;
         private ImageView image;
         private CheckBox btn;
+
         ViewHolder(View view) {
             super(view);
 
@@ -164,10 +152,21 @@ public class TabListAdapter extends RecyclerView.Adapter<TabListAdapter.ViewHold
             image = view.findViewById(R.id.normal_icon1);
             btn = view.findViewById(R.id.normal_btn);
 
-            if(!visible){
+            if (!visible) {
                 btn.setVisibility(View.INVISIBLE);
             }
 
+//            cardView.setOnClickListener(view1 -> {
+//                Log.d(TAG, "OnClick Num: " + num.getText().toString() + " Name: " + name.getText().toString());
+//            });
+
+            cardView.setOnLongClickListener(view1 -> {
+                if (!num.getText().toString().equals("")) {
+                    NurseCallUtils.newOutgoingCall(context, num.getText().toString());
+                }
+                Log.d(TAG, "OnLongClick Num: " + num.getText().toString() + " Name: " + name.getText().toString());
+                return false;
+            });
 //            cardView.setOnClickListener(view1 -> {
 //                int position = getAdapterPosition();
 //                clearSelectedItem();
@@ -186,7 +185,7 @@ public class TabListAdapter extends RecyclerView.Adapter<TabListAdapter.ViewHold
 
         for (int i = 0; i < items.size(); i++) {
             AllExtItem item = items.get(i);
-            if(item.isSelected()) {
+            if (item.isSelected()) {
                 sel.add(new AllExtItem(item.getNum(), item.getName(), true));
             }
         }

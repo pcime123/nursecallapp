@@ -8,11 +8,37 @@
         android:background="@color/black">
 
         <LinearLayout
+            android:id="@+id/layout_btn"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_margin="20dp"
+            app:layout_constraintTop_toTopOf="parent">
+
+             <Button
+                 android:id="@+id/btn_ec_on"
+                 android:layout_width="0dp"
+                 android:layout_height="match_parent"
+                 android:layout_weight=".5"
+                 android:layout_margin="8dp"
+                 android:text="에코캔슬러 Bypass ON"
+                 />
+
+            <Button
+                android:id="@+id/btn_ec_off"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".5"
+                android:layout_margin="8dp"
+                android:text="에코캔슬러 Bypass OFF"
+                />
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/layout_alarm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@id/layout_btn">
 
             <TextView
                 android:layout_width="wrap_content"

@@ -27,7 +27,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.sscctv.nursecallapp.R;
-import com.sscctv.nursecallapp.databinding.FragmentNormalCallBinding;
+import com.sscctv.nursecallapp.databinding.FragNormalCallBinding;
 import com.sscctv.nursecallapp.pbx.EndPoint;
 import com.sscctv.nursecallapp.pbx.OpenApi;
 import com.sscctv.nursecallapp.pbx.PbxData;
@@ -98,7 +98,7 @@ public class NormalCallFragment extends Fragment implements IOnBackPressed {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        FragmentNormalCallBinding layout = DataBindingUtil.inflate(inflater, R.layout.fragment_normal_call, container, false);
+        FragNormalCallBinding layout = DataBindingUtil.inflate(inflater, R.layout.frag_normal_call, container, false);
 
         tinyDB = new TinyDB(getContext());
 
@@ -113,11 +113,11 @@ public class NormalCallFragment extends Fragment implements IOnBackPressed {
         assert getFragmentManager() != null;
 
         List<Fragment> listFragments = new ArrayList<>();
-        listFragments.add(new ListNormalAll());
-        listFragments.add(new ListNormalBasic());
-        listFragments.add(new ListNormalSecurity());
-        listFragments.add(new ListNormalPathology());
-        listFragments.add(new ListNormalMark());
+        listFragments.add(new NormalViewAll());
+        listFragments.add(new NormalViewBasic());
+        listFragments.add(new NormalViewSecurity());
+        listFragments.add(new NormalViewPathology());
+        listFragments.add(new NormalViewMark());
 
         normalCallAdapter = new NormalCallAdapter(getChildFragmentManager(), listFragments);
         pager = layout.viewPager;
@@ -444,7 +444,7 @@ public class NormalCallFragment extends Fragment implements IOnBackPressed {
                 Log.w(TAG, "Result: " + str);
                 if (str.equals("Success")) {
                     pager.setCurrentItem(0);
-                    ((ListNormalAll) normalCallAdapter.listFragment.get(0)).refresh();
+                    ((NormalViewAll) normalCallAdapter.listFragment.get(0)).refresh();
                     NurseCallUtils.printShort(getContext(), "주소 연동이 완료되었습니다.");
                 } else {
                     NurseCallUtils.printShort(getContext(), "주소 연동을 실패했습니다.");

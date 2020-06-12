@@ -89,7 +89,7 @@
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_margin="20dp"
-            android:background="@drawable/button_all_list"
+            android:background="@drawable/button_default"
             android:fontFamily="@font/nanum_normal"
             android:text="확인"
             android:textSize="18sp" />

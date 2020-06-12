@@ -38,6 +38,7 @@ public class SetupStepDetails extends AppCompatActivity {
             startActivity(intent);
         });
 
+
         mBinding.inputUseWard.setText("10");
     }
 

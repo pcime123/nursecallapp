@@ -10,9 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -23,7 +20,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.gson.Gson;
 import com.sscctv.nursecallapp.R;
 import com.sscctv.nursecallapp.ui.activity.BedListConfigActivity;
-import com.sscctv.nursecallapp.ui.activity.MainActivity;
 import com.sscctv.nursecallapp.ui.adapter.BedItem;
 import com.sscctv.nursecallapp.ui.adapter.BedListAdapter;
 import com.sscctv.nursecallapp.ui.adapter.ExtListItem;
@@ -34,8 +30,6 @@ import com.sscctv.nursecallapp.ui.utils.IOnBackPressed;
 import com.sscctv.nursecallapp.ui.utils.KeyList;
 import com.sscctv.nursecallapp.ui.utils.NurseCallUtils;
 import com.sscctv.nursecallapp.ui.utils.TinyDB;
-
-import org.linphone.core.Core;
 
 import java.util.ArrayList;
 
@@ -65,7 +59,7 @@ public class BedCallFragment extends Fragment implements IOnBackPressed, OnSelec
     @Override
     public void onResume() {
         super.onResume();
-//        Log.v(TAG, "onResume()");
+        Log.v(TAG, "onResume()");
         getList();
     }
 
@@ -77,7 +71,7 @@ public class BedCallFragment extends Fragment implements IOnBackPressed, OnSelec
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        ViewGroup view = (ViewGroup) inflater.inflate(R.layout.fragment_bed_call, container, false);
+        ViewGroup view = (ViewGroup) inflater.inflate(R.layout.frag_bed_call, container, false);
         tinyDB = new TinyDB(getContext());
 
         roomList = view.findViewById(R.id.call_room_list);

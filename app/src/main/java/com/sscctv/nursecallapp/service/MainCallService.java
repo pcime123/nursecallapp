@@ -14,7 +14,9 @@ import androidx.annotation.Nullable;
 
 import com.sscctv.nursecallapp.R;
 import com.sscctv.nursecallapp.ui.activity.CallActivity;
+import com.sscctv.nursecallapp.ui.adapter.CallLogItem;
 import com.sscctv.nursecallapp.ui.utils.KeyList;
+import com.sscctv.nursecallapp.ui.utils.NurseCallUtils;
 import com.sscctv.nursecallapp.ui.utils.TinyDB;
 
 import org.linphone.core.Call;
@@ -29,6 +31,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -54,6 +57,7 @@ public class MainCallService extends Service {
     private boolean mAudioFocused;
     private boolean callStat, callMode;
     private DataOutputStream opt;
+    private boolean isLed;
 
     public static boolean isReady() {
         return sInstance != null;
@@ -102,13 +106,15 @@ public class MainCallService extends Service {
 
                 switch (state) {
                     case IncomingReceived:
+                        NurseCallUtils.sendRefreshTimer(MainCallService.this, 1);
+
                         if (core.getCallsNb() == 1) {
                             requestAudioFocus(STREAM_RING);
                             mRingingCall = call;
-//                            startRinging("call");
+                            stopMedia();
+                            startRinging("call");
 
                             callStat = true;
-
                             Intent intent = new Intent(MainCallService.this, CallActivity.class);
                             intent.putExtra("call", "incoming");
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -120,6 +126,7 @@ public class MainCallService extends Service {
                         if (core.getCallsNb() == 1) {
                             Log.d(TAG, "Call Dir: " + call.getDir());
                             if (call.getDir() == Call.Dir.Incoming) {
+                                stopRinging();
                                 setAudioManagerInCallMode();
                                 requestAudioFocus(STREAM_VOICE_CALL);
 
@@ -132,7 +139,8 @@ public class MainCallService extends Service {
 
                     case Error:
                     case End:
-
+                        NurseCallUtils.sendRefreshTimer(MainCallService.this, 0);
+                        stopRinging();
                         if (core.getCallsNb() == 0) {
                             if (mAudioFocused) {
                                 int res = mAudioManager.abandonAudioFocus(null);
@@ -147,6 +155,8 @@ public class MainCallService extends Service {
                         break;
 
                     case OutgoingInit:
+                        NurseCallUtils.sendRefreshTimer(MainCallService.this, 1);
+
                         stopMedia();
                         setAudioManagerInCallMode();
                         requestAudioFocus(STREAM_VOICE_CALL);
@@ -189,6 +199,7 @@ public class MainCallService extends Service {
         configureCore();
 //        TelephonyManager mTelephonyManager = (TelephonyManager) getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
 
+        isLed = false;
     }
 
     private void setAudioManagerInCallMode() {
@@ -319,6 +330,7 @@ public class MainCallService extends Service {
                                     playMedia();
                                 } else {
                                     stopMedia();
+                                    ledCallBtn(callStat);
                                 }
 
                                 if (mAudioManager.getMode() == MODE_NORMAL) {
@@ -331,6 +343,7 @@ public class MainCallService extends Service {
 //                                    outSpeakerMode(!callMode);
 //                                }
                             }
+
 
 
 //                            if (mAudioManager.getMode() == MODE_NORMAL) {
@@ -483,6 +496,10 @@ public class MainCallService extends Service {
     }
 
     private void ledCallBtn(boolean mode) {
+        if(isLed == mode) {
+            return;
+        }
+
         try {
             if (mode) {
                 opt.writeBytes("echo 0 > /sys/class/gpio_sw/PG4/data\n");
@@ -491,6 +508,7 @@ public class MainCallService extends Service {
                 opt.writeBytes("echo 1 > /sys/class/gpio_sw/PG4/data\n");
                 opt.writeBytes("echo 0 > /sys/class/gpio_sw/PG3/data\n");
             }
+            isLed = mode;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -560,5 +578,14 @@ public class MainCallService extends Service {
         mAudioManager.setSpeakerphoneOn(mode);
     }
 
+    private void writeCallLog(String type, String name, boolean stat) {
+
+        ArrayList<CallLogItem> items = new ArrayList<>();
+
+        if(stat) {
+//            items.add(new CallLogItem("normal", type, name, ))
+            NurseCallUtils.putCallLog(tinyDB, KeyList.CALL_LOG, items);
+        }
+    }
 
 }

@@ -34,7 +34,6 @@ import android.widget.LinearLayout;
 import androidx.annotation.Nullable;
 
 import com.sscctv.nursecallapp.R;
-import com.sscctv.nursecallapp.ui.activity._SettingsActivity;
 import com.sscctv.nursecallapp.service.MainCallService;
 import com.sscctv.nursecallapp.service.MainPreferences;
 import com.sscctv.nursecallapp.ui.utils.BasicSetting;
@@ -160,51 +159,6 @@ public class AudioSettingsFragment extends SettingsFragment {
                     }
                 });
 
-        mEchoCalibration.setListener(
-                new SettingListenerBase() {
-                    @Override
-                    public void onClicked() {
-                        mEchoCalibration.setSubtitle(getString(R.string.ec_calibrating));
-
-                        int recordAudio =
-                                getActivity()
-                                        .getPackageManager()
-                                        .checkPermission(
-                                                Manifest.permission.RECORD_AUDIO,
-                                                getActivity().getPackageName());
-                        if (recordAudio == PackageManager.PERMISSION_GRANTED) {
-                            startEchoCancellerCalibration();
-                        } else {
-                            ((_SettingsActivity) getActivity())
-                                    .requestPermissionIfNotGranted(
-                                            Manifest.permission.RECORD_AUDIO);
-                        }
-                    }
-                });
-
-        mEchoTester.setListener(
-                new SettingListenerBase() {
-                    @Override
-                    public void onClicked() {
-                        int recordAudio =
-                                getActivity()
-                                        .getPackageManager()
-                                        .checkPermission(
-                                                Manifest.permission.RECORD_AUDIO,
-                                                getActivity().getPackageName());
-                        if (recordAudio == PackageManager.PERMISSION_GRANTED) {
-                            if (getEchoTesterStatus()) {
-                                stopEchoTester();
-                            } else {
-                                startEchoTester();
-                            }
-                        } else {
-                            ((_SettingsActivity) getActivity())
-                                    .requestPermissionIfNotGranted(
-                                            Manifest.permission.RECORD_AUDIO);
-                        }
-                    }
-                });
     }
 
     private void updateValues() {

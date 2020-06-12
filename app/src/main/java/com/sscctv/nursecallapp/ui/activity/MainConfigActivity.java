@@ -35,7 +35,7 @@ public class MainConfigActivity extends AppCompatActivity implements OnSelectCal
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        mBinding = DataBindingUtil.setContentView(this, R.layout.fragment_bed_call);
+//        mBinding = DataBindingUtil.setContentView(this, R.layout.frag_bed_call);
 //        tinyDB = new TinyDB(this);
 //        NurseCallUtils.sendRefreshTimer(this);
 //

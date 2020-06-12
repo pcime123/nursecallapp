@@ -22,6 +22,7 @@ import com.sscctv.nursecallapp.service.MainCallService;
 import com.sscctv.nursecallapp.ui.adapter.AllExtItem;
 import com.sscctv.nursecallapp.ui.adapter.BedItem;
 import com.sscctv.nursecallapp.ui.adapter.CSVItem;
+import com.sscctv.nursecallapp.ui.adapter.CallLogItem;
 import com.sscctv.nursecallapp.ui.adapter.ExtItem;
 import com.sscctv.nursecallapp.ui.adapter.RoomItem;
 
@@ -134,10 +135,10 @@ public class NurseCallUtils {
 //    }
 
 
-    public static void sendRefreshTimer(Context context) {
+    public static void sendRefreshTimer(Context context, int mode) {
         Log.w("Send", "Context: " + context);
         Intent bufferIntentSendCode = new Intent(BROADCAST_BUFFER_SEND_CODE);
-        bufferIntentSendCode.putExtra("time", 120 * 100);
+        bufferIntentSendCode.putExtra("mode", mode);
         context.sendBroadcast(bufferIntentSendCode);
     }
 
@@ -303,6 +304,36 @@ public class NurseCallUtils {
 
         return num;
     }
+
+
+    public static void putCallLog(TinyDB tinyDB, String key, ArrayList<CallLogItem> logItems) {
+        Gson gson = new Gson();
+        ArrayList<String> objString = new ArrayList<>();
+        if (logItems == null) {
+            ArrayList<String> callList = new ArrayList<>();
+            callList.add("");
+            tinyDB.putListString(key, callList);
+        } else {
+            for (CallLogItem logItem : logItems) {
+                objString.add(gson.toJson(logItem));
+            }
+            tinyDB.putListString(key, objString);
+        }
+    }
+
+    public static ArrayList<CallLogItem> getCallLog(TinyDB tinyDB, String key) {
+        Gson gson = new Gson();
+
+        ArrayList<String> objStrings = tinyDB.getListString(key);
+        ArrayList<CallLogItem> callList = new ArrayList<>();
+
+        for (String jObjString : objStrings) {
+            CallLogItem callLogItem = gson.fromJson(jObjString, CallLogItem.class);
+            callList.add(callLogItem);
+        }
+        return callList;
+    }
+
 
     private static void inviteAddress(Context context, Address address) {
         Core core = MainCallService.getCore();

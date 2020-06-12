@@ -17,6 +17,7 @@ import com.sscctv.nursecallapp.R;
 import com.sscctv.nursecallapp.databinding.ActivityBackgroundBinding;
 import com.sscctv.nursecallapp.databinding.TestPageBinding;
 import com.sscctv.nursecallapp.service.MainPreferences;
+import com.sscctv.nursecallapp.ui.utils.KeyList;
 import com.sscctv.nursecallapp.ui.utils.NurseCallUtils;
 import com.sscctv.nursecallapp.ui.utils.TinyDB;
 
@@ -43,9 +44,8 @@ public class BackgroundActivity extends AppCompatActivity {
         mBinding.backLayout.setOnTouchListener((view, motionEvent) -> {
 
             if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                NurseCallUtils.printShort(getApplicationContext(), "TOUCH!!");
                 finish();
-                NurseCallUtils.sendRefreshTimer(this);
+                NurseCallUtils.sendRefreshTimer(this, 0);
                 return true;
             }
             return false;

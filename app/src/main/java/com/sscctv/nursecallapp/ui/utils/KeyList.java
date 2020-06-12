@@ -71,8 +71,20 @@ public class KeyList {
     public static final String BED_ALL_VIEW = "bed_all_view";
     public static final String BED_SELECT_VIEW = "bed_select_view";
 
-    public static final String HEADSET_START = "headset_start";
+    // Call
     public static final String CALL_MODE = "call_mode";
-//    public static final String BTN_SPEAKER_STATUS = "btn_speaker";
-//    public static final String BTN_HANDSET_STATUS = "btn_hook";
+
+    // Display
+    public static final String SCREEN_CHANGE_TIME = "screen_change_time";
+    public static final String SCREEN_CHANGE_POS = "screen_change_pos";
+
+    // Call Log
+    public static final String CALL_LOG = "call_log";
+
+    // Emergency
+    public static final String EM_TYPE = "em_type";
+    public static final String EM_CALL = "em_call";
+
+    //Sensor
+    public static final String SENSOR_LIGHT = "sensor_light";
 }

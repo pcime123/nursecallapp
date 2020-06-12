@@ -25,6 +25,7 @@ import androidx.databinding.DataBindingUtil;
 import com.sscctv.nursecallapp.R;
 import com.sscctv.nursecallapp.databinding.ActivityOutcallBinding;
 import com.sscctv.nursecallapp.service.MainCallService;
+import com.sscctv.nursecallapp.ui.adapter.CallLogItem;
 import com.sscctv.nursecallapp.ui.utils.KeyList;
 import com.sscctv.nursecallapp.ui.utils.NurseCallUtils;
 import com.sscctv.nursecallapp.ui.utils.TinyDB;
@@ -36,6 +37,7 @@ import org.linphone.core.Core;
 import org.linphone.core.CoreListenerStub;
 import org.linphone.core.Reason;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class CallActivity extends AppCompatActivity {
@@ -48,8 +50,9 @@ public class CallActivity extends AppCompatActivity {
     private AudioManager mAudioManager;
     private TinyDB tinyDB;
     private ActivityOutcallBinding mBinding;
-    private boolean isUsedSpeaker;
+    private boolean isUsedSpeaker, isHook;
     private String getCallMode;
+    private String startCallMode;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,7 +65,7 @@ public class CallActivity extends AppCompatActivity {
         Intent intent = getIntent();
         getCallMode = Objects.requireNonNull(intent.getExtras()).getString("call");
         callChangeMode(getCallMode);
-
+        startCallMode = getCallMode;
         Log.d(TAG, "Change ---> CallMode: " + getCallMode);
 
         mBinding.outSpeaker.setOnClickListener(view -> {
@@ -119,7 +122,7 @@ public class CallActivity extends AppCompatActivity {
                             Core core, Call call, Call.State state, String message) {
                         Log.d(TAG, "Status: " + state);
                         if (state == Call.State.Connected) {
-                            if(!getCallMode.equals("incoming")){
+                            if (!getCallMode.equals("incoming")) {
                                 changeLayout("call");
                             }
                             updateCallsList();
@@ -155,12 +158,18 @@ public class CallActivity extends AppCompatActivity {
             acceptCall(mCall);
         });
 
-        mBinding.callPause.setOnClickListener(view ->  {
+        mBinding.offCall.setOnLongClickListener(view -> {
+            decline();
+            return false;
+        });
+
+        mBinding.callPause.setOnClickListener(view -> {
             for (Call call : mCore.getCalls()) {
-                Log.d(TAG, "call: " +call );
+                Log.d(TAG, "call: " + call);
                 togglePause(call);
             }
         });
+
 
     }
 
@@ -178,6 +187,8 @@ public class CallActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Log.d(TAG, "isSpeaker: " + mAudioManager.isSpeakerphoneOn());
+
+        mAudioManager.setSpeakerphoneOn(!tinyDB.getBoolean(KeyList.CALL_MODE));
 
         if (mAudioManager.isSpeakerphoneOn()) {
             mBinding.outSpeaker.setSelected(true);
@@ -202,6 +213,7 @@ public class CallActivity extends AppCompatActivity {
                 }
             }
             if (mCall == null) {
+                NurseCallUtils.printShort(this, "없는 번호이거나 통화가 종료되었습니다.");
                 finish();
             } else {
                 Address address = mCall.getRemoteAddress();
@@ -232,6 +244,7 @@ public class CallActivity extends AppCompatActivity {
         mCore.enableMic(true);
         isUsedSpeaker = false;
         mIsMicMuted = false;
+        isHook = false;
 
     }
 
@@ -241,6 +254,12 @@ public class CallActivity extends AppCompatActivity {
         if (mCore != null) {
             mCore.removeListener(mListener);
         }
+//        Address address = mCall.getRemoteAddress();
+//        ArrayList<CallLogItem> items = new ArrayList<>();
+//        items.add(new CallLogItem("normal", startCallMode, address.getUsername(), mBinding.currentCallTimer.getText().toString(), String.valueOf(System.currentTimeMillis()), true));
+//        NurseCallUtils.putCallLog(tinyDB, KeyList.CALL_LOG, items);
+//        Log.d(TAG, "Call Time: " + mBinding.currentCallTimer.getText().toString());
+
         super.onPause();
     }
 
@@ -299,12 +318,13 @@ public class CallActivity extends AppCompatActivity {
     }
 
 
-
     private void changeLayout(String mode) {
 
 
         switch (mode) {
             case "outgoing":
+                mBinding.layoutOnlyIn.setVisibility(View.INVISIBLE);
+
                 mBinding.layoutOutCallBottom.setVisibility(View.VISIBLE);
                 mBinding.layoutCallBottom.setVisibility(View.INVISIBLE);
                 mBinding.layoutInCallBottom.setVisibility(View.INVISIBLE);
@@ -313,6 +333,8 @@ public class CallActivity extends AppCompatActivity {
                 mBinding.currentCallTimer.setVisibility(View.INVISIBLE);
                 break;
             case "call":
+                mBinding.layoutOnlyIn.setVisibility(View.INVISIBLE);
+
                 mBinding.layoutOutCallBottom.setVisibility(View.INVISIBLE);
                 mBinding.layoutCallBottom.setVisibility(View.VISIBLE);
                 mBinding.layoutInCallBottom.setVisibility(View.INVISIBLE);
@@ -327,6 +349,7 @@ public class CallActivity extends AppCompatActivity {
                 callConstraintSet.applyTo(mBinding.constraintCall);
                 break;
             case "incoming":
+                mBinding.layoutOnlyIn.setVisibility(View.VISIBLE);
                 mBinding.layoutOutCallBottom.setVisibility(View.INVISIBLE);
                 mBinding.layoutCallBottom.setVisibility(View.INVISIBLE);
                 mBinding.layoutInCallBottom.setVisibility(View.VISIBLE);
@@ -336,7 +359,7 @@ public class CallActivity extends AppCompatActivity {
 
                 ConstraintSet inComingConstraintSet = new ConstraintSet();
                 inComingConstraintSet.clone(mBinding.constraintCall);
-                inComingConstraintSet.setVerticalBias(R.id.layout_call_where, (float) 0.3);
+                inComingConstraintSet.setVerticalBias(R.id.layout_call_where, (float) 0.4);
                 inComingConstraintSet.applyTo(mBinding.constraintCall);
 
                 break;
@@ -418,12 +441,7 @@ public class CallActivity extends AppCompatActivity {
         ImageView removeFromConference =
                 conferenceCallView.findViewById(R.id.remove_from_conference);
         removeFromConference.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        removeCallFromConference(call);
-                    }
-                });
+                v -> removeCallFromConference(call));
 
         mBinding.conferenceList.addView(conferenceCallView);
     }
@@ -504,9 +522,14 @@ public class CallActivity extends AppCompatActivity {
             return true;
         }
 
+        Log.d(TAG, "Code: " + keyCode + " Speaker: " + mAudioManager.isSpeakerphoneOn() + " CallMode: " + tinyDB.getBoolean(KeyList.CALL_MODE));
         if (keyCode == KeyEvent.KEYCODE_F8) {
             if (action == KeyEvent.ACTION_DOWN) {
+                if(getCallMode.equals("incoming") && mAudioManager.isSpeakerphoneOn()) {
+                    acceptCall(mCall);
+                }
                 if (!mAudioManager.isSpeakerphoneOn()) {
+
                     return true;
                 } else {
                     if (!tinyDB.getBoolean(KeyList.CALL_MODE)) {

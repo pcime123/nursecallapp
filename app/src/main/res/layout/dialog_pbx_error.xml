@@ -32,7 +32,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_margin="20dp"
-            android:background="@drawable/button_all_list"
+            android:background="@drawable/button_default"
             android:fontFamily="sans-serif-light"
             android:text="Close"
             android:textSize="18sp" />

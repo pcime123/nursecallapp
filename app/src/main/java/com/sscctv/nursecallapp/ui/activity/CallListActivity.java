@@ -2,7 +2,6 @@ package com.sscctv.nursecallapp.ui.activity;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -12,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.sscctv.nursecallapp.R;
 import com.sscctv.nursecallapp.databinding.ActivityCallListBinding;
 import com.sscctv.nursecallapp.service.MainCallService;
-import com.sscctv.nursecallapp.ui.adapter.CallListAdapter;
+import com.sscctv.nursecallapp.ui.adapter.CallListAdapter1;
 import com.sscctv.nursecallapp.ui.adapter.CallListViewHolder;
 import com.sscctv.nursecallapp.ui.adapter.SelectableHelper;
 
@@ -30,7 +29,7 @@ public class CallListActivity extends AppCompatActivity implements SelectableHel
 
     private static final String TAG = "MainActivity";
     private Core core;
-    private CallListAdapter mCallListAdapter;
+    private CallListAdapter1 mCallListAdapter;
     private List<CallLog> mLogs;
     private SelectableHelper mSelectionHelper;
     private ActivityCallListBinding mBinding;
@@ -105,7 +104,7 @@ public class CallListActivity extends AppCompatActivity implements SelectableHel
     private void reloadData() {
         mLogs = Arrays.asList(core.getCallLogs());
         mCallListAdapter =
-                new CallListAdapter(getApplicationContext(), mLogs, this, mSelectionHelper);
+                new CallListAdapter1(getApplicationContext(), mLogs, this, mSelectionHelper);
         mBinding.historyList.setAdapter(mCallListAdapter);
 //        mSelectionHelper.setAdapter(mCallListAdapter);
 //        mSelectionHelper.setDialogMessage(R.string.app_name);

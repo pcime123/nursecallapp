@@ -6,7 +6,6 @@
         android:id="@+id/backLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#1A7C7C"
         android:orientation="vertical">
 
         <TextView
@@ -16,6 +15,8 @@
             android:fontFamily="@font/nanum_light"
             android:text="18:00"
             android:textSize="40sp"
+            android:textColor="@color/black"
+            app:layout_constraintVertical_bias="0.1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -26,20 +27,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Thursday, April 7"
+            android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/time" />
-
-        <TextView
-            android:id="@+id/logo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="30sp"
-            android:text="서울아산병원"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

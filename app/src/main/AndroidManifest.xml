@@ -89,6 +89,9 @@
     <uses-permission android:name="android.permission.CAMERA" /> <!-- Screen Capturing -->
     <uses-permission android:name="android.permission.MANAGE_MEDIA_PROJECTION" />
 
+    <!-- HardWare -->
+    <uses-feature android:name="android.hardware.sensor.light" android:required="true"/>
+
     <application
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
@@ -102,7 +105,7 @@
         <activity
             android:name=".ui.activity.LauncherActivity"
             android:exported="true"
-            android:launchMode="singleTop"
+            android:launchMode="standard"
             android:noHistory="true"
             android:stateNotNeeded="true"
             android:theme="@style/AppTheme">
@@ -125,7 +128,6 @@
             android:name=".ui.activity.MainActivity"
             android:theme="@style/AppTheme" />
         <activity android:name=".ui.activity.noneCallActivity" />
-        <activity android:name=".ui.activity._SettingsActivity" />
         <activity android:name=".ui.activity.CallInActivity" />
         <activity android:name=".ui.activity.CallActivity" />
         <activity android:name=".ui.activity.DialerActivity" />
@@ -152,13 +154,14 @@
         <activity android:name=".ui.activity.BedAddConfigActivity" />
         <activity android:name=".ui.settings.SettingsActivity" />
         <activity android:name=".ui.settings.SettingsAdminSetup" />
-        <activity android:name=".ui.settings.SettingsAdminAccount" />
         <activity android:name=".ui.settings.SettingsPbxServer" />
         <activity android:name=".ui.settings.SettingsEthernet" />
         <activity android:name=".ui.settings.SettingsSipAccount" />
         <activity android:name=".ui.settings.SettingsAdminBed" />
         <activity android:name=".ui.setup.SetupStepAccount" />
         <activity android:name=".ui.settings.SettingsVolume" />
+        <activity android:name=".ui.activity.TcpServer" />
+        <activity android:name=".ui.activity.EmergencyActivity" />
 
         <service android:name=".service.MainCallService" />
         <service
@@ -176,17 +179,6 @@
             </intent-filter>
         </receiver>
 
-        <receiver
-            android:name=".service.MyReceiver"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.NEW_OUTGOING_CALL" />
-                <action android:name="android.intent.action.CALL" />
-                <action android:name="android.intent.action.CALL_BUTTON" />
-            </intent-filter>
-
-        </receiver>
     </application>
 
 </manifest>

@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/back_aqua_splash">
 
+
     <TextView
         android:id="@+id/call_where"
         android:layout_width="match_parent"
@@ -28,6 +29,20 @@
         app:layout_constraintVertical_bias=".3" />
 
 
+    <TextView
+        android:id="@+id/call_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/nanum_bold"
+        android:gravity="center"
+        android:text="호출 수신 중.."
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias=".1" />
+
+
     <!--    <RelativeLayout-->
     <!--        android:id="@+id/top_bar_incoming"-->
     <!--        android:layout_width="match_parent"-->
@@ -48,7 +63,11 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:paddingTop="50dp"
+        android:paddingBottom="50dp"
+        android:background="#52FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <ImageButton
             android:id="@+id/offCall"
@@ -75,10 +94,9 @@
             android:src="@drawable/ic_call_white_60dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias=".7"
+            app:layout_constraintHorizontal_bias="0.702"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias=".8" />
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

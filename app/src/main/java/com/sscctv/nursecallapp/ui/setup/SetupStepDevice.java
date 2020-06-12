@@ -2,6 +2,7 @@ package com.sscctv.nursecallapp.ui.setup;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -39,6 +40,7 @@ public class SetupStepDevice extends AppCompatActivity {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         });
+
     }
 
     private void getSelectMode() {

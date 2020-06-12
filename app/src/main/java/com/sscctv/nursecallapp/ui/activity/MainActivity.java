@@ -1,20 +1,20 @@
 package com.sscctv.nursecallapp.ui.activity;
 
 import android.annotation.SuppressLint;
-import android.app.StatusBarManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.AssetFileDescriptor;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
 import android.media.MediaPlayer;
+import android.media.audiofx.Equalizer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.view.inputmethod.InputMethodManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -27,8 +27,11 @@ import com.sscctv.nursecallapp.service.MainCallService;
 import com.sscctv.nursecallapp.service.PersistentService;
 import com.sscctv.nursecallapp.service.RestartService;
 import com.sscctv.nursecallapp.ui.fragment.BedCallFragment;
+import com.sscctv.nursecallapp.ui.fragment.CallListFragment;
+import com.sscctv.nursecallapp.ui.fragment.DashFragment;
 import com.sscctv.nursecallapp.ui.fragment.NormalCallFragment;
-import com.sscctv.nursecallapp.ui.settings.SettingsActivity;
+import com.sscctv.nursecallapp.ui.fragment.NoticeFragment;
+import com.sscctv.nursecallapp.ui.settings.SetMainFragment;
 import com.sscctv.nursecallapp.ui.settings.SettingsSipAccount;
 import com.sscctv.nursecallapp.ui.utils.KeyList;
 import com.sscctv.nursecallapp.ui.utils.NurseCallUtils;
@@ -48,7 +51,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import static android.media.AudioManager.MODE_NORMAL;
-import static android.media.AudioManager.STREAM_RING;
 import static android.media.AudioManager.STREAM_VOICE_CALL;
 
 public class MainActivity extends AppCompatActivity {
@@ -61,8 +63,12 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMain1Binding mBinding;
     private AudioManager mAudioManager;
     private FragmentManager manager;
+    private DashFragment dashFragment;
     private BedCallFragment bedCallFragment;
     private NormalCallFragment normalCallFragment;
+    private CallListFragment callListFragment;
+    private NoticeFragment noticeFragment;
+    private SetMainFragment settingsFragment;
     private DataOutputStream opt;
 
     // HeadSet Hook Sound Setting
@@ -79,8 +85,10 @@ public class MainActivity extends AppCompatActivity {
     byte[] samples;
     @SuppressLint("StaticFieldLeak")
     public static Context context;
-
+    private boolean chkNumber;
     private MediaPlayer mRingerPlayer;
+
+    Equalizer equalizer;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -92,12 +100,19 @@ public class MainActivity extends AppCompatActivity {
         core = MainCallService.getCore();
         gpioPortSet();
 
+        dashFragment = new DashFragment();
         bedCallFragment = new BedCallFragment();
         normalCallFragment = new NormalCallFragment();
+        callListFragment = new CallListFragment();
+        noticeFragment = new NoticeFragment();
+        settingsFragment = new SetMainFragment();
+
+
         manager = getSupportFragmentManager();
 
         mBinding.btnDashDashboard.setOnClickListener(view -> {
-            NurseCallUtils.startIntent(this, PbxLoginActivity.class);
+            FragmentTransaction dashCall = manager.beginTransaction();
+            dashCall.replace(R.id.main_frame, dashFragment).commitAllowingStateLoss();
         });
 
         mBinding.statNumber.setOnClickListener(view -> NurseCallUtils.startIntent(this, SettingsSipAccount.class));
@@ -117,30 +132,60 @@ public class MainActivity extends AppCompatActivity {
 
         });
         mBinding.btnDashList.setOnClickListener(view -> {
+            FragmentTransaction dashNormal = manager.beginTransaction();
+            dashNormal.replace(R.id.main_frame, callListFragment).commitAllowingStateLoss();
+//                NurseCallUtils.startIntent(this, CallListActivity.class);
+
 //            playMedia();
 //            mAudioManager.setSpeakerphoneOn(false);
         });
         mBinding.btnDashNotice.setOnClickListener(view -> {
+            FragmentTransaction dashNormal = manager.beginTransaction();
+            dashNormal.replace(R.id.main_frame, noticeFragment).commitAllowingStateLoss();
 //            mAudioManager.setSpeakerphoneOn(true);
 //            stopMedia();
+//            NurseCallUtils.startNewIntent(this, EmergencyActivity.class);
         });
 
         mBinding.btnDashSetup.setOnClickListener(view -> {
-            NurseCallUtils.startIntent(this, SettingsActivity.class);
-//            if (audioTrack != null) {
-//                if (audioTrack.getPlayState() != 3) {
-//                    Log.d(TAG, "AudioTrack0: " + audioTrack.getPlayState());
-//
-//                } else {
-//                    Log.d(TAG, "AudioTrack3: " + audioTrack.getPlayState());
-//                }
-//            }
+            FragmentTransaction dashNormal = manager.beginTransaction();
+            dashNormal.replace(R.id.main_frame, settingsFragment).commitAllowingStateLoss();
+
         });
 
-//        mAudioManager.setMode(MODE_IN_CALL);
+        chkNumber = false;
+
+        try {
+            runShellCommand();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void runShellCommand() throws Exception {
+        String commandToRun = "settings put secure user_setup_complete 0";
+//        Runtime.getRuntime().exec(commandToRun);
+        Process proc;
+        try {
+            String[] test = new String[]{"su", "-c", commandToRun};
+            proc = Runtime.getRuntime().exec(test);
+            proc.waitFor();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (getCurrentFocus() != null) {
+            assert imm != null;
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+
+        }
+        return true;
+    }
 
     private void gpioPortSet() {
         try {
@@ -160,13 +205,17 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         MainTimerTask timerTask = new MainTimerTask();
         mTimer = new Timer();
-        mTimer.schedule(timerTask, 1000, 1000);
+        mTimer.schedule(timerTask, 0, 1000);
         deviceConfig();
-        getDeviceInfo();
         initService();
         mAudioManager.setMode(MODE_NORMAL);
     }
 
+    public void restartTimer() {
+        MainTimerTask timerTask = new MainTimerTask();
+        mTimer = new Timer();
+        mTimer.schedule(timerTask, 0, 1000);
+    }
 
     //
 //    @Override
@@ -420,11 +469,13 @@ public class MainActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            chkNumber = false;
         } else {
             for (ProxyConfig proxyConfig : proxyConfigs) {
                 if (proxyConfig.getIdentityAddress() != null) {
                     mBinding.imgStat.setImageResource(R.drawable.led_connected);
                     mBinding.txtNumber.setText(proxyConfig.getIdentityAddress().getUsername());
+
                     try {
                         opt.writeBytes("echo 0 > /sys/class/gpio_sw/PG2/data\n");
                     } catch (IOException e) {
@@ -432,10 +483,37 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             }
+            chkNumber = true;
+
 
         }
     }
-
+//
+//    private boolean pingTest() {
+//        Runtime runtime = Runtime.getRuntime();
+//
+//        String host = mBinding.editPbxIp.getText().toString();
+//        String cmd = "ping -c 1 -W 3 " + host;
+//
+//        Process process = null;
+//
+//        try {
+//            process = runtime.exec(cmd);
+//        } catch (IOException e) {
+//            Log.d(TAG, Objects.requireNonNull(e.getMessage()));
+//        }
+//
+//        try {
+//            assert process != null;
+//            process.waitFor();
+//        } catch (InterruptedException e) {
+//            Log.d(TAG, Objects.requireNonNull(e.getMessage()));
+//        }
+//
+//        int result = process.exitValue();
+//
+//        return result == 0;
+//    }
 
     private void deviceConfig() {
         String type = "";
@@ -459,8 +537,6 @@ public class MainActivity extends AppCompatActivity {
 //        mBinding.deviceBuilding.setText(tinyDB.getString(KeyList.DEVICE_WARD));
 //        mBinding.deviceFloor.setText(tinyDB.getString(KeyList.DEVICE_LOCATION));
 //        mBinding.devicePart.setText(tinyDB.getString(KeyList.DEVICE_ETC));
-
-
     }
 
     private void inviteAddress(Address address) {
@@ -479,37 +555,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-//    @Override
-//    public void onBackPressed() {
-////        onFragmentChange(0);
-////        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container);
-////        if (!(fragment instanceof IOnBackPressed) || !((IOnBackPressed) fragment).onBackPressed()) {
-////            super.onBackPressed();
-////        }
-//        if (curView == 0) {
-//            if (pressedTime == 0) {
-//                NurseCallUtils.printShort(this, "Press again to exit.");
-//                pressedTime = System.currentTimeMillis();
-//            } else {
-//                int seconds = (int) (System.currentTimeMillis() - pressedTime);
-//
-//                if (seconds > 2000) {
-//                    NurseCallUtils.printShort(this, "Press again to exit.");
-//                    pressedTime = 0;
-//                } else {
-//                    super.onBackPressed();
-//
-//                }
-//            }
-//
-//        }
-//    }
+    @Override
+    public void onBackPressed() {
+        //
+    }
 
     class MainTimerTask extends TimerTask {
         public void run() {
             mHandler.post(mUpdateTimeTask);
 //            Log.v(TAG, "Speaker: " + tinyDB.getBoolean(KeyList.BTN_SPEAKER_STATUS) + " Handset: " + tinyDB.getBoolean(KeyList.BTN_HANDSET_STATUS) + " CallStat: " + callStat);
-
+            mHandler.post(mUpdateStatus);
         }
 
     }
@@ -528,6 +583,8 @@ public class MainActivity extends AppCompatActivity {
             mBinding.dateText.setText(formatDate);
         }
     };
+
+    private Runnable mUpdateStatus = this::getDeviceInfo;
 
     private void initService() {
         if (PersistentService.isReady()) {

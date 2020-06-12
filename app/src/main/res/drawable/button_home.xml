@@ -9,7 +9,7 @@
 
     <item android:state_pressed="true">
         <shape>
-            <solid android:color="#7C3CF0D4" />
+            <solid android:color="#66D5D5D5" />
 
         </shape>
     </item>
@@ -22,13 +22,13 @@
 
     <item android:state_selected="true">
         <shape>
-            <solid android:color="#6643F7FD" />
+            <solid android:color="#66D5D5D5" />
         </shape>
     </item>
 
     <item android:state_enabled="false">
         <shape>
-            <solid android:color="#7E5F5F5F" />
+            <solid android:color="#7ECACACA" />
         </shape>
     </item>
 

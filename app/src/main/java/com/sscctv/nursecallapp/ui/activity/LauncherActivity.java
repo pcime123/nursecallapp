@@ -56,12 +56,12 @@ public class LauncherActivity extends AppCompatActivity implements ServiceWaitTh
         super.onStart();
         Log.d(TAG, "onStart");
 
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        defaultSettings();
 
         Log.d(TAG, "onResume");
 
@@ -104,6 +104,7 @@ public class LauncherActivity extends AppCompatActivity implements ServiceWaitTh
         Log.d(TAG, "Value doFirst: " + val);
 
         if(!val) {
+            defaultSettings();
             Intent intent = new Intent(this, SetupStepSplash.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -116,8 +117,11 @@ public class LauncherActivity extends AppCompatActivity implements ServiceWaitTh
     private void defaultSettings() {
 
         tinyDB.putBoolean(KeyList.CALL_MODE, getResources().getBoolean(R.bool.first_call_mode));
+        tinyDB.putInt(KeyList.SCREEN_CHANGE_TIME, 0);
+        tinyDB.putInt(KeyList.SCREEN_CHANGE_POS, 0);
 //        tinyDB.putBoolean(KeyList.BTN_SPEAKER_STATUS, getResources().getBoolean(R.bool.first_speaker_button));
 //        tinyDB.putBoolean(KeyList.BTN_HANDSET_STATUS, getResources().getBoolean(R.bool.first_speaker_button));
     }
+
 
 }

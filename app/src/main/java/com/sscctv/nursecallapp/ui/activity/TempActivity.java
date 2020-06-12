@@ -39,7 +39,7 @@ public class TempActivity extends AppCompatActivity {
             NurseCallUtils.startIntent(this, AccountActivity.class);
         });
         mBinding.btnSettings.setOnClickListener(view -> {
-            NurseCallUtils.startIntent(this, _SettingsActivity.class);
+//            NurseCallUtils.startIntent(this, _SettingsActivity.class);
         });
 
         mBinding.btnPbxEnter.setOnClickListener(view -> {

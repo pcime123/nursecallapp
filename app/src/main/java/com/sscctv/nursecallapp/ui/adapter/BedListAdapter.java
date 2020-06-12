@@ -89,19 +89,19 @@ public class BedListAdapter extends RecyclerView.Adapter<BedListAdapter.ViewHold
 //        holder.cardView.setCardBackgroundColor(context.getResources().getColor(R.color.white));
 //        holder.bedColor.setBackgroundColor(context.getResources().getColor(R.color.main));
 
-        if (selectedItem == position) {
-//            holder.cardView.setCardBackgroundColor(context.getResources().getColor(R.color.LightGray));
-//            holder.bedNum.setTextColor(context.getResources().getColor(R.color.black));
-//            holder.addr.setTextColor(context.getResources().getColor(R.color.black));
-//            holder.bedColor.setBackgroundColor(context.getResources().getColor(R.color.Brown_middle));
-//            String room = tinyDB.getString(KeyList.KEY_SELECT);
-//            ArrayList BedList = NurseCallUtils.getBedList(tinyDB, room);
-            if (!holder.addr.getText().toString().equals("None")) {
-                NurseCallUtils.newOutgoingCall(context, holder.addr.getText().toString());
-            } else {
-                NurseCallUtils.printShort(context, "번호를 입력해주세요");
-            }
-        }
+//        if (selectedItem == position) {
+////            holder.cardView.setCardBackgroundColor(context.getResources().getColor(R.color.LightGray));
+////            holder.bedNum.setTextColor(context.getResources().getColor(R.color.black));
+////            holder.addr.setTextColor(context.getResources().getColor(R.color.black));
+////            holder.bedColor.setBackgroundColor(context.getResources().getColor(R.color.Brown_middle));
+////            String room = tinyDB.getString(KeyList.KEY_SELECT);
+////            ArrayList BedList = NurseCallUtils.getBedList(tinyDB, room);
+//            if (!holder.addr.getText().toString().equals("None")) {
+//                NurseCallUtils.newOutgoingCall(context, holder.addr.getText().toString());
+//            } else {
+//                NurseCallUtils.printShort(context, "번호를 입력해주세요");
+//            }
+//        }
 
         holder.itemView.setTag(items.get(position));
         holder.itemView.setOnClickListener(view -> {
@@ -154,6 +154,12 @@ public class BedListAdapter extends RecyclerView.Adapter<BedListAdapter.ViewHold
             bedColor = view.findViewById(R.id.bedColor);
 //            view.setOnCreateContextMenuListener(this);
 
+            cardView.setOnLongClickListener(view1 -> {
+                if (!addr.getText().toString().equals("")) {
+                    NurseCallUtils.newOutgoingCall(context, addr.getText().toString());
+                }
+                return false;
+            });
         }
 
         @Override

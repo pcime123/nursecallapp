@@ -53,7 +53,7 @@ public class SettingsSipAccount extends AppCompatActivity {
                 switch (state) {
                     case Ok:
 
-                        mBinding.txtSip.setText(String.format("OK: %s", msg));
+                        mBinding.txtSip.setText("정상적으로 등록되었습니다.");
                         break;
                     case Failed:
                         mBinding.txtSip.setText(String.format("Failed: %s", msg));

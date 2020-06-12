@@ -10,6 +10,31 @@
         android:background="@drawable/back_aqua_splash">
 
         <LinearLayout
+            android:id="@+id/layout_only_in"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:orientation="vertical"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:paddingTop="5dp"
+                android:textStyle="bold"
+                android:text="호출 수신 중.."
+                android:textColor="@color/white"
+                android:textSize="27sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/active_call_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -61,7 +86,7 @@
                 android:gravity="center"
                 android:text="12병동 101호실 1번 병상"
                 android:textColor="@color/white"
-                android:textSize="40sp"
+                android:textSize="50sp"
                />
 <!--            <TextView-->
 <!--                android:id="@+id/call_where"-->
@@ -150,7 +175,7 @@
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_marginTop="20dp"
-
+                android:visibility="gone"
                 android:background="@drawable/button_white_stroke"
                 android:src="@drawable/ic_volume_off_white_30dp" />
 
@@ -159,6 +184,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:visibility="gone"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
                 android:text="송화 차단"
@@ -259,7 +285,6 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0.25"
                 android:layout_margin="12dp"
-
                 android:background="@drawable/button_deepgray_trans"
                 android:orientation="vertical">
 
@@ -278,7 +303,6 @@
                     android:fontFamily="sans-serif-light"
                     android:gravity="center"
                     android:text="메뉴"
-
                     android:textColor="@color/White_EA"
                     android:textSize="18sp" />
             </LinearLayout>
@@ -288,12 +312,12 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layout_in_call_bottom"
             android:layout_width="match_parent"
-            android:visibility="invisible"
+            android:visibility="visible"
             android:layout_height="match_parent">
 
             <ImageButton
                 android:id="@+id/offCall"
-                android:layout_width="120dp"
+                android:layout_width="180dp"
                 android:layout_height="120dp"
                 android:background="@drawable/button_red_circle_in"
                 android:paddingTop="40dp"
@@ -301,14 +325,14 @@
                 android:src="@drawable/ic_close_black_60dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias=".3"
+                app:layout_constraintHorizontal_bias=".25"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias=".8" />
+                app:layout_constraintVertical_bias=".85" />
 
             <ImageButton
                 android:id="@+id/onCall"
-                android:layout_width="120dp"
+                android:layout_width="180dp"
                 android:layout_height="120dp"
                 android:background="@drawable/button_green_circle_in"
                 android:paddingTop="40dp"
@@ -316,10 +340,10 @@
                 android:src="@drawable/ic_call_white_60dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias=".7"
+                app:layout_constraintHorizontal_bias=".75"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias=".8" />
+                app:layout_constraintVertical_bias=".85" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
