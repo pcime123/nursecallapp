@@ -1302,7 +1302,7 @@ public class MaterialCalendarView extends ViewGroup {
 
   /**
    * Invalidate decorators after one has changed internally. That is, if a decorator mutates, you
-   * should call this method to update the widget.
+   * should activity_call this method to update the widget.
    */
   public void invalidateDecorators() {
     adapter.invalidateDecorators();
