@@ -2,6 +2,8 @@ package com.sscctv.nursecallapp.ui.settings;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.graphics.Color;
 import android.net.EthernetManager;
 import android.net.IpConfiguration;
 import android.net.LinkAddress;
@@ -14,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -26,6 +29,8 @@ import androidx.fragment.app.Fragment;
 
 import com.sscctv.nursecallapp.R;
 import com.sscctv.nursecallapp.databinding.FragSetEthernetBinding;
+import com.sscctv.nursecallapp.ui.utils.CommandExecutor;
+import com.sscctv.nursecallapp.ui.utils.NurseCallUtils;
 import com.sscctv.nursecallapp.ui.utils.TinyDB;
 
 import org.linphone.core.Core;
@@ -41,6 +46,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -61,6 +67,8 @@ public class SetEthernetFragment extends Fragment implements RadioGroup.OnChecke
     private int prefixLength;
     private EditText ip, mask, gate;
     private RadioButton on, off;
+    private boolean isAdbUse = false;
+    private InputMethodManager imm;
 
     static SetEthernetFragment newInstance() {
         return new SetEthernetFragment();
@@ -74,7 +82,7 @@ public class SetEthernetFragment extends Fragment implements RadioGroup.OnChecke
 
     @Override
     public void onResume() {
-        retrieveInfo();
+        TaskRetrieveInfo(new RetrieveInfoTask());
         super.onResume();
     }
 
@@ -84,6 +92,7 @@ public class SetEthernetFragment extends Fragment implements RadioGroup.OnChecke
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         FragSetEthernetBinding layout = DataBindingUtil.inflate(inflater, R.layout.frag_set_ethernet, container, false);
         mEthernetManager = (EthernetManager) getActivity().getSystemService("ethernet");
+        imm = (InputMethodManager) Objects.requireNonNull(getContext()).getSystemService(Context.INPUT_METHOD_SERVICE);
 
         ip = layout.editEthernetIp;
         mask = layout.editEthernetMask;
@@ -96,11 +105,66 @@ public class SetEthernetFragment extends Fragment implements RadioGroup.OnChecke
         ipInput();
 
         layout.btnEthernetSetup.setOnClickListener(view -> {
-            CheckTypesTask task = new CheckTypesTask();
-            task.execute();
+            TaskEthernetSetup(new CheckTypesTask());
+        });
+
+        layout.btnAdb.setOnClickListener(view -> {
+            if(!isAdbUse){
+                CommandExecutor.execSingleCommand("setprop service.adb.tcp.port 5555");
+                CommandExecutor.execSingleCommand("stop adbd");
+                CommandExecutor.execSingleCommand("start adbd");
+                isAdbUse = true;
+                layout.btnAdb.setText("ADB ON");
+                layout.btnAdb.setTextColor(Color.RED);
+
+                NurseCallUtils.printShort(getContext(), "adb connect " + getIpAddress() + ":5555");
+            } else {
+                CommandExecutor.execSingleCommand("setprop service.adb.tcp.port -1");
+                CommandExecutor.execSingleCommand("stop adbd");
+                CommandExecutor.execSingleCommand("start adbd");
+                isAdbUse = false;
+                layout.btnAdb.setText("ADB OFF");
+                layout.btnAdb.setTextColor(Color.BLACK);
+            }
+
+        });
+
+        layout.btnIpPing.setOnClickListener(view -> {
+            if(!pingTest(ip.getText().toString())) {
+                NurseCallUtils.printShort(getContext(),"사용 가능합니다.");
+            } else {
+                ip.requestFocus();
+                NurseCallUtils.printShort(getContext(),"이미 사용하고 있는 IP 주소 입니다. 다른 IP 주소를 입력해주세요.");
+            }
+        });
+
+        layout.btnAutoSet.setOnClickListener(view -> {
+            if (isIpAddress(ip.getText().toString())) {
+
+                String[] strIp = ip.getText().toString().split("\\.");
+                String ip1 = strIp[0];
+                String ip2 = strIp[1];
+                String ip3 = strIp[2];
+
+                mask.setText("255.255.255.0");
+                gate.setText(String.format("%s.%s.%s.1", ip1, ip2, ip3));
+                layout.btnEthernetSetup.requestFocus();
+                imm.hideSoftInputFromWindow(layout.btnEthernetSetup.getWindowToken(), 0);
+
+            } else {
+                NurseCallUtils.printShort(getContext(), "IP 주소를 확인해주세요.");
+            }
         });
 
         return layout.getRoot();
+    }
+
+    private void TaskEthernetSetup(CheckTypesTask asyncTask) {
+        asyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    private void TaskRetrieveInfo(RetrieveInfoTask asyncTask) {
+        asyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
 
@@ -125,8 +189,8 @@ public class SetEthernetFragment extends Fragment implements RadioGroup.OnChecke
             return null;
         };
         ip.setFilters(filters);
-        ip.setFilters(filters);
-        ip.setFilters(filters);
+        mask.setFilters(filters);
+        gate.setFilters(filters);
 
     }
 
@@ -141,8 +205,8 @@ public class SetEthernetFragment extends Fragment implements RadioGroup.OnChecke
         protected void onPreExecute() {
             Log.d(TAG, "Start CheckTypesTask onPreExecute");
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            progressDialog.setCanceledOnTouchOutside(false);
-            progressDialog.setCancelable(false);
+//            progressDialog.setCanceledOnTouchOutside(false);
+//            progressDialog.setCancelable(false);
             progressDialog.setMessage(getResources().getString(R.string.please_wait));
             progressDialog.show();
 
@@ -161,6 +225,7 @@ public class SetEthernetFragment extends Fragment implements RadioGroup.OnChecke
                     inetAddr = getIPv4Address(ip.getText().toString());
                     value = true;
                 } else {
+                    ip.requestFocus();
                     Toast.makeText(getContext(), getResources().getString(R.string.not_ip), Toast.LENGTH_SHORT).show();
                     progressDialog.dismiss();
                     value = false;
@@ -170,6 +235,7 @@ public class SetEthernetFragment extends Fragment implements RadioGroup.OnChecke
                     prefixLength = maskStr2InetMask(mask.getText().toString());
                     value = true;
                 } else {
+                    mask.requestFocus();
                     Toast.makeText(getContext(), getResources().getString(R.string.not_mask), Toast.LENGTH_SHORT).show();
                     progressDialog.dismiss();
                     value = false;
@@ -179,6 +245,7 @@ public class SetEthernetFragment extends Fragment implements RadioGroup.OnChecke
                     gatewayAddr = getIPv4Address(gate.getText().toString());
                     value = true;
                 } else {
+                    gate.requestFocus();
                     Toast.makeText(getContext(), getResources().getString(R.string.not_gate), Toast.LENGTH_SHORT).show();
                     progressDialog.dismiss();
                     value = false;
@@ -232,13 +299,13 @@ public class SetEthernetFragment extends Fragment implements RadioGroup.OnChecke
         @Override
         @SuppressLint("DefaultLocale")
         protected void onPostExecute(Void aVoid) {
-//            Log.d(TAG, "Start CheckTypesTask onPostExecute");
+            Log.d(TAG, "Start CheckTypesTask onPostExecute");
             step = 0;
             new Thread(() -> {
                 while (true) {
                     if (value) {
                         step++;
-//                    Log.d(TAG, "CheckTypesTask onPostExecute Step: " + step);
+                    Log.d(TAG, "CheckTypesTask onPostExecute Step: " + step);
                         try {
                             Thread.sleep(500);
                         } catch (InterruptedException e) {
@@ -247,10 +314,10 @@ public class SetEthernetFragment extends Fragment implements RadioGroup.OnChecke
 
                         if (getEnableIP()) {
                             try {
-                                Thread.sleep(2000);
-                                retrieveInfo();
+                                Thread.sleep(500);
+                                TaskRetrieveInfo(new RetrieveInfoTask());
                                 progressDialog.dismiss();
-//                            Log.d(TAG, "CheckTypesTask onPostExecute Success Network Setup");
+                            Log.d(TAG, "CheckTypesTask onPostExecute Success Network Setup");
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
@@ -259,7 +326,7 @@ public class SetEthernetFragment extends Fragment implements RadioGroup.OnChecke
 
                         if (step == 20) {
                             progressDialog.dismiss();
-//                        Log.d(TAG, "CheckTypesTask onPostExecute 20th Failed Network Setup");
+                        Log.d(TAG, "CheckTypesTask onPostExecute 20th Failed Network Setup");
                             getActivity().runOnUiThread(() -> Toast.makeText(getContext(), getResources().getString(R.string.time_out), Toast.LENGTH_SHORT).show());
                             break;
                         }
@@ -272,64 +339,137 @@ public class SetEthernetFragment extends Fragment implements RadioGroup.OnChecke
         }
     }
 
-    @SuppressLint("SetTextI18n")
-    private void retrieveInfo() {
-        Log.d(TAG, "Ethernet Retrieve Information..");
-        getActivity().runOnUiThread(() -> {
-            String sValue;
-            String dns;
-            String mode;
+    private class RetrieveInfoTask extends AsyncTask<Void, Void, Void> {
+        private String sValue;
+        private String dns;
+        private String mode;
 
+        @Override
+        protected void onPreExecute() {
             mode = getEthMode();
-            switch (mode) {
-                case "DHCP":
-//                    Log.d(TAG, "DHCP MODE");
-                    on.setChecked(true);
-//                    addBtn.setEnabled(false);
-                    try {
-                        Process p = Runtime.getRuntime().exec("getprop");
-                        BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
-                        while ((sValue = input.readLine()) != null) {
+            Log.d(TAG, "RetrieveInfoTask onPreExcute");
+        }
 
-                            if (sValue.contains("[dhcp.eth0.gateway]:")) {
-                                Pattern pDHCPGateway = Pattern.compile("\\[dhcp.eth0.gateway\\]: \\[(.+?)\\]");
-                                Matcher m = pDHCPGateway.matcher(sValue);
-                                if (m.find()) {
-                                    gate.setText(m.group(1));
+        @Override
+        protected Void doInBackground(Void... voids) {
+            Log.d(TAG, "RetrieveInfoTask doInBackground");
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            if(mode.equals("DHCP")) {
+                on.setChecked(true);
+                try {
+                    Process p = Runtime.getRuntime().exec("getprop");
+                    BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                    while ((sValue = input.readLine()) != null) {
+
+                        if (sValue.contains("[dhcp.eth0.gateway]:")) {
+                            Pattern pDHCPGateway = Pattern.compile("\\[dhcp.eth0.gateway\\]: \\[(.+?)\\]");
+                            Matcher m = pDHCPGateway.matcher(sValue);
+                            if (m.find()) {
+                                gate.setText(m.group(1));
 //                                    Log.d(TAG, "GateWay---------" + m.group(1));
-                                }
+                            }
 
-                            } else if (sValue.contains("[dhcp.eth0.ipaddress]:")) {
-                                Pattern pDHCPIPAddress = Pattern.compile("\\[dhcp.eth0.ipaddress\\]: \\[(.+?)\\]");
-                                Matcher m = pDHCPIPAddress.matcher(sValue);
-                                if (m.find()) {
-                                    ip.setText(m.group(1));
+                        } else if (sValue.contains("[dhcp.eth0.ipaddress]:")) {
+                            Pattern pDHCPIPAddress = Pattern.compile("\\[dhcp.eth0.ipaddress\\]: \\[(.+?)\\]");
+                            Matcher m = pDHCPIPAddress.matcher(sValue);
+                            if (m.find()) {
+                                ip.setText(m.group(1));
 //                                    Log.d(TAG, "IP---------" + m.group(1));
-                                }
-                            } else if (sValue.contains("[dhcp.eth0.mask]:")) {
-                                Pattern pDHCPIPAddress = Pattern.compile("\\[dhcp.eth0.mask\\]: \\[(.+?)\\]");
-                                Matcher m = pDHCPIPAddress.matcher(sValue);
-                                if (m.find()) {
-                                    mask.setText(m.group(1));
+                            }
+                        } else if (sValue.contains("[dhcp.eth0.mask]:")) {
+                            Pattern pDHCPIPAddress = Pattern.compile("\\[dhcp.eth0.mask\\]: \\[(.+?)\\]");
+                            Matcher m = pDHCPIPAddress.matcher(sValue);
+                            if (m.find()) {
+                                mask.setText(m.group(1));
 //                                    Log.d(TAG, "Mask---------" + m.group(1));
-                                }
                             }
                         }
-                        input.close();
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
                     }
-                    break;
-                case "STATIC":
-                    off.setChecked(true);
-                    ip.setText(getIpAddress());
-                    mask.setText(getNetMask());
-                   gate.setText(getGateWay());
-                    break;
+                    input.close();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            } else {
+                Log.d(TAG, "RetrieveInfoTask onPostExecute");
+
+                off.setChecked(true);
+                ip.setText(getIpAddress());
+                Log.d(TAG, "RetrieveInfoTask getIpAddress");
+
+                mask.setText(getNetMask());
+                Log.d(TAG, "RetrieveInfoTask getNetMask");
+
+                gate.setText(getGateWay());
+                Log.d(TAG, "RetrieveInfoTask getGateWay");
 
             }
-        });
+        }
+
+
     }
+//    @SuppressLint("SetTextI18n")
+//    private void retrieveInfo() {
+//        Log.d(TAG, "Ethernet Retrieve Information..");
+//        getActivity().runOnUiThread(() -> {
+//            String sValue;
+//            String dns;
+//            String mode;
+//
+//            mode = getEthMode();
+//            switch (mode) {
+//                case "DHCP":
+////                    Log.d(TAG, "DHCP MODE");
+//                    on.setChecked(true);
+////                    addBtn.setEnabled(false);
+//                    try {
+//                        Process p = Runtime.getRuntime().exec("getprop");
+//                        BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
+//                        while ((sValue = input.readLine()) != null) {
+//
+//                            if (sValue.contains("[dhcp.eth0.gateway]:")) {
+//                                Pattern pDHCPGateway = Pattern.compile("\\[dhcp.eth0.gateway\\]: \\[(.+?)\\]");
+//                                Matcher m = pDHCPGateway.matcher(sValue);
+//                                if (m.find()) {
+//                                    gate.setText(m.group(1));
+////                                    Log.d(TAG, "GateWay---------" + m.group(1));
+//                                }
+//
+//                            } else if (sValue.contains("[dhcp.eth0.ipaddress]:")) {
+//                                Pattern pDHCPIPAddress = Pattern.compile("\\[dhcp.eth0.ipaddress\\]: \\[(.+?)\\]");
+//                                Matcher m = pDHCPIPAddress.matcher(sValue);
+//                                if (m.find()) {
+//                                    ip.setText(m.group(1));
+////                                    Log.d(TAG, "IP---------" + m.group(1));
+//                                }
+//                            } else if (sValue.contains("[dhcp.eth0.mask]:")) {
+//                                Pattern pDHCPIPAddress = Pattern.compile("\\[dhcp.eth0.mask\\]: \\[(.+?)\\]");
+//                                Matcher m = pDHCPIPAddress.matcher(sValue);
+//                                if (m.find()) {
+//                                    mask.setText(m.group(1));
+////                                    Log.d(TAG, "Mask---------" + m.group(1));
+//                                }
+//                            }
+//                        }
+//                        input.close();
+//                    } catch (Exception ex) {
+//                        ex.printStackTrace();
+//                    }
+//                    break;
+//                case "STATIC":
+//                    off.setChecked(true);
+//                    ip.setText(getIpAddress());
+//                    mask.setText(getNetMask());
+//                   gate.setText(getGateWay());
+//                    break;
+//
+//            }
+//        });
+//    }
 
     private void killDhcp() {
         List<String> listPID = new ArrayList<>();
@@ -576,4 +716,33 @@ public class SetEthernetFragment extends Fragment implements RadioGroup.OnChecke
         }
 
     }
+
+
+    private boolean pingTest(String ip) {
+        Runtime runtime = Runtime.getRuntime();
+
+        String cmd = "ping -c 1 -W 2 " + ip;
+
+        Process process = null;
+
+        try {
+            process = runtime.exec(cmd);
+        } catch (IOException e) {
+            Log.d(TAG, Objects.requireNonNull(e.getMessage()));
+        }
+
+        try {
+            assert process != null;
+            process.waitFor();
+        } catch (InterruptedException e) {
+            Log.d(TAG, Objects.requireNonNull(e.getMessage()));
+        }
+
+        int result = process.exitValue();
+
+        return result == 0;
+    }
+
+
+
 }

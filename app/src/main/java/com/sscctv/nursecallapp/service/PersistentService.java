@@ -15,10 +15,14 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.CountDownTimer;
-import android.os.Handler;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.util.Log;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.EditText;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.sscctv.nursecallapp.ui.activity.BackgroundActivity;
 import com.sscctv.nursecallapp.ui.activity.EmergencyActivity;
@@ -33,25 +37,33 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
-import java.util.Timer;
-import java.util.TimerTask;
+
+import io.seeeyes.nursecallapp.calldisplay.Reply;
+import io.seeeyes.nursecallapp.calldisplay.SystemInfo;
 
 public class PersistentService extends Service implements SensorEventListener {
     private static final String TAG = "PersistentService";
     public static final String BROADCAST_BUFFER_SEND_CODE = "com.sscctv.nursecallapp.utils.NurseCallUtils";
-
+    private static final int grpc_port = 50054;
+    private static final int em_port = 59009;
     private int MILLISINFUTURE = 100 * 100;
     private static final int COUNT_DOWN_INTERVAL = 1000;
     private static PersistentService sInstance;
     private CountDownTimer countDownTimer;
-    private Context mContext;
     private TinyDB tinyDB;
-    private ServerSocket serverSocket;
-    private boolean isRunning;
+
 
     private SensorManager sensorManager;
     private Sensor lightSensor;
     private String light;
+
+    private View topView;
+    private WindowManager wManager;
+    private WindowManager.LayoutParams params;
+    private EditText getText;
+
+    private SystemInfo systemInfo;
+    private Reply reply;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -81,7 +93,7 @@ public class PersistentService extends Service implements SensorEventListener {
         registerReceiver(broadcastBufferReceiver, new IntentFilter(BROADCAST_BUFFER_SEND_CODE));
 
         initSensor();
-        TcpSockServer(59009);
+//        TcpSockServer();
         super.onCreate();
     }
 
@@ -102,9 +114,6 @@ public class PersistentService extends Service implements SensorEventListener {
         nm.cancel(startId);
 
         sensorManager.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
-
-
-
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -215,139 +224,25 @@ public class PersistentService extends Service implements SensorEventListener {
                 case 2:
                     startTimer();
                     break;
+                case 3:
+                    tinyDB.putInt(KeyList.BACK_DISPLAY_STAT, 0);
+                    break;
+                case 4:
+                    tinyDB.putInt(KeyList.BACK_DISPLAY_STAT, 1);
+                    break;
             }
         }
     };
 
-
-    private ServerSocket serversock;
-
-    private void TcpSockServer(int iport) {
-        //서버소켓 생성
-        new Thread() {
-            @Override
-            public void run() {
-                super.run();
-                try {
-                    System.out.println("[서버실행]");
-                    serversock = new ServerSocket(iport);
-                    while (true) {
-                        System.out.println("[클라이언트 접속을 위한 대기중...]");
-                        Socket sock = serversock.accept();
-                        System.out.println("[클라이언트 IP '" + sock.getInetAddress() + "' 접속됨 ]");
-
-                        if (sock.getInputStream() != null) {
-                            TcpSockServer_read read = new TcpSockServer_read(sock);
-                            read.start();
-                        }
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }.start();
-
-    }
-
-
-
-    public class TcpSockServer_read extends Thread {
-        Socket sock = null;
-        DataOutputStream dos;
-        DataInputStream dis; //읽기버퍼
-        byte[] rbuff = new byte[1024];
-        int rbuff_cnt = 0; //연결된 클라이언트 아이피
-        private String sip = null;
-
-        TcpSockServer_read(Socket sock) {
-            this.sock = sock;
-            sip = sock.getInetAddress().toString();
-        }
-
-        public void run() {
-            try {
-                try {
-                    // 클라이언트와 문자열 통신을 위한 스트림 생성
-                    dos = new DataOutputStream(sock.getOutputStream());
-                    dis = new DataInputStream(sock.getInputStream());
-                    while (true) {
-//                    Thread.sleep(1);
-                        rbuff_cnt = dis.read(rbuff);
-
-                        if (rbuff_cnt == 0) {
-                            break;
-                        }
-
-                        dos.write(0);
-                        String s = fn_testDisplay(rbuff, rbuff_cnt);
-                        byte[] bytes = s.getBytes(StandardCharsets.UTF_8);
-                        dos.write(bytes);
-                    }
-                } finally {
-                    dis.close();
-                    dos.close();
-                    sock.close();
-                }
-            } catch (IOException e) {
-                System.out.println("클라이언트 IP '" + sip + "' 접속종료");
-            }
-        }
-    }
-
-
-    private String fn_testDisplay(byte[] buf, int num) {
-        int i;
-
-        StringBuilder stringBuilder = new StringBuilder();
-        for (i = 0; i < num; i++) {
-            stringBuilder.append(String.format("%02X ", buf[i]));
-        }
-
-        Log.d("Builder", "Data: " + stringBuilder.toString().length());
-
-        tinyDB.putString(KeyList.EM_TYPE, String.format("%02X", buf[2]));
-        tinyDB.putString(KeyList.EM_CALL, String.format("%02X", buf[11]));
-
-        Log.d(TAG, "Type: " + tinyDB.getString(KeyList.EM_TYPE) + " Call: " + tinyDB.getString(KeyList.EM_CALL));
-        if (tinyDB.getString(KeyList.EM_TYPE).equals("01") && tinyDB.getString(KeyList.EM_CALL).equals("01")) {
-            Intent intent = new Intent(getApplicationContext(), EmergencyActivity.class);
-            intent.putExtra("call", "01");
-            intent.putExtra("type", "01");
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-        } else if(tinyDB.getString(KeyList.EM_TYPE).equals("01") && tinyDB.getString(KeyList.EM_CALL).equals("00")) {
-            Intent intent = new Intent(getApplicationContext(), EmergencyActivity.class);
-            intent.putExtra("call", "00");
-            intent.putExtra("type", "01");
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-        } else if(tinyDB.getString(KeyList.EM_TYPE).equals("02") && tinyDB.getString(KeyList.EM_CALL).equals("01")) {
-            Intent intent = new Intent(getApplicationContext(), EmergencyActivity.class);
-            intent.putExtra("call", "01");
-            intent.putExtra("type", "02");
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-        } else if(tinyDB.getString(KeyList.EM_TYPE).equals("02") && tinyDB.getString(KeyList.EM_CALL).equals("00")) {
-            Intent intent = new Intent(getApplicationContext(), EmergencyActivity.class);
-            intent.putExtra("call", "00");
-            intent.putExtra("type", "02");
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-        }
-        return stringBuilder.toString();
-    }
-
-    public static void sendStatus(Context context, String msg) {
-        Intent intent = new Intent("activity_emergency");
+    private void sendMessage(String message) {
+        Intent intent = new Intent("call_start");
+        intent.putExtra("msg", message);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
-        if(sensorEvent.sensor.getType() == Sensor.TYPE_LIGHT) {
+        if (sensorEvent.sensor.getType() == Sensor.TYPE_LIGHT) {
             light = String.valueOf(sensorEvent.values[0]);
 //            Log.d(TAG, "Light: " + light);
             tinyDB.putString(KeyList.SENSOR_LIGHT, light);
@@ -358,7 +253,6 @@ public class PersistentService extends Service implements SensorEventListener {
     public void onAccuracyChanged(Sensor sensor, int i) {
 
     }
-
 
 }
 

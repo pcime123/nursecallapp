@@ -11,10 +11,11 @@ import android.os.IBinder;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.sscctv.nursecallapp.R;
-import com.sscctv.nursecallapp.ui.activity.CallActivity;
-import com.sscctv.nursecallapp.ui.adapter.CallLogItem;
+import com.sscctv.nursecallapp.ui.activity.BackgroundActivity;
+import com.sscctv.nursecallapp.ui.activity.MainActivity;
 import com.sscctv.nursecallapp.ui.utils.KeyList;
 import com.sscctv.nursecallapp.ui.utils.NurseCallUtils;
 import com.sscctv.nursecallapp.ui.utils.TinyDB;
@@ -31,16 +32,19 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import static android.media.AudioManager.MODE_NORMAL;
+import static android.media.AudioManager.STREAM_MUSIC;
 import static android.media.AudioManager.STREAM_RING;
+import static android.media.AudioManager.STREAM_SYSTEM;
 import static android.media.AudioManager.STREAM_VOICE_CALL;
 
 public class MainCallService extends Service {
     private static final String TAG = MainCallService.class.getSimpleName();
+
     private Core mCore;
 
     private static MainCallService sInstance;
@@ -51,11 +55,9 @@ public class MainCallService extends Service {
     private MainPreferences mPrefs;
     private boolean mCallGsmON;
     private MediaPlayer mRingerPlayer, mHookPlayer;
-    private Call mRingingCall;
     private TinyDB tinyDB;
-    private boolean mIsRinging;
     private boolean mAudioFocused;
-    private boolean callStat, callMode;
+    private boolean callStat, isHook;
     private DataOutputStream opt;
     private boolean isLed;
 
@@ -75,6 +77,7 @@ public class MainCallService extends Service {
         return this;
     }
 
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -87,16 +90,8 @@ public class MainCallService extends Service {
         String mBasePath = this.getFilesDir().getAbsolutePath();
         tinyDB = new TinyDB(this);
         gpioPortSet();
-//        mRingSoundFile = mBasePath + "/share/sounds/linphone/rings/notes_of_the_optimistic.mkv";
-//        mUserCertsPath = mBasePath + "/user-certs";
+        ledCallBtn(false);
         mAudioManager = ((AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE));
-
-//        Factory.instance().setLogCollectionPath(mBasePath);
-//        Factory.instance().enableLogCollection(LogCollectionState.Disabled);
-//        Factory.instance().setDebugMode(false, getString(R.string.app_name));
-//        Log.i(START_LINPHONE_LOGS);
-//        dumpDeviceInformation();
-//        dumpInstalledLinphoneInformation();
         callHandler = new Handler();
         hookHandler = new Handler();
         mCoreListener = new CoreListenerStub() {
@@ -108,31 +103,40 @@ public class MainCallService extends Service {
                     case IncomingReceived:
                         NurseCallUtils.sendRefreshTimer(MainCallService.this, 1);
 
+                        Intent missedIntent = new Intent(getApplicationContext(), MissedCallService.class);
+                        missedIntent.putExtra("msg", NurseCallUtils.CALL_INCOMING);
+                        startService(missedIntent);
+
                         if (core.getCallsNb() == 1) {
-                            requestAudioFocus(STREAM_RING);
-                            mRingingCall = call;
-                            stopMedia();
-                            startRinging("call");
-
                             callStat = true;
-                            Intent intent = new Intent(MainCallService.this, CallActivity.class);
-                            intent.putExtra("call", "incoming");
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
-                        }
-                        break;
 
+                            requestAudioFocus(STREAM_RING);
+                            stopMedia();
+                            startRingTone();
+                            sendMessage(NurseCallUtils.CALL_INCOMING);
+
+                        } else if (1 < core.getCallsNb() && core.getCallsNb() < 6) {
+                            sendMessage(NurseCallUtils.CALL_NEW_INCOMING + core.getCallsNb());
+                        }
+
+                        break;
                     case Connected:
                         if (core.getCallsNb() == 1) {
                             Log.d(TAG, "Call Dir: " + call.getDir());
                             if (call.getDir() == Call.Dir.Incoming) {
-                                stopRinging();
+                                stopRingTone();
                                 setAudioManagerInCallMode();
                                 requestAudioFocus(STREAM_VOICE_CALL);
+                                ledCallBtn(true);
 
+                            } else if (call.getDir() == Call.Dir.Outgoing) {
+                                sendMessage(NurseCallUtils.CALL_NORMAL);
                             }
-
                             callStat = true;
+                            sendMessage(NurseCallUtils.CALL_CONNECTED);
+                        } else {
+                            Log.d(TAG, "Connected Call Nb: " + core.getCallsNb());
+                            Log.d(TAG, "Connected Call: " + call.getRemoteAddress().getUsername());
                         }
 
                         break;
@@ -140,49 +144,55 @@ public class MainCallService extends Service {
                     case Error:
                     case End:
                         NurseCallUtils.sendRefreshTimer(MainCallService.this, 0);
-                        stopRinging();
+                        for(int i = 0; i< mCore.getCalls().length; i++) {
+                            Log.d(TAG, "Call: " + mCore.getCalls()[i].getRemoteAddress().getDisplayName() + " Status: " + mCore.getCalls()[i].getState());
+                        }
+
                         if (core.getCallsNb() == 0) {
+                            ledCallBtn(false);
+                            stopRingTone();
                             if (mAudioFocused) {
                                 int res = mAudioManager.abandonAudioFocus(null);
-                                Log.d(TAG, "[Audio Manager] Audio focus released a bit later: " + (res == AudioManager.AUDIOFOCUS_REQUEST_GRANTED ? "Granted" : "Denied"));
                                 mAudioFocused = false;
                             }
+                            tinyDB.putBoolean(KeyList.CALL_SPEAKER_MODE, false);
+                            sendMessage(NurseCallUtils.CALL_DECLINE);
                             callStat = false;
+
+                        } else if(core.getCallsNb() > 1){
+                            sendMessage(NurseCallUtils.CALL_NEW_DECLINE);
+                        } else if(core.getCallsNb() == 1) {
+                            sendMessage(NurseCallUtils.CALL_CALL_END);
                         }
                         break;
+                    case Released:
+                        if (core.getCallsNb() == 0) {
+                            if ((core.getCallLogs()[0].getDir() == Call.Dir.Incoming && core.getCallLogs()[0].getStatus() == Call.Status.Aborted) || tinyDB.getBoolean(KeyList.MISSED_CALL)) {
+                                Intent intent = new Intent(getApplicationContext(), MissedCallService.class);
+                                intent.putExtra("msg", core.getCallLogs()[0].getRemoteAddress().getUsername());
+                                tinyDB.putBoolean(KeyList.MISSED_CALL, true);
+                                startService(intent);
+                            }
+                        } else {
+                            Log.d(TAG, "Released Call Nb: " + core.getCallsNb());
+                            Log.d(TAG, "Released Call: " + call.getRemoteAddress().getUsername());
 
+                        }
+                        break;
                     case OutgoingRinging:
+                        sendMessage(NurseCallUtils.CALL_OUTGOING);
                         break;
 
                     case OutgoingInit:
                         NurseCallUtils.sendRefreshTimer(MainCallService.this, 1);
-
                         stopMedia();
                         setAudioManagerInCallMode();
                         requestAudioFocus(STREAM_VOICE_CALL);
-
-                        outSpeakerMode(!tinyDB.getBoolean(KeyList.CALL_MODE));
-//                        startRinging("handset");
                         callStat = true;
-                        Intent intent = new Intent(MainCallService.this, CallActivity.class);
-                        intent.putExtra("call", "outgoing");
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
                         break;
-
                     case StreamsRunning:
-//                        setAudioManagerInCallMode();
                         break;
-
-
-//                if (call == mRingingCall && mIsRinging) {
-//                    Log.d(TAG, "GOGO Stop");
-//                    stopRinging();
-//                }
                 }
-
-                ledCallBtn(callStat);
-
             }
         };
 
@@ -193,81 +203,67 @@ public class MainCallService extends Service {
             ioe.printStackTrace();
         }
 
-//        mCore = Factory.instance().createCore(mBasePath + "/.rc", mBasePath + "/rc", this);
         mPrefs = MainPreferences.instance();
         mPrefs.setContext(getApplication());
         configureCore();
-//        TelephonyManager mTelephonyManager = (TelephonyManager) getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
 
         isLed = false;
     }
 
-    private void setAudioManagerInCallMode() {
-        if (mAudioManager.getMode() == AudioManager.MODE_IN_COMMUNICATION) {
-            Log.w(TAG, "[Audio Manager] already in MODE_IN_COMMUNICATION, skipping...");
-            return;
-        }
-        Log.d(TAG, "[Audio Manager] Mode: MODE_IN_COMMUNICATION");
-
-        mAudioManager.setMode(AudioManager.MODE_IN_COMMUNICATION);
-    }
-
-    private void startRinging(String mode) {
+    private void startRingTone() {
 
         mAudioManager.setSpeakerphoneOn(true);
         mAudioManager.setMode(MODE_NORMAL);
         Log.d(TAG, "Start RingRing");
-
+        requestAudioFocus(STREAM_RING);
         try {
-            requestAudioFocus(STREAM_RING);
             AssetFileDescriptor afd;
-            if (mode.equals("call")) {
-                afd = getAssets().openFd("basic_ring.mp3");
-                if (mRingerPlayer == null) {
-                    mRingerPlayer = new MediaPlayer();
-                    mRingerPlayer.reset();
-                    mRingerPlayer.setAudioStreamType(STREAM_RING);
-                    mRingerPlayer.setLooping(true);
-                    try {
-                        mRingerPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    mRingerPlayer.setOnPreparedListener(MediaPlayer::start);
-                    mRingerPlayer.prepareAsync();
-
-                    mRingerPlayer.setOnCompletionListener(mediaPlayer -> {
-                        mediaPlayer.stop();
-                        mediaPlayer.release();
-                    });
+            afd = getApplicationContext().getAssets().openFd("basic_ring.mp3");
+            if (mRingerPlayer == null) {
+                mRingerPlayer = new MediaPlayer();
+                mRingerPlayer.reset();
+                mRingerPlayer.setAudioStreamType(STREAM_RING);
+                mRingerPlayer.setLooping(true);
+                try {
+                    mRingerPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-            }
+                mRingerPlayer.setOnPreparedListener(MediaPlayer::start);
+                mRingerPlayer.prepareAsync();
 
+                mRingerPlayer.setOnCompletionListener(mediaPlayer -> {
+                    mediaPlayer.stop();
+                    mediaPlayer.release();
+                });
+            }
         } catch (Exception e) {
-            org.linphone.core.tools.Log.e(e, "[Audio Manager] Cannot handle incoming call");
+            e.printStackTrace();
         }
-        mIsRinging = true;
     }
 
-    private void stopRinging() {
+
+    private void stopRingTone() {
         Log.d(TAG, "StopRingRing~");
         if (mRingerPlayer != null) {
             mRingerPlayer.stop();
             mRingerPlayer.release();
             mRingerPlayer = null;
         }
-
-        mIsRinging = false;
     }
+
+    private void setAudioManagerInCallMode() {
+        if (mAudioManager.getMode() == AudioManager.MODE_IN_COMMUNICATION) {
+            return;
+        }
+        mAudioManager.setMode(AudioManager.MODE_IN_COMMUNICATION);
+    }
+
 
     private void requestAudioFocus(int stream) {
         if (!mAudioFocused) {
-            int res = mAudioManager.requestAudioFocus(null, stream, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_EXCLUSIVE);
-            org.linphone.core.tools.Log.d("[Audio Manager] Audio focus requested: "
-                    + (res == AudioManager.AUDIOFOCUS_REQUEST_GRANTED
-                    ? "Granted"
-                    : "Denied"));
-            if (res == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) mAudioFocused = true;
+            if (mAudioManager.requestAudioFocus(null, stream, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_EXCLUSIVE) == AudioManager.AUDIOFOCUS_REQUEST_GRANTED)
+                mAudioFocused = true;
         }
     }
 
@@ -290,18 +286,19 @@ public class MainCallService extends Service {
             return START_STICKY;
         }
         sInstance = this;
-        mCore = Factory.instance().createCore(
-                mPrefs.getDefaultConfig(),
-                mPrefs.getFactoryConfig(),
-                this);
+
+
+        if (mCore == null) {
+
+            mCore = Factory.instance().createCore(
+                    mPrefs.getDefaultConfig(),
+                    mPrefs.getFactoryConfig(),
+                    sInstance);
+        }
+
         mCore.addListener(mCoreListener);
-
         mCore.setRing(null);
-//        mCore.setRingback(null);
-//        mCore.setRingDuringIncomingEarlyMedia(false);
-//        mCore.setRingerDevice(null);
-//        mCore.setRemoteRingbackTone(null);
-
+        mCore.setMaxCalls(2);
         mCore.start();
         TimerTask lTask =
                 new TimerTask() {
@@ -323,53 +320,34 @@ public class MainCallService extends Service {
             public void run() {
                 hookHandler.post(
                         () -> {
-//                            Log.d(TAG, getAudioMode(mAudioManager.getMode()) + " | CallMode: " + tinyDB.getBoolean(KeyList.CALL_MODE) + " | Call: " + callStat + " | isSpeaker: " + mAudioManager.isSpeakerphoneOn());
-                            callMode = tinyDB.getBoolean(KeyList.CALL_MODE);
+//                            Log.d(TAG,  "isHook: " + tinyDB.getBoolean(KeyList.CALL_HOOK) + " | Call: " + callStat + " | isSpeaker: " + mAudioManager.isSpeakerphoneOn());
+                            isHook = tinyDB.getBoolean(KeyList.CALL_HOOK);
                             if (!callStat) {
-                                if (callMode) {
-                                    playMedia();
-                                } else {
-                                    stopMedia();
-                                    ledCallBtn(callStat);
-                                }
-
                                 if (mAudioManager.getMode() == MODE_NORMAL) {
-                                    outSpeakerMode(!callMode);
+                                    outSpeakerMode(!isHook);
                                 }
 
-                            } else {
+                                if (isHook) {
+                                    if (mHookPlayer != null && !mHookPlayer.isPlaying()) {
+                                        mHookPlayer.start();
+//                                        Log.d(TAG, "Start!!");
+                                    } else {
+                                        playMedia();
+//                                        Log.d(TAG, "First Start!!");
+                                        ledCallBtn(true);
+                                    }
+                                } else {
+//                                    stopMedia();
+                                    if (mHookPlayer != null && mHookPlayer.isPlaying()) {
+                                        mHookPlayer.pause();
+//                                        Log.d(TAG, "Pause!!");
+                                        ledCallBtn(false);
+                                    }
+                                }
 
-//                                if (mAudioManager.getMode() == MODE_NORMAL) {
-//                                    outSpeakerMode(!callMode);
-//                                }
+
                             }
 
-
-
-//                            if (mAudioManager.getMode() == MODE_NORMAL) {
-//                                if (callStat) {
-//                                    if (tinyDB.getBoolean(KeyList.BTN_HANDSET_STATUS) && !tinyDB.getBoolean(KeyList.BTN_SPEAKER_STATUS)) {
-//                                        outSpeakerMode(false);
-//                                    } else if (!tinyDB.getBoolean(KeyList.BTN_HANDSET_STATUS) && tinyDB.getBoolean(KeyList.BTN_SPEAKER_STATUS)) {
-//                                        outSpeakerMode(true);
-//                                    }
-//                                } else {
-//                                    if (!tinyDB.getBoolean(KeyList.BTN_HANDSET_STATUS) && !tinyDB.getBoolean(KeyList.BTN_SPEAKER_STATUS)) {
-//                                        outSpeakerMode(false);
-//                                    }
-//                                }
-//                            }
-//
-//
-//                            if (mAudioManager.getMode() == MODE_IN_COMMUNICATION) {
-//                                if (tinyDB.getBoolean(KeyList.BTN_HANDSET_STATUS) && !tinyDB.getBoolean(KeyList.BTN_SPEAKER_STATUS)) {
-//                                    outSpeakerMode(false);
-////                                    tinyDB.putBoolean(KeyList.BTN_SPEAKER_STATUS, false);
-//                                    if(CallActivity.mContext != null) {
-//                                        ((CallActivity) CallActivity.mContext).changeSpeakerMode(false);
-//                                    }
-//                                }
-//                            }
                         });
             }
         };
@@ -385,9 +363,10 @@ public class MainCallService extends Service {
         callTimer.cancel();
         hookTimer.cancel();
         mCore.stop();
-        mCore = null;
+//        mCore = null;
         sInstance = null;
-
+        stopMedia();
+        stopRingTone();
         super.onDestroy();
     }
 
@@ -406,67 +385,8 @@ public class MainCallService extends Service {
                 Log.e(TAG, userCerts + " can't be created.");
             }
         }
-
-
-//        mCore.setUserCertificatesPath(userCerts);
-//        mCore.setCallLogsDatabasePath(mCallLogDatabaseFile);
-//        enableDeviceRingtone(mPrefs.isDeviceRingtoneEnabled());
     }
 
-    private String getAudioMode(int mode) {
-        switch (mode) {
-            case 0:
-                return "MODE_NORMAL";
-            case 1:
-                return "MODE_RINGTONE";
-            case 2:
-                return "MODE_IN_CALL";
-            case 3:
-                return "MODE_IN_COMMUNICATION";
-        }
-        return "Null: " + mode;
-    }
-
-//    public void enableDeviceRingtone(boolean use) {
-//        if (use) {
-//            Uri inAppsoundUri = Uri.parse("file:///android_asset/basic_ring.mp3");
-//            mCore.setRing(inAppsoundUri.toString());
-//            mCore.setRemoteRingbackTone(inAppsoundUri.toString());
-//        } else {
-//            mCore.setRing(mRingSoundFile);
-//        }
-//    }
-
-//    private void dumpDeviceInformation() {
-//        StringBuilder sb = new StringBuilder();
-//        sb.append("DEVICE=").append(Build.DEVICE).append("\n");
-//        sb.append("MODEL=").append(Build.MODEL).append("\n");
-//        sb.append("MANUFACTURER=").append(Build.MANUFACTURER).append("\n");
-//        sb.append("SDK=").append(Build.VERSION.SDK_INT).append("\n");
-//        sb.append("Supported ABIs=");
-//        for (String abi : Version.getCpuAbis()) {
-//            sb.append(abi).append(", ");
-//        }
-//        sb.append("\n");
-//        Log.i(TAG, sb.toString());
-//    }
-//
-//    private void dumpInstalledLinphoneInformation() {
-//        PackageInfo info = null;
-//        try {
-//            info = getPackageManager().getPackageInfo(getPackageName(), 0);
-//        } catch (PackageManager.NameNotFoundException nnfe) {
-//            nnfe.printStackTrace();
-//        }
-//
-//        if (info != null) {
-//            Log.i(TAG,
-//                    "[Service] Linphone version is " +
-//                            info.versionName + " (" + info.versionCode + ")");
-//        } else {
-//            Log.i(TAG, "[Service] Linphone version is unknown");
-//        }
-//    }
 
     private void copyIfNotExist(String target) throws IOException {
         File lFileToCopy = new File(target);
@@ -475,9 +395,9 @@ public class MainCallService extends Service {
         }
     }
 
-    private void copyFromPackage(int ressourceId, String target) throws IOException {
+    private void copyFromPackage(int resourceId, String target) throws IOException {
         FileOutputStream lOutputStream = openFileOutput(target, 0);
-        InputStream lInputStream = getResources().openRawResource(ressourceId);
+        InputStream lInputStream = getResources().openRawResource(resourceId);
         int readByte;
         byte[] buff = new byte[8048];
         while ((readByte = lInputStream.read(buff)) != -1) {
@@ -496,19 +416,15 @@ public class MainCallService extends Service {
     }
 
     private void ledCallBtn(boolean mode) {
-        if(isLed == mode) {
-            return;
-        }
 
         try {
             if (mode) {
-                opt.writeBytes("echo 0 > /sys/class/gpio_sw/PG4/data\n");
+//                opt.writeBytes("echo 0 > /sys/class/gpio_sw/PG2/data\n");
                 opt.writeBytes("echo 1 > /sys/class/gpio_sw/PG3/data\n");
             } else {
-                opt.writeBytes("echo 1 > /sys/class/gpio_sw/PG4/data\n");
+//                opt.writeBytes("echo 1 > /sys/class/gpio_sw/PG2/data\n");
                 opt.writeBytes("echo 0 > /sys/class/gpio_sw/PG3/data\n");
             }
-            isLed = mode;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -530,43 +446,37 @@ public class MainCallService extends Service {
 
     private void playMedia() {
         if (mHookPlayer == null) {
-            Log.w(TAG, "PlayMedia()");
-            mAudioManager.setMode(MODE_NORMAL);
-            requestAudioFocus(STREAM_VOICE_CALL);
+//            Log.w(TAG, "PlayMedia()");
+            mAudioManager.setSpeakerphoneOn(false);
+            mAudioManager.setMode(STREAM_MUSIC);
+            requestAudioFocus(STREAM_MUSIC);
+
             try {
                 AssetFileDescriptor afd = getAssets().openFd("freq_440hz_1sec.wav");
                 mHookPlayer = new MediaPlayer();
-                mHookPlayer.reset();
-                mHookPlayer.setAudioStreamType(MODE_NORMAL);
+                mHookPlayer.setAudioStreamType(STREAM_MUSIC);
                 mHookPlayer.setLooping(true);
                 try {
                     mHookPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+                    mHookPlayer.prepare();
+                    mHookPlayer.start();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                mHookPlayer.setOnPreparedListener(MediaPlayer::start);
-                mHookPlayer.prepareAsync();
-
-                mHookPlayer.setOnCompletionListener(mediaPlayer -> {
-                    mediaPlayer.stop();
-                    mediaPlayer.release();
-                });
-
             } catch (Exception e) {
-                org.linphone.core.tools.Log.e(e, "[Audio Manager] Cannot handle incoming call");
+                e.printStackTrace();
             }
-            ledCallBtn(true);
         }
 
     }
 
     private void stopMedia() {
         if (mHookPlayer != null) {
-            Log.w(TAG, "stopMedia " + mHookPlayer);
+//            Log.w(TAG, "stopMedia " + mHookPlayer);
             mHookPlayer.stop();
+            mHookPlayer.reset();
             mHookPlayer.release();
             mHookPlayer = null;
-
             ledCallBtn(false);
         }
     }
@@ -578,14 +488,12 @@ public class MainCallService extends Service {
         mAudioManager.setSpeakerphoneOn(mode);
     }
 
-    private void writeCallLog(String type, String name, boolean stat) {
-
-        ArrayList<CallLogItem> items = new ArrayList<>();
-
-        if(stat) {
-//            items.add(new CallLogItem("normal", type, name, ))
-            NurseCallUtils.putCallLog(tinyDB, KeyList.CALL_LOG, items);
-        }
+    private void sendMessage(String message) {
+//        Log.d(TAG, "Get Call Service Message: " + message);
+        Intent intent = new Intent("call_start");
+        intent.putExtra("msg", message);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
+
 
 }

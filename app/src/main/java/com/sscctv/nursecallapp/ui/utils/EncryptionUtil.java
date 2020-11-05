@@ -60,12 +60,15 @@ public class EncryptionUtil {
 
     public static String decode(String str) throws NoSuchPaddingException, NoSuchAlgorithmException,
             InvalidAlgorithmParameterException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
+        Log.i(TAG, "decode Write: " + str);
 
         byte[] data = secretKey.getBytes();
         SecretKey secureKey = new SecretKeySpec(data, "AES");
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
         cipher.init(Cipher.DECRYPT_MODE, secureKey, new IvParameterSpec(IV.getBytes()));
         byte[] byteStr = Base64.decodeBase64(str.getBytes());
+        Log.i(TAG, "byteStr Write: " + str);
+
         return new String(cipher.doFinal(byteStr), StandardCharsets.UTF_8);
     }
 

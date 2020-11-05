@@ -30,13 +30,13 @@
     <string name="type_title">장비 설정 확인</string>
     <string name="main_device">Main Device</string>
     <string name="setup">Setup</string>
-    <string name="type_result_title">장비 설정을 위한 확인 준비 단계입니다. 해당하는 단계를 선택 후 다음 버튼을 눌러주세요.</string>
-    <string name="type_result_first">최초 설치 장비</string>
+    <string name="type_result_title">장비 설정을 위한 확인 단계입니다. 해당하는 단계를 선택 후 다음 버튼을 눌러주세요.</string>
+    <string name="type_result_first">최초 설치(설정) 장비</string>
     <string name="type_result_first_content">최초 설치 시 네트워크 설정 단계로 이동됩니다.</string>
     <string name="type_result_second">기존 사용 장비</string>
     <string name="type_result_second_content">네트워크를 설정하지 않고 장비 유형 단계로 이동됩니다.</string>
     <string name="network_title">네트워크 설정</string>
-    <string name="network_result_title">네트워크가 IP 자동 설정 기능을 지원하면 IP 설정이 자동으로 할당됩니다. 지원하지 않으면, 네트워크 관리자에게 적절한 IP 설정값을 문의해야 합니다.</string>
+    <string name="network_result_title">네트워크가 DHCP(IP 자동 할당)를 지원하면 IP 설정이 자동으로 할당됩니다. 지원하지 않으면, 네트워크 관리자에게 적절한 IP 설정값을 문의해야 합니다.</string>
     <string name="dhcp_content">DHCP 서버가 네트워크에 구성되어 있을 경우 선택 시 자동으로 네트워크 정보를 할당 받습니다.</string>
     <string name="btn_static">고정 IP 주소</string>
     <string name="static_content">직접 IP 주소를 입력하여 설정합니다.</string>
@@ -82,4 +82,19 @@
         <item>64 kbits/s</item>
         <item>128 kbits/s</item>
     </string-array>
+
+    <string name="get_tcp_port_command">getprop service.adb.tcp.port</string>
+    <string name="get_ipaddress_command">getprop dhcp.wlan0.ipaddress</string>
+
+    <array name="enable_tcp_commands">
+        <item>setprop service.adb.tcp.port 5555</item>
+        <item>stop adbd</item>
+        <item>start adbd</item>
+    </array>
+
+    <array name="disable_tcp_commands">
+        <item>setprop service.adb.tcp.port -1</item>
+        <item>stop adbd</item>
+        <item>start adbd</item>
+    </array>
 </resources>

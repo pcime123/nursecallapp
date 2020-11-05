@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/White_EA"
+        android:orientation="vertical"
+        android:padding="4dp">
+
+        <LinearLayout
+            android:id="@+id/Bar_bed_config"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/WhiteSmoke">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:text="병실 방송"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+
+
+                <Button
+                    android:id="@+id/btn_refresh"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/button_home"
+                    android:drawableStart="@drawable/ic_refresh_black_24dp"
+                    android:drawablePadding="20dp"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:text="갱신"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/btn_prev"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/button_home"
+                    android:drawableStart="@drawable/ic_prev_24dp"
+                    android:drawablePadding="20dp"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:text="이전"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="4dp"
+            android:background="@color/WhiteSmoke"
+            android:orientation="vertical">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/bc_list"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.9"
+                android:padding="10dp" />
+
+
+            <Button
+                android:id="@+id/btn_bc_start"
+                android:layout_width="300dp"
+                android:layout_height="0dp"
+                android:layout_weight="0.1"
+                android:layout_gravity="center"
+                android:drawableStart="@drawable/ic_baseline_mic_40"
+                android:paddingStart="60dp"
+                android:paddingEnd="20dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/button_blue_ra10"
+                android:text="방송 시작"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+
+</layout>

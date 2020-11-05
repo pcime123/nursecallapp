@@ -1,14 +1,19 @@
 package com.sscctv.nursecallapp.ui.activity;
 
+import android.animation.AnimatorSet;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.graphics.Color;
+import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-
+import android.view.WindowManager;
+import android.animation.ObjectAnimator;
+import android.util.Property;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -23,6 +28,9 @@ import com.sscctv.nursecallapp.ui.utils.TinyDB;
 
 import org.linphone.core.Core;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -33,6 +41,8 @@ public class BackgroundActivity extends AppCompatActivity {
     private MainPreferences mPrefs;
     private TinyDB tinyDB;
     private ActivityBackgroundBinding mBinding;
+    private long dateTime;
+    private boolean isChange = false;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -79,21 +89,37 @@ public class BackgroundActivity extends AppCompatActivity {
         second = new TimerTask() {
             @Override
             public void run() {
-                Update();
+                handler.post(mUpdateTimeTask);
                 timer_sec++;
+                handler.post(() -> {
+                    if(!isChange) {
+                        mBinding.colon.setVisibility(View.INVISIBLE);
+                        isChange = true;
+                    } else {
+                        mBinding.colon.setVisibility(View.VISIBLE);
+                        isChange = false;
+                    }
+                });
+
             }
         };
         Timer timer = new Timer();
-        timer.schedule(second, 0, 1000);
+        timer.schedule(second, 0, 500);
     }
-    protected void Update() {
-        Runnable updater = () -> {
-//                if(timer_sec == 5) {
-//                    mBinding.backLayout.setBackgroundColor(Color.RED);
-//                } else if(timer_sec == 10) {
-//                    mBinding.backLayout.setBackgroundColor(Color.CYAN);
-//                }
-        };
-        handler.post(updater);
-    }
+
+    private Runnable mUpdateTimeTask = new Runnable() {
+
+        public void run() {
+            dateTime = System.currentTimeMillis();
+            Date date = new Date(dateTime);
+            SimpleDateFormat fHour = new SimpleDateFormat("HH", Locale.KOREA);
+            SimpleDateFormat fMinute = new SimpleDateFormat("mm", Locale.KOREA);
+
+            String strHour = fHour.format(date);
+            String strMinute = fMinute.format(date);
+
+            mBinding.hour.setText(strHour);
+            mBinding.minute.setText(strMinute);
+        }
+    };
 }

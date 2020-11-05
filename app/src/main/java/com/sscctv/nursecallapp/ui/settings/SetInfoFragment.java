@@ -1,5 +1,9 @@
 package com.sscctv.nursecallapp.ui.settings;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,7 +21,10 @@ import com.sscctv.nursecallapp.R;
 import com.sscctv.nursecallapp.databinding.FragSetAccountBinding;
 import com.sscctv.nursecallapp.databinding.FragSetInfoBinding;
 import com.sscctv.nursecallapp.service.MainCallService;
+import com.sscctv.nursecallapp.ui.activity.MainActivity;
+import com.sscctv.nursecallapp.ui.fragment.BedListFragment;
 import com.sscctv.nursecallapp.ui.utils.KeyList;
+import com.sscctv.nursecallapp.ui.utils.NurseCallUtils;
 import com.sscctv.nursecallapp.ui.utils.TinyDB;
 
 import org.linphone.core.AccountCreator;
@@ -27,7 +34,16 @@ import org.linphone.core.ProxyConfig;
 import org.linphone.core.RegistrationState;
 import org.linphone.core.TransportType;
 
+import java.io.InputStream;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.security.Key;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+
+import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
 
 
 public class SetInfoFragment extends Fragment {
@@ -38,6 +54,7 @@ public class SetInfoFragment extends Fragment {
     private AccountCreator mAccountCreator;
     private CoreListenerStub mCoreListener;
     private EditText id, pw, domain;
+    private static final int REQUEST_CODE = 10;
 
     static SetInfoFragment newInstance() {
         return new SetInfoFragment();
@@ -75,6 +92,7 @@ public class SetInfoFragment extends Fragment {
 
         layout.btnSetup.setOnClickListener(view -> {
             tinyDB.putString(KeyList.DEVICE_WARD, layout.setupLocation.getText().toString());
+            ((MainActivity) MainActivity.context).deviceConfig();
         });
 
         layout.btnClear.setOnClickListener(view -> {
@@ -92,6 +110,15 @@ public class SetInfoFragment extends Fragment {
             }
         });
 
+        layout.btnChangeLogo.setOnClickListener(view -> {
+            ((MainActivity) Objects.requireNonNull(getActivity())).setNewLogo();
+        });
+
+        layout.txtMac.setText(getMacAddress());
+
+        layout.btnSdUnmount.setOnClickListener(view -> {
+
+        });
 
         return layout.getRoot();
     }
@@ -111,4 +138,32 @@ public class SetInfoFragment extends Fragment {
 //        tinyDB.putString(KeyList.DEVICE_WARD,mBinding.inputUseWard.getText().toString());
 //    }
 
+    private String getMacAddress() {
+        try{
+            List<NetworkInterface> all = Collections.list(NetworkInterface.getNetworkInterfaces());
+            for(NetworkInterface nif : all) {
+
+                if(!nif.getName().equalsIgnoreCase("eth0")) continue;
+
+                byte[] macByte = nif.getHardwareAddress();
+                if(macByte == null) {
+                    return "";
+                }
+
+                StringBuilder res1 = new StringBuilder();
+                for(byte b : macByte) {
+                    res1.append(String.format("%02X",b));
+                }
+
+                if(res1.length() > 0) {
+                    res1.deleteCharAt(res1.length() -1);
+                }
+                return res1.toString();
+            }
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
+
+        return "";
+    }
 }

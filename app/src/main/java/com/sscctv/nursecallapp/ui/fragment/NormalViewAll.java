@@ -15,8 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.sscctv.nursecallapp.R;
 import com.sscctv.nursecallapp.databinding.TabCallAllBinding;
-import com.sscctv.nursecallapp.ui.adapter.AllExtItem;
-import com.sscctv.nursecallapp.ui.adapter.OnSelectCall;
+import com.sscctv.nursecallapp.data.AllExtItem;
+import com.sscctv.nursecallapp.ui.utils.OnSelectCall;
 import com.sscctv.nursecallapp.ui.fragment.adapter.TabListAdapter;
 import com.sscctv.nursecallapp.ui.utils.KeyList;
 import com.sscctv.nursecallapp.ui.utils.NurseCallUtils;
@@ -63,18 +63,22 @@ public class NormalViewAll extends Fragment implements OnSelectCall {
 
     private void getList() {
         getArrayList = NurseCallUtils.getAllExtList(tinyDB, KeyList.KEY_ALL_EXTENSION);
+        ArrayList<AllExtItem> temp = new ArrayList<>();
         for (int i = 0; i < getArrayList.size(); i++) {
-//            Log.d(TAG, "" + getArrayList.get(i));
+//            Log.d(TAG, "Number: " + getArrayList.get(i).getNum() + " Name: " + getArrayList.get(i).getName());
+            if(getArrayList.get(i).getName().contains("-") && !getArrayList.get(i).getNum().equals(tinyDB.getString(KeyList.SIP_ID))) {
+//                Log.d(TAG, "Temp Number: " + getArrayList.get(i).getNum() + " Temp Name: " + getArrayList.get(i).getName());
+                temp.add(new AllExtItem(getArrayList.get(i).getNum(), getArrayList.get(i).getName(),getArrayList.get(i).isSelected()));
+            }
         }
-        adapter = new TabListAdapter(getContext(), getArrayList, true, this);
+
+        adapter = new TabListAdapter(getContext(), temp, true, this);
         allList.setAdapter(adapter);
     }
 
 
     @Override
-    public void roomSelect() {
-
-    }
+    public void roomSelect(int position) { }
 
     @Override
     public void roomAllClear() {
@@ -87,25 +91,18 @@ public class NormalViewAll extends Fragment implements OnSelectCall {
     }
 
     @Override
-    public void starSelect(int position, boolean chk) {
-        ArrayList<AllExtItem> mark_list = NurseCallUtils.getAllExtList(tinyDB, KeyList.KEY_FAVORITE_EXTENSION);
-        AllExtItem item = getArrayList.get(position);
+    public void starSelect(String num, boolean chk) {
+//        ArrayList<AllExtItem> mark_list = NurseCallUtils.getAllExtList(tinyDB, KeyList.KEY_FAVORITE_EXTENSION);
 
-        if(chk) {
-            mark_list.add(new AllExtItem(item.getNum(), item.getName(), true));
+        for(int i = 0; i<getArrayList.size(); i++) {
 
-        } else {
-            for(int i = 0; i < mark_list.size(); i++) {
-                AllExtItem item1 = mark_list.get(i);
-
-                if(item.getNum().equals(item1.getNum())) {
-                    mark_list.remove(i);
-                    break;
-                }
+            if(getArrayList.get(i).getNum().equals(num)) {
+                getArrayList.get(i).setSelected(chk);
+                adapter.notifyDataSetChanged();
+                break;
             }
         }
-
-        NurseCallUtils.putAllExtList(tinyDB, KeyList.KEY_FAVORITE_EXTENSION, mark_list);
+//        NurseCallUtils.putAllExtList(tinyDB, KeyList.KEY_FAVORITE_EXTENSION, mark_list);
         NurseCallUtils.putAllExtList(tinyDB, KeyList.KEY_ALL_EXTENSION, getArrayList);
     }
 }

@@ -1,30 +1,28 @@
 package com.sscctv.nursecallapp.ui.utils;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
-import android.view.Window;
+import android.view.Gravity;
 import android.view.WindowManager;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.core.content.ContextCompat;
-
 import com.google.gson.Gson;
-import com.sscctv.nursecallapp.R;
+import com.sscctv.nursecallapp.data.AllExtItem;
+import com.sscctv.nursecallapp.data.BcItem;
+import com.sscctv.nursecallapp.data.BedItem;
+import com.sscctv.nursecallapp.data.CSVItem;
+import com.sscctv.nursecallapp.data.CallLogItem;
+import com.sscctv.nursecallapp.data.DpItem;
+import com.sscctv.nursecallapp.data.EmCallLogItem;
+import com.sscctv.nursecallapp.data.EmListItem;
+import com.sscctv.nursecallapp.data.ExtItem;
+import com.sscctv.nursecallapp.data.RoomItem;
+import com.sscctv.nursecallapp.service.CallDisplayClient;
 import com.sscctv.nursecallapp.service.MainCallService;
-import com.sscctv.nursecallapp.ui.adapter.AllExtItem;
-import com.sscctv.nursecallapp.ui.adapter.BedItem;
-import com.sscctv.nursecallapp.ui.adapter.CSVItem;
-import com.sscctv.nursecallapp.ui.adapter.CallLogItem;
-import com.sscctv.nursecallapp.ui.adapter.ExtItem;
-import com.sscctv.nursecallapp.ui.adapter.RoomItem;
 
 import org.linphone.core.Address;
 import org.linphone.core.CallParams;
@@ -46,26 +44,68 @@ public class NurseCallUtils {
     public static final String BROADCAST_BUFFER_SEND_CODE = "com.sscctv.nursecallapp.utils.NurseCallUtils";
     public static final String SERVICE_CODE = "com.sscctv.nursecallapp.service.PersistentService";
 
+    public static final String STRING_SPLIT= "_@#@_";
+    public static final String CALL_INCOMING = "incoming";
+    public static final String CALL_DECLINE = "decline";
+    public static final String CALL_OUTGOING = "outgoing";
+    public static final String CALL_NORMAL = "call";
+    public static final String CALL_NEW_INCOMING = "incoming+";
+    public static final String CALL_NEW_DECLINE = "list_end";
+    public static final String CALL_CALL_END = "end_call";
+    public static final String CALL_CONNECTED = "call_connected";
+
+    public static final String ECHO_BYPASS = "0300";
+    public static final String ECHO_SPEAKER_GAIN = "02A0";
+    public static final String ECHO_MIC_GAIN = "02B2";
+    public static final String ECHO_RESET = "0006";
     public NurseCallUtils() {
     }
 
-    public static Dialog getDialog(Context context, String text) {
-        final Dialog dialog = new Dialog(context);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        Drawable d = new ColorDrawable(ContextCompat.getColor(context, R.color.gray));
-        d.setAlpha(200);
-        dialog.setContentView(R.layout.dialog);
-        dialog.getWindow()
-                .setLayout(
-                        WindowManager.LayoutParams.MATCH_PARENT,
-                        WindowManager.LayoutParams.MATCH_PARENT);
-        dialog.getWindow().setBackgroundDrawable(d);
+    public static void getMyCallNumber() {
 
-        TextView customText = dialog.findViewById(R.id.dialog_message);
-        customText.setText(text);
-        return dialog;
     }
 
+    public static void sendCallBoard(boolean mode) {
+
+        String host = "175.195.153.233";
+        int port = 50054;
+        CallDisplayClient client = new CallDisplayClient(host, port);
+
+        if(mode) {
+            client.displayCallPhrase("0", "0", "101", "3");
+        } else {
+            client.stopCallPhrase();
+        }
+        client.shutdown();
+    }
+
+
+
+
+    public static void sendSetTime() {
+        String host = "175.195.153.241";
+        int port = 50054;
+        CallDisplayClient client = new CallDisplayClient(host, port);
+        client.setTime();
+//        SystemInfo systemInfo = client.getSystem();
+//        if (systemInfo == null) {
+//            Log.d("CallDisplayClient", "getSystem error");
+//
+//            client.shutdown();
+//            return;
+//        }
+//        Log.d("CallDisplayClient", "Model      : " + systemInfo.getModel());
+//        Log.d("CallDisplayClient", "Version    : " + systemInfo.getVersion());
+//        Log.d("CallDisplayClient", "VolumeMax  : " + systemInfo.getVolumeMax());
+//        Log.d("CallDisplayClient", "VolumeMin  : " + systemInfo.getVolumeMin());
+//        Log.d("CallDisplayClient", "VolumeStep : " + systemInfo.getVolumeStep());
+//        Log.d("CallDisplayClient", "VolumeCur  : " + systemInfo.getVolumeCur().getVolume());
+//        Log.d("CallDisplayClient", "TimeCur    : " + systemInfo.getTimeCur().getTime());
+//        Log.d("CallDisplayClient", "CommonPhrase : " + systemInfo.getCommonPhrase().getPhrase());
+//        Log.d("CallDisplayClient", "Network    : " + systemInfo.getNetInfoList().toString());
+
+//                    client.shutdown();
+    }
 
     public static String getAddressDisplayName(Address address) {
         if (address == null) return null;
@@ -90,7 +130,18 @@ public class NurseCallUtils {
     }
 
     public static void printShort(Context context, String str) {
+
         Toast.makeText(context, str, Toast.LENGTH_SHORT).show();
+    }
+
+    public static void printShortCenter(Context context, String str) {
+        Toast toast = Toast.makeText(context, str, Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.show();
+
+
+
+
     }
 
     public static void printLong(Context context, String str) {
@@ -152,6 +203,28 @@ public class NurseCallUtils {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
+    }
+
+    public static void putBcList(TinyDB tinyDB, String key, ArrayList<BcItem> bcItems) {
+        Gson gson = new Gson();
+        ArrayList<String> objString = new ArrayList<>();
+        for (BcItem bcItem : bcItems) {
+            objString.add(gson.toJson(bcItem));
+        }
+        tinyDB.putListString(key, objString);
+    }
+
+    public static ArrayList<BcItem> getBcList(TinyDB tinyDB, String key) {
+        Gson gson = new Gson();
+
+        ArrayList<String> objStrings = tinyDB.getListString(key);
+        ArrayList<BcItem> bcItems = new ArrayList<>();
+
+        for (String jObjString : objStrings) {
+            BcItem bcItem = gson.fromJson(jObjString, BcItem.class);
+            bcItems.add(bcItem);
+        }
+        return bcItems;
     }
 
 
@@ -290,14 +363,14 @@ public class NurseCallUtils {
     }
 
 
-    public static String putCallName (TinyDB tinyDB, String num) {
+    public static String putCallName(TinyDB tinyDB, String num) {
 
         ArrayList<AllExtItem> temp = getAllExtList(tinyDB, KeyList.KEY_ALL_EXTENSION);
 
-        for(int i = 0; i< temp.size(); i++ ) {
-            AllExtItem item =  temp.get(i);
+        for (int i = 0; i < temp.size(); i++) {
+            AllExtItem item = temp.get(i);
 //            Log.d("putCallName", "GetNum: " + item.getNum());
-            if(item.getNum().equals(num)) {
+            if (item.getNum().equals(num)) {
                 return item.getName();
             }
         }
@@ -332,6 +405,140 @@ public class NurseCallUtils {
             callList.add(callLogItem);
         }
         return callList;
+    }
+
+    public static void putEmLog(TinyDB tinyDB, String key, ArrayList<EmCallLogItem> logItems) {
+        Gson gson = new Gson();
+        ArrayList<String> objString = new ArrayList<>();
+        if (logItems == null) {
+            ArrayList<String> emCallList = new ArrayList<>();
+            emCallList.add("");
+            tinyDB.putListString(key, emCallList);
+        } else {
+            for (EmCallLogItem logItem : logItems) {
+                objString.add(gson.toJson(logItem));
+            }
+            tinyDB.putListString(key, objString);
+        }
+    }
+
+    public static ArrayList<EmCallLogItem> getEmLog(TinyDB tinyDB, String key) {
+        Gson gson = new Gson();
+
+        ArrayList<String> objStrings = tinyDB.getListString(key);
+        ArrayList<EmCallLogItem> emCallList = new ArrayList<>();
+
+        for (String jObjString : objStrings) {
+            EmCallLogItem emCallLogItem = gson.fromJson(jObjString, EmCallLogItem.class);
+            emCallList.add(emCallLogItem);
+        }
+        return emCallList;
+    }
+
+    public static ArrayList<EmListItem> getEmAllList(TinyDB tinyDB, String key) {
+        Gson gson = new Gson();
+
+        ArrayList<String> objStrings = tinyDB.getListString(key);
+        ArrayList<EmListItem> emList = new ArrayList<>();
+
+        for (String jObjString : objStrings) {
+            EmListItem emLogItem = gson.fromJson(jObjString, EmListItem.class);
+            emList.add(emLogItem);
+        }
+        return emList;
+    }
+
+    public static void putEmCallList(TinyDB tinyDB, String key, ArrayList<EmListItem> logItems) {
+        Gson gson = new Gson();
+        ArrayList<String> objString = new ArrayList<>();
+        if (logItems == null) {
+            ArrayList<String> emList = new ArrayList<>();
+            emList.add("");
+            tinyDB.putListString(key, emList);
+        } else {
+            for (EmListItem logItem : logItems) {
+                objString.add(gson.toJson(logItem));
+            }
+            tinyDB.putListString(key, objString);
+        }
+    }
+
+
+
+    public static void putDpList(TinyDB tinyDB, String key, ArrayList<DpItem> dpItems) {
+        Gson gson = new Gson();
+        ArrayList<String> objString = new ArrayList<>();
+        if (dpItems == null) {
+            ArrayList<String> nullList = new ArrayList<>();
+            nullList.add("");
+            tinyDB.putListString(key, nullList);
+        } else {
+            for (DpItem dpItem : dpItems) {
+                objString.add(gson.toJson(dpItem));
+            }
+            tinyDB.putListString(key, objString);
+        }
+    }
+
+    public static ArrayList<DpItem> getDpList(TinyDB tinyDB, String key) {
+        Gson gson = new Gson();
+
+        ArrayList<String> objStrings = tinyDB.getListString(key);
+        ArrayList<DpItem> dpItems = new ArrayList<>();
+
+        for (String jObjString : objStrings) {
+            DpItem dpItem = gson.fromJson(jObjString, DpItem.class);
+            dpItems.add(dpItem);
+        }
+        return dpItems;
+    }
+
+    public static String putDeviceName(String device) {
+
+        if(!device.contains("-")){
+            return device;
+        }
+
+        String model = null;
+        String index1 = null;
+        String index2 = null;
+        String index3 = null;
+
+        String[] callerId = device.split("-");
+        if(callerId.length == 4) {
+            model = callerId[0];
+            index1 = callerId[1];
+            index2 = callerId[2];
+            index3 = callerId[3];
+
+            if (device.contains(KeyList.MODEL_TELEPHONE_MASTER)) {
+                // 기기모델명 + 병동 + 0 + 일련번호 (2자리)
+                return index1 + "병동 간호사 스테이션 - " + index3;
+            } else if (device.contains(KeyList.MODEL_TELEPHONE_SECURITY)) {
+                return index1 + "병동 보안 스테이션 - " + index3;
+            } else if (device.contains(KeyList.MODEL_TELEPHONE_PUBLIC)) {
+                return index1 + "병동 병리실 - " + index3;
+            } else if (device.contains(KeyList.MODEL_PAGER_BASIC) || device.contains(KeyList.MODEL_PAGER_EXTENTION)
+                    || device.contains(KeyList.MODEL_PAGER_BASIC_WALL) || device.contains(KeyList.MODEL_PAGER_BASIC_STAND)) {
+                // 기기모델명 + 병동 + 병실 + 병상
+                return index1 + "병동 " + index2.replaceAll("M", "") + "호 " + index3 + "번 간호사 호출기";
+            } else if (device.contains(KeyList.MODEL_PAGER_PUBLIC_STAND) || device.contains(KeyList.MODEL_PAGER_PUBLIC_WALL)) {
+                return index1 + "병동 공용통화자기 - " + index3;
+
+            } else if (device.contains(KeyList.MODEL_PAGER_OPERATING_01) || device.contains(KeyList.MODEL_PAGER_OPERATING_02) ||
+                    device.contains(KeyList.MODEL_PAGER_OPERATING_03)) {
+                return index2 + " 수슬실 호출기 - " + index3;
+
+            }
+        } else {
+            return device;
+        }
+        return device;
+    }
+
+    public static String telePhoneDetail(String name) {
+        //NCTB-10-0-01
+        return name;
     }
 
 
@@ -370,6 +577,7 @@ public class NurseCallUtils {
 
         } catch (Exception e) {
             e.printStackTrace();
+
         }
 
         return message;

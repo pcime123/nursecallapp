@@ -10,7 +10,7 @@
         <LinearLayout
             android:id="@+id/bar"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="50dp"
             android:background="@color/white"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -37,7 +37,7 @@
             android:id="@+id/settings_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="44dp"
+            android:layout_marginTop="54dp"
             android:background="@color/white"
             android:elevation="2dp"
             android:focusable="true"
@@ -61,8 +61,7 @@
                     android:gravity="center"
                     android:text="날짜/시간 자동설정"
                     android:textColor="@color/black"
-                    android:textSize="14sp"
-                    />
+                    android:textSize="16sp" />
 
                 <Switch
                     android:id="@+id/sw_auto"
@@ -70,9 +69,9 @@
                     android:layout_height="match_parent"
                     android:layout_weight="0.8"
                     android:paddingEnd="10dp"
+                    android:text="Switch"
                     android:thumb="@drawable/switch_thumb"
-                    android:track="@drawable/switch_track_selector"
-                    android:text="Switch" />
+                    android:track="@drawable/switch_track_selector" />
 
             </LinearLayout>
 
@@ -103,17 +102,18 @@
                     android:gravity="center"
                     android:text="날짜 설정"
                     android:textColor="@color/black"
-                    android:textSize="14sp"
-                   />
+                    android:textSize="16sp" />
 
                 <Button
                     android:id="@+id/btn_set_date"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.8"
-                    android:background="@drawable/button_home"
-                    android:text="2020년 6월 5일"
-                    android:textColor="@color/black" />
+                    android:background="@drawable/button_trans_ra10"
+                    android:text="2020년 01월 01일"
+                    android:textColor="@color/black"
+
+                    android:textSize="16sp" />
 
 
             </LinearLayout>
@@ -145,18 +145,17 @@
                     android:gravity="center"
                     android:text="시간 설정"
                     android:textColor="@color/black"
-                    android:textSize="14sp"
-                    />
+                    android:textSize="16sp" />
 
                 <Button
                     android:id="@+id/btn_set_time"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.8"
-                    android:background="@drawable/button_home"
-                    android:text="오전 10:42"
+                    android:background="@drawable/button_trans_ra10"
+                    android:text="오전 10:00"
                     android:textColor="@color/black"
-                    />
+                    android:textSize="16sp" />
 
             </LinearLayout>
 
@@ -186,17 +185,17 @@
                     android:gravity="center"
                     android:text="표준 시간대 선택"
                     android:textColor="@color/black"
-                    android:textSize="14sp"
-                    />
+                    android:textSize="16sp" />
 
                 <Button
                     android:id="@+id/btn_set_gmt"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.8"
-                    android:background="@drawable/button_home"
+                    android:background="@drawable/button_trans_ra10"
                     android:text="GMT+09:00 대한민국 표준시"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
 
             </LinearLayout>
 
@@ -226,8 +225,7 @@
                     android:gravity="center"
                     android:text="24시간 형식 사용"
                     android:textColor="@color/black"
-                    android:textSize="14sp"
-                    />
+                    android:textSize="16sp" />
 
                 <Switch
                     android:id="@+id/sw_hour"
@@ -235,10 +233,10 @@
                     android:layout_height="match_parent"
                     android:layout_weight="0.8"
                     android:paddingEnd="10dp"
-                    android:thumb="@drawable/switch_thumb"
+                    android:text="Switch"
 
-                    android:track="@drawable/switch_track_selector"
-                    android:text="Switch" />
+                    android:thumb="@drawable/switch_thumb"
+                    android:track="@drawable/switch_track_selector" />
 
 
             </LinearLayout>

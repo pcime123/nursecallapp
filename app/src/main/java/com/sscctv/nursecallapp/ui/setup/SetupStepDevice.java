@@ -1,8 +1,10 @@
 package com.sscctv.nursecallapp.ui.setup;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
+import android.view.Window;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -18,6 +20,7 @@ public class SetupStepDevice extends AppCompatActivity {
     private ActivitySetupDeviceBinding mBinding;
     private int mode;
     private TinyDB tinyDB;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,22 +32,53 @@ public class SetupStepDevice extends AppCompatActivity {
         mBinding.btnPath.setEnabled(false);
         mBinding.btnEtc.setEnabled(false);
 
-        mBinding.btnPrev.setOnClickListener(view -> finish());
+        mBinding.btnPrev.setOnClickListener(view -> {
+            startActivity(new Intent(this, SetupStepType.class));
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+            finish();
+        });
 
         mBinding.btnNext.setOnClickListener(view -> {
 
-            getSelectMode();
+            if (mBinding.inputUseWard.getText().toString().isEmpty()) {
+                Dialog dialog = new Dialog(SetupStepDevice.this);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.dialog_error_setup);
 
-            Intent intent = new Intent(this, SetupStepAccount.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
+                final Button yes = dialog.findViewById(R.id.dialog_setup_yes);
+                yes.setOnClickListener(view1 -> {
+                    getSelectMode();
+
+                    Intent intent = new Intent(this, SetupStepAccount.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    dialog.dismiss();
+                });
+
+                final Button no = dialog.findViewById(R.id.dialog_setup_no);
+                no.setOnClickListener(view1 -> {
+                    dialog.dismiss();
+                });
+
+                dialog.show();
+
+            } else {
+
+                getSelectMode();
+
+                Intent intent = new Intent(this, SetupStepAccount.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                finish();
+            }
+
         });
 
     }
 
     private void getSelectMode() {
-        if(mBinding.btnNurse.isChecked()){
+        if (mBinding.btnNurse.isChecked()) {
             mode = 0;
         } else if (mBinding.btnSecurity.isChecked()) {
             mode = 1;
@@ -55,6 +89,6 @@ public class SetupStepDevice extends AppCompatActivity {
         }
 
         tinyDB.putInt(KeyList.DEVICE_TYPE, mode);
-        tinyDB.putString(KeyList.DEVICE_WARD,mBinding.inputUseWard.getText().toString());
+        tinyDB.putString(KeyList.DEVICE_WARD, mBinding.inputUseWard.getText().toString());
     }
 }

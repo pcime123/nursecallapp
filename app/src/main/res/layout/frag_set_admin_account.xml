@@ -1,29 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/White_EA">
+        android:background="@color/White_EA"
+        android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/bar"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="@color/white"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_height="50dp"
+            android:background="@color/white">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginStart="18dp"
-                android:text="화면 설정"
-
+                android:text="관리자 계정 관리"
                 android:textColor="@color/black"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <View
@@ -31,17 +28,29 @@
                 android:layout_height="0dp"
                 android:layout_weight="1" />
 
+            <Button
+                android:id="@+id/btn_hidden"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/button_home"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:textSize="12sp"
+                android:visibility="visible" />
+
         </LinearLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:id="@+id/settings_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="44dp"
+            android:layout_marginTop="4dp"
             android:background="@color/white"
             android:elevation="2dp"
             android:focusable="true"
             android:focusableInTouchMode="true"
+            android:orientation="vertical"
             android:padding="10dp">
 
 
@@ -51,8 +60,7 @@
                 android:layout_height="50dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="30dp"
-                android:layout_marginEnd="10dp"
-                app:layout_constraintTop_toTopOf="parent">
+                android:layout_marginEnd="10dp">
 
                 <Button
                     android:id="@+id/btn_admin_change"
@@ -63,7 +71,8 @@
                     android:paddingStart="24dp"
                     android:paddingEnd="24dp"
                     android:text="비밀번호 변경"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
 
             </LinearLayout>
 
@@ -71,10 +80,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="0.1dp"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginEnd="10dp"
-                android:background="@color/LightGray"
-                app:layout_constraintTop_toBottomOf="@id/settings_admin_0" />
+                android:background="@color/LightGray" />
 
             <LinearLayout
                 android:id="@+id/settings_admin_1"
@@ -82,8 +90,7 @@
                 android:layout_height="50dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="20dp"
-                android:layout_marginEnd="10dp"
-                app:layout_constraintTop_toBottomOf="@id/settings_admin_0">
+                android:layout_marginEnd="10dp">
 
                 <Button
                     android:id="@+id/btn_admin_default"
@@ -94,15 +101,12 @@
                     android:paddingStart="24dp"
                     android:paddingEnd="24dp"
                     android:text="비밀번호 초기화"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
 
             </LinearLayout>
+        </LinearLayout>
 
 
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 </layout>

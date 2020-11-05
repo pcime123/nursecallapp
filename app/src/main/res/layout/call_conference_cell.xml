@@ -61,7 +61,7 @@
             android:layout_gravity="center_vertical"
             android:adjustViewBounds="true"
             android:gravity="center_vertical"
-            android:src="@drawable/conference_exit_default" />
+            android:src="@drawable/icon_volume_up" />
 
     </LinearLayout>
 

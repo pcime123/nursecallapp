@@ -2,27 +2,30 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="50dp"
-    android:alpha="0.5"
+    android:alpha="0.8"
     android:gravity="center_vertical"
     android:orientation="horizontal"
+    android:background="#68FFFFFF"
     android:padding="5dp">
 
     <com.sscctv.nursecallapp.ui.utils.MarqueeTextView
         android:id="@+id/contact_name"
-        android:layout_width="0dip"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center_vertical|left"
-        android:textColor="@color/white"
-        android:textSize="15sp"
+        android:textColor="@color/black"
+        android:textSize="18sp"
         android:singleLine="true"
+        android:textStyle="bold"
         android:paddingLeft="20dp"
         android:paddingRight="10dp" />
 
     <Chronometer
         android:id="@+id/call_timer"
-        android:textColor="@color/white"
-        android:textSize="15sp"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_vertical|right"
@@ -34,6 +37,6 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:gravity="center_vertical"
-        android:src="@drawable/pause" />
+        android:src="@drawable/ic_baseline_pause_circle_filled_24" />
 
 </LinearLayout>

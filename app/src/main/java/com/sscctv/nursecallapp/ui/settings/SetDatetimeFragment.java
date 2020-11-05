@@ -130,6 +130,7 @@ public class SetDatetimeFragment extends Fragment {
         ((MainActivity)MainActivity.context).restartTimer();
 
 //        refreshMillis();
+
     };
 
     private TimePickerDialog.OnTimeSetListener timeListener = ((timePicker, i, i1) -> {

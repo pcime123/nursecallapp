@@ -84,7 +84,7 @@ public class OpenApi {
         public String agentid;
     }
 
-    public class PagingGroupList {
+    public static class PagingGroupList {
         public String id;
         public String number;
         public String name;
@@ -108,6 +108,12 @@ public class OpenApi {
         public String allowexten;
         public String allowextengroup;
         public String enablekeyhanup;
-        public String multicastip;
+    }
+
+    public class PagingPlayMusic {
+        public String callee;
+        public String volume;
+        public String prompt;
+        public String count;
     }
 }

@@ -3,7 +3,7 @@
     android:id="@+id/bed_list_select"
     android:clickable="true"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="55dp"
     android:orientation="horizontal"
     android:padding="8dp"
     android:focusable="true">
@@ -12,7 +12,8 @@
         android:id="@+id/list_checkbox"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="0.1"
+        android:layout_weight="0.08"
+        android:layout_marginStart="10dp"
         android:button="@drawable/checkbox"
         />
 
@@ -23,7 +24,8 @@
         android:layout_weight="0.1"
         android:gravity="center"
         android:textColor="@color/black"
-        android:text="1011" />
+        android:textSize="16sp"
+        android:text="ex) 1001" />
 
     <TextView
         android:id="@+id/bed_list_name"
@@ -31,6 +33,7 @@
         android:layout_height="match_parent"
         android:layout_weight="0.3"
         android:gravity="center"
+        android:textSize="16sp"
         android:textColor="@color/black"
         android:text="간호사 호출기" />
 
@@ -41,7 +44,7 @@
         android:layout_weight="0.2"
         android:gravity="center"
         android:textColor="@color/black"
-
+        android:textSize="16sp"
         android:text="101" />
 
     <TextView
@@ -50,6 +53,7 @@
         android:layout_height="match_parent"
         android:layout_weight="0.2"
         android:gravity="center"
+        android:textSize="16sp"
         android:textColor="@color/black"
         android:text="1001" />
 
@@ -59,6 +63,7 @@
         android:layout_height="match_parent"
         android:layout_weight="0.2"
         android:gravity="center"
+        android:textSize="16sp"
         android:textColor="@color/black"
         android:text="01" />
 

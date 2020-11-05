@@ -15,9 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.sscctv.nursecallapp.R;
 import com.sscctv.nursecallapp.databinding.TabCallMarkBinding;
-import com.sscctv.nursecallapp.databinding.TabCallSecurityBinding;
-import com.sscctv.nursecallapp.ui.adapter.AllExtItem;
-import com.sscctv.nursecallapp.ui.adapter.OnSelectCall;
+import com.sscctv.nursecallapp.data.AllExtItem;
+import com.sscctv.nursecallapp.ui.utils.OnSelectCall;
 import com.sscctv.nursecallapp.ui.fragment.adapter.TabListAdapter;
 import com.sscctv.nursecallapp.ui.utils.KeyList;
 import com.sscctv.nursecallapp.ui.utils.NurseCallUtils;
@@ -61,18 +60,21 @@ public class NormalViewMark extends Fragment implements OnSelectCall{
     }
 
     private void getList() {
-        getArrayList = NurseCallUtils.getAllExtList(tinyDB, KeyList.KEY_FAVORITE_EXTENSION);
+        getArrayList = NurseCallUtils.getAllExtList(tinyDB, KeyList.KEY_ALL_EXTENSION);
+        ArrayList<AllExtItem> temp = new ArrayList<>();
+        for(int i = 0; i<getArrayList.size(); i++) {
+            if(getArrayList.get(i).isSelected()) {
+                temp.add(new AllExtItem(getArrayList.get(i).getNum(), getArrayList.get(i).getName(), getArrayList.get(i).isSelected()));
+            }
+        }
+        Collections.sort(temp);
 
-        Collections.sort(getArrayList);
-
-        TabListAdapter adapter = new TabListAdapter(getContext(), getArrayList, false, this);
+        TabListAdapter adapter = new TabListAdapter(getContext(), temp, false, this);
         markList.setAdapter(adapter);
     }
 
     @Override
-    public void roomSelect() {
-
-    }
+    public void roomSelect(int position) { }
 
     @Override
     public void roomAllClear() {
@@ -84,7 +86,7 @@ public class NormalViewMark extends Fragment implements OnSelectCall{
     }
 
     @Override
-    public void starSelect(int position, boolean chk) {
+    public void starSelect(String position, boolean chk) {
 
     }
 }

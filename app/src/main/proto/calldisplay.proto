@@ -1,0 +1,96 @@
+syntax = "proto3";
+
+package nursecallapp.calldisplay;
+
+option java_multiple_files = true;
+option java_package = "io.seeeyes.nursecallapp.calldisplay";
+option java_outer_classname = "CallDisplayProto";
+
+import "google/protobuf/empty.proto";
+
+service CallDisplay {
+
+  rpc GetSystem(google.protobuf.Empty) returns (SystemInfo) {}
+
+  rpc SetNetwork(NetworkInfo) returns (Reply) {}
+
+  rpc SetTime(Time) returns (Reply) {}
+
+  rpc GetCommonPhrase(google.protobuf.Empty) returns (CommonPhrase) {}
+
+  rpc SetCommonPhrase(CommonPhrase) returns (Reply) {}
+
+  rpc DisplayCallPhrase(CallPhrase) returns (Reply) {}
+
+  rpc StopCallPhrase(google.protobuf.Empty) returns (Reply) {}
+
+  rpc DisplayAlarmPhrase(AlarmPhrase) returns (Reply) {}
+
+  rpc StopAlarmPhrase(google.protobuf.Empty) returns (Reply) {}
+
+  rpc GetVolume(google.protobuf.Empty) returns (Volume) {}
+
+  rpc SetVolume(Volume) returns (Reply) {}
+
+  rpc UpdateApp(google.protobuf.Empty) returns (Reply) {}
+
+  rpc GetLocation(Location) returns (Location) {}
+
+}
+
+message Reply {
+  enum Result {
+    SUCCESS = 0;
+    FAIL = 1;
+  }
+
+  Result result = 1;
+}
+
+message Location {
+    string loc = 1;
+}
+
+message Time {
+  int64 time = 1;
+}
+
+message Volume {
+  int32 volume = 1;
+}
+
+message CommonPhrase {
+  string phrase = 1;
+}
+
+message CallPhrase {
+  string type = 1;
+  string phrase = 2;
+  string room = 3;
+  string bed = 4;
+}
+
+message AlarmPhrase {
+  string phrase = 1;
+}
+
+message NetworkInfo {
+  string if = 1;            // interface : eth0, wlan0 ...
+  string addr = 2;
+  string mask = 3;
+  string gateway = 4;
+}
+
+message SystemInfo {
+  string model = 1;         // Product Model
+  string version = 2;       // Software Version
+  int32 volume_max = 3;
+  int32 volume_min = 4;
+  int32 volume_step = 5;     // Sound Volume up/down step size
+  Volume volume_cur = 6;       // Current Sound Volume
+  Time time_cur = 7;         // Current Time
+  CommonPhrase common_phrase = 8;
+  repeated NetworkInfo net_info = 9;
+}
+
+

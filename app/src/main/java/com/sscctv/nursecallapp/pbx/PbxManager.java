@@ -26,7 +26,6 @@ public class PbxManager {
         String json = new Gson().toJson(mLoginApi, OpenApi.LoginApi.class);
         new PbxHttpClient().postSync(url, json);
 
-
     }
 //
 //    public OpenApi.DeviceInfo queryPbxInfo() {

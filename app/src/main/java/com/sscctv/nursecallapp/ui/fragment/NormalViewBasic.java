@@ -1,7 +1,6 @@
 package com.sscctv.nursecallapp.ui.fragment;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.sscctv.nursecallapp.R;
 import com.sscctv.nursecallapp.databinding.TabCallBedBinding;
-import com.sscctv.nursecallapp.ui.adapter.AllExtItem;
-import com.sscctv.nursecallapp.ui.adapter.OnSelectCall;
+import com.sscctv.nursecallapp.data.AllExtItem;
+import com.sscctv.nursecallapp.ui.utils.OnSelectCall;
 import com.sscctv.nursecallapp.ui.fragment.adapter.TabListAdapter;
 import com.sscctv.nursecallapp.ui.utils.KeyList;
 import com.sscctv.nursecallapp.ui.utils.NurseCallUtils;
@@ -66,7 +65,7 @@ public class NormalViewBasic extends Fragment implements OnSelectCall {
         getArrayList = NurseCallUtils.getAllExtList(tinyDB, KeyList.KEY_ALL_EXTENSION);
         for (int i = 0; i < getArrayList.size(); i++) {
             AllExtItem item = getArrayList.get(i);
-            if (item.getName().contains("NCTB")) {
+            if (item.getName().contains("NCTB")&& !getArrayList.get(i).getNum().equals(tinyDB.getString(KeyList.SIP_ID))) {
                 bedArrayList.add(new AllExtItem(item.getNum(), item.getName(), false));
             }
         }
@@ -76,9 +75,7 @@ public class NormalViewBasic extends Fragment implements OnSelectCall {
 
 
     @Override
-    public void roomSelect() {
-
-    }
+    public void roomSelect(int position) { }
 
     @Override
     public void roomAllClear() {
@@ -90,7 +87,7 @@ public class NormalViewBasic extends Fragment implements OnSelectCall {
     }
 
     @Override
-    public void starSelect(int position, boolean chk) {
+    public void starSelect(String position, boolean chk) {
 
     }
 

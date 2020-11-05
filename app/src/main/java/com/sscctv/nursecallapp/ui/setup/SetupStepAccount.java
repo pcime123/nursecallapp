@@ -55,16 +55,23 @@ public class SetupStepAccount extends AppCompatActivity {
         tinyDB = new TinyDB(this);
         EncryptionUtil.getInstance();
 
-        mBinding.btnPrev.setOnClickListener(view -> finish());
+        mBinding.btnPrev.setOnClickListener(view -> {
+            startActivity(new Intent(this, SetupStepDevice.class));
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+            finish();
+        });
 
         mBinding.btnFinish.setOnClickListener(view -> {
             tinyDB.putBoolean(KeyList.FIRST_KEY, true);
             intent = new Intent(this, LauncherActivity.class);
-            goLauncher task = new goLauncher();
-            task.execute();
+            TaskGoLauncher(new goLauncher());
         });
 
-        mBinding.inputAdminPw.setText("1234");
+    }
+
+
+    private void TaskGoLauncher(goLauncher asyncTask) {
+        asyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     @Override
@@ -75,7 +82,7 @@ public class SetupStepAccount extends AppCompatActivity {
     @SuppressLint("StaticFieldLeak")
     private class goLauncher extends AsyncTask<Void, Void, Void> {
         ProgressDialog progressDialog = new ProgressDialog(SetupStepAccount.this);
-        String pass,pass1;
+        String pass, pass1;
 
         @Override
         protected void onPreExecute() {
@@ -84,7 +91,11 @@ public class SetupStepAccount extends AppCompatActivity {
             progressDialog.setCancelable(false);
             progressDialog.setMessage(getResources().getString(R.string.please_wait));
             progressDialog.show();
-            pass1 = mBinding.inputAdminPw.getText().toString();
+            if (mBinding.inputAdminPw.getText().toString().isEmpty()) {
+                pass1 = mBinding.inputAdminPw.getHint().toString();
+            } else {
+                pass1 = mBinding.inputAdminPw.getText().toString();
+            }
 
             super.onPreExecute();
         }
@@ -161,13 +172,12 @@ public class SetupStepAccount extends AppCompatActivity {
     }
 
     private void defaultColorSetup() {
-        tinyDB.putInt(KeyList.BED_COLOR_1, Color.parseColor("#af0054"));
-        tinyDB.putInt(KeyList.BED_COLOR_2, Color.parseColor("#37a79e"));
-        tinyDB.putInt(KeyList.BED_COLOR_3, Color.parseColor("#c67009"));
-        tinyDB.putInt(KeyList.BED_COLOR_4, Color.parseColor("#4505c1"));
-        tinyDB.putInt(KeyList.BED_COLOR_5, Color.parseColor("#3769b2"));
+        tinyDB.putInt(KeyList.BED_COLOR_1, Color.parseColor("#4d6193"));
+        tinyDB.putInt(KeyList.BED_COLOR_2, Color.parseColor("#4e9187"));
+        tinyDB.putInt(KeyList.BED_COLOR_3, Color.parseColor("#ba7c48"));
+        tinyDB.putInt(KeyList.BED_COLOR_4, Color.parseColor("#50ae56"));
+        tinyDB.putInt(KeyList.BED_COLOR_5, Color.parseColor("#944856"));
 
     }
-
 
 }

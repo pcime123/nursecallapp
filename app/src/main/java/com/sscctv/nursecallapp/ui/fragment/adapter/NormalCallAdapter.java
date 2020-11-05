@@ -11,7 +11,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 import java.util.List;
 
 public class NormalCallAdapter extends FragmentStatePagerAdapter {
-    private static final String TAG = "NormalCallAdapter";
+    private static final String TAG = NormalCallAdapter.class.getSimpleName();
     public List<Fragment> listFragment;
     int num;
 

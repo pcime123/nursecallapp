@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.PluralsRes;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
@@ -38,6 +37,7 @@ public class SetDisplayFragment extends Fragment {
 
     private Handler sen_light_Handelr;
     private Timer sen_light_Timer;
+    private FragSetDisplayBinding mBinding;
 
     static SetDisplayFragment newInstance() {
         return new SetDisplayFragment();
@@ -68,19 +68,23 @@ public class SetDisplayFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        FragSetDisplayBinding layout = DataBindingUtil.inflate(inflater, R.layout.frag_set_display, container, false);
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.frag_set_display, container, false);
 
         tinyDB = new TinyDB(getContext());
 
         try {
-            layout.barLight.setMax(255);
-            layout.barLight.setProgress(Settings.System.getInt(getActivity().getContentResolver(), "screen_brightness"));
-            layout.barLight.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            mBinding.txtSetDpLight.setText(String.format("%s%%", Settings.System.getInt(Objects.requireNonNull(getActivity()).getContentResolver(), "screen_brightness") / 2.5));
+            mBinding.barLight.setMax(250);
+            mBinding.barLight.setProgress(Settings.System.getInt(getActivity().getContentResolver(), "screen_brightness"));
+            mBinding.barLight.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 WindowManager.LayoutParams layoutParams = getActivity().getWindow().getAttributes();
 
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                     changeDisplayLight(i);
+                    mBinding.txtSetDpLight.setText(String.format("%s%%", String.valueOf(i / 2.5)));
+
                 }
 
                 @Override
@@ -98,8 +102,8 @@ public class SetDisplayFragment extends Fragment {
         }
 
 //        Log.d(TAG, layout.modeTime.getSelectedItem().toString());
-        layout.modeTime.setSelection(tinyDB.getInt(KeyList.SCREEN_CHANGE_POS));
-        layout.modeTime.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        mBinding.modeTime.setSelection(tinyDB.getInt(KeyList.SCREEN_CHANGE_POS));
+        mBinding.modeTime.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 //                Log.d(TAG, "" + adapterView.getItemAtPosition(i));
@@ -121,14 +125,17 @@ public class SetDisplayFragment extends Fragment {
             public void run() {
                 sen_light_Handelr.post(
                         () -> {
-                            layout.val.setText(tinyDB.getString(KeyList.SENSOR_LIGHT));
+                            mBinding.val.setText(tinyDB.getString(KeyList.SENSOR_LIGHT));
                         });
             }
         };
         sen_light_Timer = new Timer("Light Sensor");
         sen_light_Timer.schedule(hookTask, 0, 1000);
 
-        return layout.getRoot();
+        mBinding.btnDpBack.setOnClickListener(view -> {
+            NurseCallUtils.printShort(getContext(), "현재 지원하지 않습니다.");
+        });
+        return mBinding.getRoot();
     }
 
     private int calScreenChangeTime(String val) {

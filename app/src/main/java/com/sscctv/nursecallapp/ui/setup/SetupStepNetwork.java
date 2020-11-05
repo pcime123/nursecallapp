@@ -25,6 +25,7 @@ import androidx.databinding.DataBindingUtil;
 
 import com.sscctv.nursecallapp.R;
 import com.sscctv.nursecallapp.databinding.ActivitySetupNetworkBinding;
+import com.sscctv.nursecallapp.ui.utils.NurseCallUtils;
 import com.sscctv.nursecallapp.ui.utils.TinyDB;
 
 import java.io.BufferedReader;
@@ -38,6 +39,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -86,17 +88,52 @@ public class SetupStepNetwork extends AppCompatActivity {
         });
 
         mBinding.btnNext.setOnClickListener(view -> {
-//            if (!connectionCheck()) {
-//                mBinding.resultError.setText(R.string.network_disable);
+//            if (!pingTest(mBinding.setupIp.getText().toString())) {
+                TaskEthernetSetup(new CheckTypesTask());
 //            } else {
-                mBinding.resultError.setText("");
-                CheckTypesTask task = new CheckTypesTask();
-                task.execute();
+//                mBinding.setupIp.requestFocus();
+//                NurseCallUtils.printShort(getApplicationContext(), "이미 사용하고 있는 IP 주소 입니다. 다른 IP 주소를 입력해주세요.");
 //            }
+            mBinding.resultError.setText("");
 
         });
 
-        mBinding.btnPrev.setOnClickListener(view -> finish());
+        mBinding.btnPrev.setOnClickListener(view -> {
+            startActivity(new Intent(this, SetupStepType.class));
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+            finish();
+        });
+
+        mBinding.btnAutoSet.setOnClickListener(view -> {
+            if (isIpAddress(mBinding.setupIp.getText().toString())) {
+
+                String[] strIp = mBinding.setupIp.getText().toString().split("\\.");
+                String ip1 = strIp[0];
+                String ip2 = strIp[1];
+                String ip3 = strIp[2];
+                mBinding.setupSubnet.setText("255.255.255.0");
+                mBinding.setupGate.setText(String.format("%s.%s.%s.1", ip1, ip2, ip3));
+                mBinding.btnNext.requestFocus();
+                imm.hideSoftInputFromWindow(mBinding.btnNext.getWindowToken(), 0);
+            } else {
+                NurseCallUtils.printShort(getApplicationContext(), "IP 주소를 확인해주세요.");
+            }
+        });
+
+        mBinding.btnIpPing.setOnClickListener(view -> {
+            if (!pingTest(mBinding.setupIp.getText().toString())) {
+                NurseCallUtils.printShort(getApplicationContext(), "사용 가능합니다.");
+            } else {
+                mBinding.setupIp.requestFocus();
+                NurseCallUtils.printShort(getApplicationContext(), "이미 사용하고 있는 IP 주소 입니다. 다른 IP 주소를 입력해주세요.");
+            }
+        });
+
+    }
+
+
+    private void TaskEthernetSetup(CheckTypesTask asyncTask) {
+        asyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     private void hideKeyboard() {
@@ -670,5 +707,30 @@ public class SetupStepNetwork extends AppCompatActivity {
 
     private void dhcpcdDhcp() throws IOException {
         Runtime.getRuntime().exec("dhcpcd -p eth0");
+    }
+
+    private boolean pingTest(String ip) {
+        Runtime runtime = Runtime.getRuntime();
+
+        String cmd = "ping -c 1 -W 2 " + ip;
+
+        Process process = null;
+
+        try {
+            process = runtime.exec(cmd);
+        } catch (IOException e) {
+            Log.d(TAG, Objects.requireNonNull(e.getMessage()));
+        }
+
+        try {
+            assert process != null;
+            process.waitFor();
+        } catch (InterruptedException e) {
+            Log.d(TAG, Objects.requireNonNull(e.getMessage()));
+        }
+
+        int result = process.exitValue();
+
+        return result == 0;
     }
 }

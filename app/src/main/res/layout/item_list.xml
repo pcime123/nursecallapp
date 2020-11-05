@@ -9,7 +9,7 @@
         android:id="@+id/listCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/white"
+
         app:cardCornerRadius="10dp"
         app:cardElevation="2dp"
         app:cardUseCompatPadding="true">
@@ -19,6 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:background="@drawable/back_cloudy_knoxvile"
 
             >
 
@@ -28,10 +29,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginEnd="0dp"
                 android:layout_weight="0.1"
-                android:paddingTop="15dp"
-                android:paddingBottom="15dp"
-                android:paddingStart="15dp"
-                android:paddingEnd="15dp"
+                android:padding="20dp"
                 android:src="@drawable/main_device" />
 
             <View
@@ -45,10 +43,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginEnd="10dp"
                 android:layout_weight="0.05"
-                android:paddingTop="15dp"
-                android:paddingBottom="15dp"
-                android:paddingStart="15dp"
-                android:paddingEnd="15dp"
+                android:padding="20dp"
                 android:src="@drawable/call_in_list" />
 
 
@@ -57,6 +52,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0.3"
                 android:orientation="vertical"
+                android:gravity="center"
                 >
 
                 <TextView
@@ -64,22 +60,21 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
-                    android:paddingTop="20dp"
                     android:text="송신 호출"
                     android:textColor="@color/black"
-                    android:textSize="15sp"
+                    android:textSize="17sp"
                     android:textStyle="bold" />
 
 
                 <TextView
                     android:id="@+id/list_call_device"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:gravity="start"
-                    android:paddingBottom="10dp"
+                    android:layout_marginTop="3dp"
                     android:text="2층 10병동 간호사 스테이션"
                     android:textColor="@color/black"
-                    android:textSize="15sp"
+                    android:textSize="17sp"
                     />
 
             </LinearLayout>
@@ -89,6 +84,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0.2"
                 android:orientation="vertical"
+                android:gravity="center"
+                android:paddingEnd="20dp"
                 >
 
                 <TextView
@@ -96,33 +93,24 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="end"
-                    android:paddingTop="20dp"
                     android:text="2020-04-07 오후 05:42"
                     android:textColor="@color/black"
-                    android:textSize="15sp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
 
                 <TextView
                     android:id="@+id/list_time"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:gravity="end"
+                    android:layout_marginTop="3dp"
                     android:text="00:42"
                     android:textColor="@color/black"
-                    android:textSize="15sp"
+                    android:textSize="16sp"
                     />
 
             </LinearLayout>
-
-
-            <CheckBox
-                android:id="@+id/list_select"
-                android:layout_width="0dp"
-                android:layout_weight="0.08"
-                android:layout_height="match_parent"
-                android:button="@drawable/checkbox_empty"
-                android:gravity="center" />
 
         </LinearLayout>
 

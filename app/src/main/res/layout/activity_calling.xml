@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint_call"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/back_aqua_splash">
+
+        <LinearLayout
+            android:id="@+id/layout_txt_stat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:orientation="vertical"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:paddingTop="5dp"
+                android:textStyle="bold"
+                android:text="호출 수신 중.."
+                android:textColor="@color/white"
+                android:textSize="27sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/active_call_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:orientation="vertical"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/current_contact_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:paddingTop="5dp"
+                android:textStyle="bold"
+                android:text="전화 거는 중..."
+                android:textColor="#DFDFDF"
+                android:textSize="27sp" />
+
+            <Chronometer
+                android:id="@+id/current_call_timer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:textSize="22sp" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/layout_call_where"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:orientation="vertical"
+            app:layout_constraintVertical_bias=".5">
+
+            <TextView
+                android:id="@+id/call_where_bed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nanum_bold"
+                android:gravity="center"
+                android:text="12병동 101호실 1번 병상"
+                android:textColor="@color/white"
+                android:textSize="50sp"
+               />
+<!--            <TextView-->
+<!--                android:id="@+id/call_where"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:gravity="center"-->
+<!--                android:text="2000"-->
+<!--                android:textSize="30sp"-->
+<!--                />-->
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/calls_list"
+            android:layout_width="300dp"
+            android:layout_height="100dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_gravity="bottom"
+            android:orientation="vertical"
+            />
+
+        <LinearLayout
+            android:id="@+id/conference_list"
+            android:layout_width="300dp"
+            android:layout_height="100dp"
+            app:layout_constraintTop_toBottomOf="@id/calls_list"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_gravity="bottom"
+            android:orientation="vertical"
+            />
+
+        <LinearLayout
+            android:id="@+id/menu"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="50dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias=".01"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <ImageButton
+                android:id="@+id/out_speaker"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/button_white_line_ra100"
+                android:src="@drawable/ic_volume_up_white_30dp" />
+
+            <TextView
+                android:id="@+id/txt_out_speaker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:text="스피커"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <ImageButton
+                android:id="@+id/out_mic_mute"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/button_white_line_ra100"
+                android:src="@drawable/ic_mic_off_white_30dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:text="음소거"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+
+            <ImageButton
+                android:id="@+id/out_speaker_mute"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="20dp"
+                android:visibility="gone"
+                android:background="@drawable/button_white_line_ra100"
+                android:src="@drawable/ic_volume_off_30dp" />
+
+            <TextView
+                android:id="@+id/out_txt_speaker_mute"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:visibility="gone"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:text="송화 차단"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_out_call_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.02">
+
+            <ImageButton
+                android:id="@+id/out_call_end"
+                android:layout_width="300dp"
+                android:layout_height="120dp"
+                android:background="@drawable/button_red_ra20"
+                android:src="@drawable/ic_call_end_white_24dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_call_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <LinearLayout
+                android:id="@+id/call_pause"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.25"
+                android:layout_margin="12dp"
+                android:background="@drawable/button_trans_ra20"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/icon_call_pause"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/ic_phone_paused_black_24dp" />
+
+                <TextView
+                    android:id="@+id/text_call_pause"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="sans-serif-light"
+                    android:gravity="center"
+                    android:text="통화 보류"
+                    android:textColor="@color/White_EA"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/terminate_call"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.4"
+                android:layout_margin="12dp"
+                android:background="@drawable/button_red_trans_ra20"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="20dp"
+                    android:src="@drawable/ic_call_end_white_24dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+
+                    android:fontFamily="sans-serif-light"
+                    android:gravity="center"
+                    android:text="종료"
+
+                    android:textColor="@color/White_EA"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.25"
+                android:layout_margin="12dp"
+                android:background="@drawable/button_trans_ra20"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="20dp"
+                    android:src="@drawable/ic_menu_black_24dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="sans-serif-light"
+                    android:gravity="center"
+                    android:text="메뉴"
+                    android:textColor="@color/White_EA"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_in_call_bottom"
+            android:layout_width="match_parent"
+            android:visibility="visible"
+            android:layout_height="match_parent">
+
+            <ImageButton
+                android:id="@+id/offCall"
+                android:layout_width="180dp"
+                android:layout_height="120dp"
+                android:background="@drawable/button_red_circle_in"
+                android:paddingTop="40dp"
+                android:paddingBottom="40dp"
+                android:src="@drawable/ic_close_black_60dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.253"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.85" />
+
+            <ImageButton
+                android:id="@+id/onCall"
+                android:layout_width="180dp"
+                android:layout_height="120dp"
+                android:background="@drawable/button_green_circle_in"
+                android:paddingTop="40dp"
+                android:paddingBottom="40dp"
+                android:src="@drawable/ic_call_white_60dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias=".75"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias=".85" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

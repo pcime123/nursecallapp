@@ -26,7 +26,7 @@
                 android:paddingEnd="20dp"
                 android:text="일반 호출"
                 android:textColor="@color/black"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <View
@@ -36,18 +36,19 @@
 
             <Button
                 android:id="@+id/btn_get_ext"
+                android:visibility="invisible"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
                 android:background="@drawable/button_home"
                 android:drawableStart="@drawable/ic_refresh_black_24dp"
                 android:drawablePadding="20dp"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
-
                 android:text="주소 연동"
                 android:textColor="@color/black"
-                android:textSize="14sp" />
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
@@ -70,8 +71,8 @@
                 <com.google.android.material.tabs.TabLayout
                     android:id="@+id/tabLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/JBlue"
+                    android:layout_height="50dp"
+                    android:background="@drawable/back_fly_high_noradius"
                     app:tabIndicatorHeight="4dp"
                     app:tabTextAppearance="@style/tab_text" />
 
@@ -118,7 +119,7 @@
                 <LinearLayout
                     android:id="@+id/_num1"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
+                    android:layout_height="90dp"
                     android:layout_marginTop="15dp">
 
                     <Button
@@ -182,7 +183,7 @@
                 <LinearLayout
                     android:id="@+id/_num2"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp">
+                    android:layout_height="90dp">
 
                     <Button
                         android:id="@+id/num4"
@@ -245,7 +246,7 @@
                 <LinearLayout
                     android:id="@+id/_num3"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp">
+                    android:layout_height="90dp">
 
                     <Button
                         android:id="@+id/num7"
@@ -308,7 +309,7 @@
                 <LinearLayout
                     android:id="@+id/_num4"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp">
+                    android:layout_height="90dp">
 
                     <Button
                         android:id="@+id/btnStar"
@@ -359,74 +360,41 @@
                         android:textSize="35sp" />
                 </LinearLayout>
 
-                <LinearLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/_num_btn"
                     android:layout_width="match_parent"
-                    android:layout_height="80dp"
-
+                    android:layout_height="match_parent"
                     android:layout_marginTop="35dp">
 
                     <ImageButton
                         android:id="@+id/backspace"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
+                        android:layout_width="120dp"
+                        android:layout_height="80dp"
                         android:layout_gravity="start"
                         android:layout_marginStart="20dp"
-                        android:layout_weight="0.3"
-                        android:background="@drawable/button_del"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:background="@drawable/button_deepred_ra20"
                         android:src="@drawable/ic_backspace_24dp" />
 
                     <ImageButton
+
                         android:id="@+id/goCall"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
+                        android:layout_width="250dp"
+                        android:layout_height="80dp"
                         android:layout_gravity="start"
                         android:layout_marginStart="20dp"
                         android:layout_marginEnd="20dp"
-
-                        android:layout_weight="0.7"
-                        android:background="@drawable/button_call"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/backspace"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:background="@drawable/button_green_ra20"
                         android:src="@drawable/ic_call_white" />
 
-
-                </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
             </LinearLayout>
-
         </LinearLayout>
-
-
-        <!--        <androidx.recyclerview.widget.RecyclerView-->
-        <!--            android:id="@+id/call_room_list"-->
-        <!--            android:layout_width="150dp"-->
-        <!--            android:layout_height="match_parent"-->
-        <!--            android:layout_weight="0.2"-->
-        <!--            android:cacheColorHint="#00000000"-->
-        <!--            android:divider="@color/main"-->
-        <!--            android:dividerHeight="1dp"-->
-        <!--            android:paddingStart="2dp"-->
-        <!--            android:paddingEnd="2dp"-->
-        <!--            android:scrollbarFadeDuration="0"-->
-        <!--            android:scrollbarSize="5dp"-->
-        <!--            app:layout_constraintStart_toStartOf="parent"-->
-        <!--            tools:layout_editor_absoluteY="115dp" />-->
-
-
-        <!--        <androidx.recyclerview.widget.RecyclerView-->
-        <!--            android:id="@+id/call_bed_list"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="match_parent"-->
-        <!--            android:layout_marginStart="150dp"-->
-        <!--            android:layout_marginTop="40dp"-->
-        <!--            android:padding="5dp"-->
-        <!--            android:layout_weight="0.8"-->
-        <!--            android:cacheColorHint="#00000000"-->
-        <!--            android:divider="@color/main"-->
-        <!--            android:dividerHeight="1dp"-->
-        <!--            android:scrollbarFadeDuration="0"-->
-        <!--            android:scrollbarSize="5dp"-->
-        <!--            app:layout_constraintStart_toEndOf="@id/call_bed_list"-->
-        <!--            app:layout_constraintTop_toBottomOf="@id/line1" />-->
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -1,6 +1,7 @@
 package com.sscctv.nursecallapp.ui.settings;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -18,19 +19,18 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import com.sscctv.nursecallapp.R;
-import com.sscctv.nursecallapp.databinding.FragSetAccountBinding;
 import com.sscctv.nursecallapp.databinding.FragSetAdminAccountBinding;
 import com.sscctv.nursecallapp.service.MainCallService;
+import com.sscctv.nursecallapp.ui.activity.LauncherActivity;
+import com.sscctv.nursecallapp.ui.setup.SetupStepSplash;
 import com.sscctv.nursecallapp.ui.utils.EncryptionUtil;
 import com.sscctv.nursecallapp.ui.utils.KeyList;
+import com.sscctv.nursecallapp.ui.utils.NurseCallUtils;
 import com.sscctv.nursecallapp.ui.utils.TinyDB;
 
 import org.linphone.core.AccountCreator;
 import org.linphone.core.Core;
 import org.linphone.core.CoreListenerStub;
-import org.linphone.core.ProxyConfig;
-import org.linphone.core.RegistrationState;
-import org.linphone.core.TransportType;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -46,6 +46,7 @@ public class SetAdminFragment extends Fragment {
     private AccountCreator mAccountCreator;
     private CoreListenerStub mCoreListener;
     private EditText id, pw, domain;
+    private FragSetAdminAccountBinding mBinding;
 
     static SetAdminFragment newInstance() {
         return new SetAdminFragment();
@@ -71,13 +72,13 @@ public class SetAdminFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        FragSetAdminAccountBinding layout = DataBindingUtil.inflate(inflater, R.layout.frag_set_admin_account, container, false);
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.frag_set_admin_account, container, false);
 
         tinyDB = new TinyDB(getContext());
 
         core = MainCallService.getCore();
 
-        layout.btnAdminChange.setOnClickListener(view -> {
+        mBinding.btnAdminChange.setOnClickListener(view -> {
             Dialog dialog = new Dialog(getContext());
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialog.setContentView(R.layout.dialog_admin_change);
@@ -95,7 +96,7 @@ public class SetAdminFragment extends Fragment {
                     return;
                 }
 
-                if(pw.getText().toString().length() < 4 || pw_confirm.getText().toString().length() < 4) {
+                if (pw.getText().toString().length() < 4 || pw_confirm.getText().toString().length() < 4) {
                     if (error.getVisibility() != View.VISIBLE) {
                         error.setVisibility(View.VISIBLE);
                         error.setText("비밀번호는 최소 4자리 이상 입력되어야 합니다.");
@@ -126,7 +127,7 @@ public class SetAdminFragment extends Fragment {
             dialog.show();
         });
 
-        layout.btnAdminDefault.setOnClickListener(view -> {
+        mBinding.btnAdminDefault.setOnClickListener(view -> {
             Dialog dialog = new Dialog(getContext());
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialog.setContentView(R.layout.dialog_admin_hide_default);
@@ -140,13 +141,20 @@ public class SetAdminFragment extends Fragment {
             dialog.show();
         });
 
-        return layout.getRoot();
+        mBinding.btnHidden.setOnClickListener(view -> {
+            tinyDB.putBoolean(KeyList.FIRST_KEY, false);
+            Intent intent = new Intent(getContext(), LauncherActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        });
+        return mBinding.getRoot();
     }
 
     private void changePassword(String str) {
         File dir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + KeyList.ADMIN_FILE);
 
-        if(!dir.exists()){
+        if (!dir.exists()) {
             dir.mkdir();
         }
 
@@ -175,5 +183,39 @@ public class SetAdminFragment extends Fragment {
             e.printStackTrace();
         }
     }
+
+//    private void TaskDemo(DemoTask asyncTask, String mode) {
+//        asyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mode);
+//
+//    }
+
+//    private class DemoTask extends AsyncTask<String, String, String> {
+//
+//        String ipAddr;
+//        @Override
+//        protected void onPreExecute() {
+//            ipAddr = mBinding.editEthernetIp.getText().toString();
+//        }
+//
+//        @Override
+//        protected String doInBackground(String... voids) {
+//            try {
+//                InetAddress serverAddr = InetAddress.getByName(ipAddr);
+//
+//                try (Socket socket = new Socket(serverAddr, 59009)) {
+//                    String msg = voids[0];
+//                    PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
+//                    out.println(msg);
+//
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//
+//            return null;
+//        }
+//    }
 
 }

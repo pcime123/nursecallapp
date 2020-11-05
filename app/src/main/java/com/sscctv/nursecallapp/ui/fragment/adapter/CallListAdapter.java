@@ -1,31 +1,40 @@
 package com.sscctv.nursecallapp.ui.fragment.adapter;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sscctv.nursecallapp.R;
-import com.sscctv.nursecallapp.ui.adapter.CallLogItem;
-import com.sscctv.nursecallapp.ui.adapter.OnSelectCall;
+import com.sscctv.nursecallapp.data.CallLogItem;
+import com.sscctv.nursecallapp.service.MainCallService;
+import com.sscctv.nursecallapp.ui.utils.NurseCallUtils;
 import com.sscctv.nursecallapp.ui.utils.TinyDB;
 
+import org.linphone.core.Address;
+import org.linphone.core.CallParams;
+import org.linphone.core.Core;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.Objects;
 
 public class CallListAdapter extends RecyclerView.Adapter<CallListAdapter.ViewHolder> {
-    private static final String TAG = "TabListAdapter";
+    private static final String TAG = CallListAdapter.class.getSimpleName();
     private SparseBooleanArray mSelectedItems = new SparseBooleanArray(0);
     private final ArrayList<CallLogItem> mLogs;
     private Context context;
@@ -33,17 +42,16 @@ public class CallListAdapter extends RecyclerView.Adapter<CallListAdapter.ViewHo
     private int selectedItem;
     private int disableSelectItem;
     private TinyDB tinyDB;
-    private String model, ward, zero, serial;
-    private boolean visible;
-    private OnSelectCall mCallback;
+    private String number;
+    private Core core;
 
-    public CallListAdapter(Context context, ArrayList<CallLogItem> logs, OnSelectCall listener) {
+    public CallListAdapter(Context context, ArrayList<CallLogItem> logs) {
         super();
         this.context = context;
         mLogs = logs;
         selectedItem = -1;
         disableSelectItem = 0;
-        this.mCallback = listener;
+        core = MainCallService.getCore();
     }
 
     public Object getItem(int position) {
@@ -60,107 +68,49 @@ public class CallListAdapter extends RecyclerView.Adapter<CallListAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        final int pos = position;
         CallLogItem log = mLogs.get(position);
-
-        holder.type.setText(log.getCallType());
-        holder.device.setText(log.getCallLocation());
+        selectedItem = position;
+        holder.type.setText(String.format("%s %s", log.getCallDir(), log.getCallStaus()));
         holder.date.setText(log.getCallDate());
         holder.time.setText(log.getCallTime());
 
-        String mDevice = log.getDeviceType();
-
-        switch (mDevice){
-            case "간호사 호출기":
-                holder.icon1.setImageResource(R.drawable.call_device);
-                break;
-            case "간호사 스테이션":
-                holder.icon1.setImageResource(R.drawable.main_device);
-                break;
-            case "보안 스테이션":
-                holder.icon1.setImageResource(R.drawable.security_device);
-                break;
-            case "병리실 스테이션":
-                holder.icon1.setImageResource(R.drawable.etc_device);
-                break;
+        String mDevice = log.getCallerId();
+//        Log.d(TAG, "Device: " + mDevice);
+        if (mDevice.contains("NCTB")) {
+            holder.icon1.setImageResource(R.drawable.main_device);
+        } else if (mDevice.contains("NCTS")) {
+            holder.icon1.setImageResource(R.drawable.security_device);
+        } else if (mDevice.contains("NCTP")) {
+            holder.icon1.setImageResource(R.drawable.etc_device);
+        } else if (mDevice.contains("NCPB")) {
+            holder.icon1.setImageResource(R.drawable.call_device);
+        } else if(mDevice.contains("NCTO")) {
+            holder.icon1.setImageResource(R.drawable.public_device);
+        }else {
+            holder.icon1.setImageResource(R.drawable.null_device);
         }
 
-        String mCall = log.getCallType();
-
-        switch (mCall) {
-            case "호출 송신":
-                holder.icon2.setImageResource(R.drawable.call_out_list);
-                break;
-            case "호출 수신":
-                holder.icon2.setImageResource(R.drawable.call_in_list);
-                break;
-            case "호출 부재":
-                holder.icon2.setImageResource(R.drawable.call_miss_list);
-                break;
+        String mCall = log.getCallDir();
+        String mStatus = log.getCallStaus();
+        if (mStatus.equals("Aborted")) {
+            holder.icon2.setImageResource(R.drawable.call_status_miss);
+        } else {
+            switch (mCall) {
+                case "Outgoing":
+                    holder.icon2.setImageResource(R.drawable.call_status_out);
+                    break;
+                case "Incoming":
+                    holder.icon2.setImageResource(R.drawable.call_status_in);
+                    break;
+            }
         }
+        holder.device.setText(NurseCallUtils.putDeviceName(mDevice));
 
-
-
-//
-//        if (log.getDir() == Call.Dir.Incoming) {
-//            address = log.getFromAddress();
-//            if (log.getStatus() == Call.Status.Missed) {
-//                holder.type.setText("Missed Call");
-//                holder.icon1.setImageResource(R.drawable.call_miss_list);
-//            } else {
-//                holder.type.setText("Incoming Call");
-//                holder.icon1.setImageResource(R.drawable.call_in_list);
-//            }
-//        } else {
-//            address = log.getToAddress();
-//            holder.type.setText("Outgoing Call");
-//            holder.icon1.setImageResource(R.drawable.call_out_list);
-//        }
-//
-//
-//        String displayName = null;
-//        String sipUri = (address != null) ? address.asString() : "";
-//
-//        if (address != null) {
-//            displayName = address.getDisplayName();
-//        }
-//        if (displayName == null) {
-//            assert address != null;
-//            holder.device.setText(address.getUsername());
-//        } else {
-//            holder.device.setText(displayName);
-//        }
-//        holder.btn.setChecked(item.isSelected());
-//        holder.btn.setTag(items.get(position));
-//        holder.btn.setOnClickListener(view -> {
-//            CheckBox cb = (CheckBox) view;
-//            AllExtItem extItem = (AllExtItem) cb.getTag();
-//            extItem.setSelected(cb.isChecked());
-//            items.get(pos).setSelected(cb.isChecked());
-//            mCallback.starSelect(pos, item.isSelected());
-//            notifyDataSetChanged();
+//        holder.card.setOnClickListener(view -> {
+//            mCallback.roomSelect(position);
 //        });
-
-//
-//        if (selectedItem == position) {
-//            if (!holder.num.getText().toString().equals("")) {
-//
-//
-//                NurseCallUtils.newOutgoingCall(context, holder.num.getText().toString());
-//            } else {
-//                NurseCallUtils.printShort(context, "번호를 입력해주세요");
-//            }
-//        }
-//
-//
-//        holder.itemView.setTag(items.get(position));
-//        holder.itemView.setOnClickListener(view -> {
-//            int previousItem = selectedItem;
-//            selectedItem = position;
-//            notifyItemChanged(previousItem);
-//            notifyItemChanged(position);
-//        });
-
+        number = log.getCallNumber();
+//        Log.d(TAG, "CallDir: " + log.getCallNumber());
     }
 
     @Override
@@ -168,7 +118,7 @@ public class CallListAdapter extends RecyclerView.Adapter<CallListAdapter.ViewHo
         return this.mLogs.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder  {
+    class ViewHolder extends RecyclerView.ViewHolder{
         private TextView type;
         private TextView device;
         private TextView time;
@@ -176,22 +126,66 @@ public class CallListAdapter extends RecyclerView.Adapter<CallListAdapter.ViewHo
         private ImageView icon1;
         private ImageView icon2;
         private CheckBox btn;
+        private CardView card;
+
         ViewHolder(View view) {
             super(view);
-
+            card = view.findViewById(R.id.listCard);
             type = view.findViewById(R.id.list_call_type);
             device = view.findViewById(R.id.list_call_device);
             time = view.findViewById(R.id.list_time);
             date = view.findViewById(R.id.list_date);
             icon1 = view.findViewById(R.id.list_icon1);
             icon2 = view.findViewById(R.id.list_icon2);
-            btn = view.findViewById(R.id.list_select);
 
             tinyDB = new TinyDB(context);
 
 
+            card.setOnClickListener(view1 -> {
+                Dialog dialog = new Dialog(Objects.requireNonNull(context));
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.dialog_call_list);
+
+                final TextView title = dialog.findViewById(R.id.dialog_ward_title);
+
+                final Button call = dialog.findViewById(R.id.dialog_btn_call);
+                final Button delete = dialog.findViewById(R.id.dialog_btn_delete);
+
+                title.setText(device.getText().toString());
+
+                call.setOnClickListener(view2 -> {
+                    newOutgoingCall(number);
+                    dialog.dismiss();
+                });
+
+                delete.setOnClickListener(view2 -> {
+//                    mCallback.roomSelect(selectedItem);
+                    dialog.dismiss();
+                });
+
+
+                dialog.show();
+            });
+
+
+
         }
 
+    }
+
+    private void inviteAddress(Address address) {
+        CallParams params = core.createCallParams(null);
+        if (address != null) {
+            core.inviteAddressWithParams(address, params);
+        } else {
+            NurseCallUtils.printShort(context, "Address null");
+        }
+    }
+
+    public void newOutgoingCall(String to) {
+        if (to == null) return;
+        Address address = core.interpretUrl(to);
+        inviteAddress(address);
     }
 
     @SuppressLint("SimpleDateFormat")

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/dialog_add_room"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="#131313">
+
+    <LinearLayout
+        android:id="@+id/layout_room_error"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="visible"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/dialog_txt_room_error"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="10dp"
+            android:fontFamily="sans-serif-light"
+            android:gravity="center_vertical"
+            android:text="등록된 병상이 없습니다. 우측 상단의 관리를 눌러 등록해주세요."
+            android:textSize="20sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="20dp"
+            >
+            <Button
+                android:id="@+id/dialog_room_no"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="50dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/button_blue_ra10"
+                android:fontFamily="sans-serif-light"
+                android:text="다시 보지 않기"
+                android:textSize="16sp" />
+            <Button
+                android:id="@+id/dialog_room_close"
+                android:layout_width="0dp"
+                android:layout_weight=".8"
+                android:layout_height="50dp"
+                android:layout_marginStart="10dp"
+
+                android:background="@drawable/button_blue_ra10"
+                android:fontFamily="sans-serif-light"
+                android:text="닫기"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

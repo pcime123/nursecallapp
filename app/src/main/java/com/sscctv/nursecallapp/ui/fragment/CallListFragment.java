@@ -1,49 +1,49 @@
 package com.sscctv.nursecallapp.ui.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
-import android.media.AudioManager;
-import android.media.ToneGenerator;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 import com.sscctv.nursecallapp.R;
+import com.sscctv.nursecallapp.data.CallLogItem;
 import com.sscctv.nursecallapp.databinding.FragCallListBinding;
 import com.sscctv.nursecallapp.service.MainCallService;
 import com.sscctv.nursecallapp.ui.activity.MainActivity;
-import com.sscctv.nursecallapp.ui.adapter.AllExtItem;
-import com.sscctv.nursecallapp.ui.fragment.adapter.ListCalldapter;
-import com.sscctv.nursecallapp.ui.fragment.adapter.NormalCallAdapter;
-import com.sscctv.nursecallapp.ui.utils.IOnBackPressed;
-import com.sscctv.nursecallapp.ui.utils.NurseCallUtils;
+import com.sscctv.nursecallapp.ui.fragment.adapter.CallListTitleAdapter;
+import com.sscctv.nursecallapp.ui.utils.KeyList;
 import com.sscctv.nursecallapp.ui.utils.TinyDB;
 
-import org.linphone.core.Address;
-import org.linphone.core.CallParams;
 import org.linphone.core.Core;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
 
-public class CallListFragment extends Fragment implements IOnBackPressed {
+public class CallListFragment extends Fragment {
     private static final String TAG = "CallListFragment";
     private MainActivity activity;
     private TinyDB tinyDB;
-    private ListCalldapter listCalldapter;
+    private CallListTitleAdapter callListTitleAdapter;
     private Core core;
-    private Dialog dialog;
-    private ArrayList<AllExtItem> allExtItems;
-    private ViewPager pager;
-    private ToneGenerator toneGenerator;
-    private AudioManager mAudioManager;
+    private FragCallListBinding mBinding;
+    private ArrayList<CallLogItem> callLogItems = new ArrayList<>();
+    private int listSize;
+    private List<Fragment> listFragments;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -63,9 +63,8 @@ public class CallListFragment extends Fragment implements IOnBackPressed {
     @Override
     public void onResume() {
         super.onResume();
-        listCalldapter.notifyDataSetChanged();
-
 //        Log.v(TAG, "onResume()");
+
     }
 
     @Override
@@ -76,36 +75,27 @@ public class CallListFragment extends Fragment implements IOnBackPressed {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        FragCallListBinding layout = DataBindingUtil.inflate(inflater, R.layout.frag_call_list, container, false);
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.frag_call_list, container, false);
 
         tinyDB = new TinyDB(getContext());
 
-        layout.callLayout.addTab((layout.callLayout.newTab().setText("전체목록")));
-        layout.callLayout.addTab((layout.callLayout.newTab().setText("병상호출 목록")));
-        layout.callLayout.addTab((layout.callLayout.newTab().setText("일반호출 목록")));
-        layout.callLayout.addTab((layout.callLayout.newTab().setText("긴급호출 목록")));
-        layout.callLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-
+        mBinding.callLayout.addTab((mBinding.callLayout.newTab().setText("일반호출 목록")));
+        mBinding.callLayout.addTab((mBinding.callLayout.newTab().setText("긴급호출 목록")));
+        mBinding.callLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         assert getFragmentManager() != null;
 
-        List<Fragment> listFragments = new ArrayList<>();
-        listFragments.add(new CallListViewAll());
-        listFragments.add(new NormalViewBasic());
-        listFragments.add(new NormalViewSecurity());
-        listFragments.add(new NormalViewPathology());
+        listFragments = new ArrayList<>();
+        listFragments.add(new CallListNormal());
+        listFragments.add(new CallListEmergency());
 
-        listCalldapter = new ListCalldapter(getChildFragmentManager(), listFragments);
-        pager = layout.viewPager;
-        layout.viewPager.setAdapter(listCalldapter);
-        layout.viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(layout.callLayout));
-        layout.callLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        callListTitleAdapter = new CallListTitleAdapter(getChildFragmentManager(), listFragments);
+        mBinding.viewPager.setAdapter(callListTitleAdapter);
+        mBinding.viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mBinding.callLayout));
+        mBinding.callLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-//                Log.e(TAG, "Select: " + tab.getPosition());
-
-                layout.viewPager.setCurrentItem(tab.getPosition());
-//                normalCallAdapter.notifyDataSetChanged();
+                mBinding.viewPager.setCurrentItem(tab.getPosition());
             }
 
             @Override
@@ -119,32 +109,59 @@ public class CallListFragment extends Fragment implements IOnBackPressed {
             }
         });
 
-
-
-
-        return layout.getRoot();
+        mBinding.btnListSetup.setOnClickListener(view -> {
+            goListSetup();
+        });
+        return mBinding.getRoot();
     }
 
+    private void goListSetup() {
+        Dialog dialog = new Dialog(Objects.requireNonNull(getContext()));
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_list_setup);
+        final EditText max = dialog.findViewById(R.id.dg_list_max);
+        final Button btnNormalDel = dialog.findViewById(R.id.dg_list_normal_del);
+        final Button btnEmDel = dialog.findViewById(R.id.dg_list_em_del);
+        final Button btnClose = dialog.findViewById(R.id.dg_list_close);
 
-    private void inviteAddress(Address address) {
-        CallParams params = core.createCallParams(null);
-        if (address != null) {
-            core.inviteAddressWithParams(address, params);
-        } else {
-            NurseCallUtils.printShort(getContext(), "Address null");
-        }
+        max.setText(String.valueOf(tinyDB.getInt(KeyList.CALL_LOG_MAX)));
+
+        btnClose.setOnClickListener(view -> {
+            tinyDB.putInt(KeyList.CALL_LOG_MAX, Integer.parseInt(max.getText().toString()));
+
+            dialog.dismiss();
+        });
+
+        btnNormalDel.setOnClickListener(view -> {
+            core.clearCallLogs();
+            tinyDB.remove(KeyList.CALL_LOG_NORMAL);
+            dialog.dismiss();
+
+            callListTitleAdapter = new CallListTitleAdapter(getChildFragmentManager(), listFragments);
+            mBinding.viewPager.setAdapter(callListTitleAdapter);
+        });
+
+
+        btnEmDel.setOnClickListener(view -> {
+            tinyDB.remove(KeyList.CALL_LOG_EMERGENCY);
+            dialog.dismiss();
+
+            callListTitleAdapter = new CallListTitleAdapter(getChildFragmentManager(), listFragments);
+            mBinding.viewPager.setAdapter(callListTitleAdapter);
+            Log.d(TAG, "getSize: " + core.getLogCollectionMaxFileSize());
+        });
+
+        dialog.show();
+
     }
 
-    public void newOutgoingCall(String to) {
-        if (to == null) return;
-        Address address = core.interpretUrl(to);
-        inviteAddress(address);
+    @SuppressLint("SimpleDateFormat")
+    private String secondsToDisplayableString(int secs) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+        Calendar cal = Calendar.getInstance();
+        cal.set(0, 0, 0, 0, 0, secs);
+        return dateFormat.format(cal.getTime());
     }
 
-    @Override
-    public boolean onBackPressed() {
-        NurseCallUtils.sendStatus(getContext(), 0);
-        return true;
-    }
 
 }

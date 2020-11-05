@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "792125173904",
+    "firebase_url": "https://nursecall-7e93d.firebaseio.com",
+    "project_id": "nursecall-7e93d",
+    "storage_bucket": "nursecall-7e93d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:792125173904:android:63e2f14a5b6b78d97ca815",
+        "android_client_info": {
+          "package_name": "com.sscctv.nursecallapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "792125173904-9jo5e2vhd2dohhd1gudb0qii5j87niv8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqv12E5CZFrUOHONzuC-ggrn5jGEjZCdU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "792125173904-9jo5e2vhd2dohhd1gudb0qii5j87niv8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.sscctv.nursecallapp">
 
+    <uses-permission android:name="android.permission.ACCESS_SUPERUSER" />
+
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
@@ -88,6 +90,7 @@
     <uses-permission android:name="android.permission.CONFIGURE_WIFI_DISPLAY" />
     <uses-permission android:name="android.permission.CAMERA" /> <!-- Screen Capturing -->
     <uses-permission android:name="android.permission.MANAGE_MEDIA_PROJECTION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <!-- HardWare -->
     <uses-feature android:name="android.hardware.sensor.light" android:required="true"/>
@@ -114,7 +117,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
 
-                 <category android:name="android.intent.category.HOME" />
+<!--                 <category android:name="android.intent.category.HOME" />-->
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             <intent-filter>
@@ -127,46 +130,25 @@
         <activity
             android:name=".ui.activity.MainActivity"
             android:theme="@style/AppTheme" />
-        <activity android:name=".ui.activity.noneCallActivity" />
-        <activity android:name=".ui.activity.CallInActivity" />
-        <activity android:name=".ui.activity.CallActivity" />
-        <activity android:name=".ui.activity.DialerActivity" />
-        <activity android:name=".ui.activity.PbxLoginActivity" />
-        <activity android:name=".ui.activity.PbxMenuActivity" />
-        <activity android:name=".ui.activity.PbxInfoActivity" />
-        <activity android:name=".ui.activity.PbxExtActivity" />
-        <activity
-            android:name=".ui.activity.MainConfigActivity"
-            android:theme="@style/AppTheme" />
-        <activity android:name=".ui.activity.MainBedConfigActivity" />
-        <activity android:name=".ui.activity.AccountActivity" />
         <activity android:name=".ui.setup.SetupStepType" />
         <activity android:name=".ui.setup.SetupStepSplash" />
         <activity android:name=".ui.setup.SetupStepNetwork" />
         <activity android:name=".ui.setup.SetupStepDevice" />
-        <activity android:name=".ui.setup.SetupStepDetails" />
-        <activity android:name=".ui.activity.test" />
-        <activity android:name=".ui.activity.CSVScanActivity" />
-        <activity android:name=".ui.activity.TempActivity" />
-        <activity android:name=".ui.activity.CallListActivity" />
         <activity android:name=".ui.activity.BackgroundActivity" />
-        <activity android:name=".ui.activity.BedListConfigActivity" />
-        <activity android:name=".ui.activity.BedAddConfigActivity" />
-        <activity android:name=".ui.settings.SettingsActivity" />
         <activity android:name=".ui.settings.SettingsAdminSetup" />
         <activity android:name=".ui.settings.SettingsPbxServer" />
-        <activity android:name=".ui.settings.SettingsEthernet" />
-        <activity android:name=".ui.settings.SettingsSipAccount" />
         <activity android:name=".ui.settings.SettingsAdminBed" />
         <activity android:name=".ui.setup.SetupStepAccount" />
-        <activity android:name=".ui.settings.SettingsVolume" />
-        <activity android:name=".ui.activity.TcpServer" />
         <activity android:name=".ui.activity.EmergencyActivity" />
-
+        <activity android:name=".ui.activity.BoardWriteActivity" />
+        <activity android:name=".ui.activity.PagingActivity" />
+        <activity android:name=".ui.activity.PianoActivity" />
         <service android:name=".service.MainCallService" />
+        <service android:name=".service.MissedCallService" />
         <service
             android:name=".service.PersistentService"
             android:enabled="true" />
+        <service android:name=".service.CallDialogService" />
 
         <receiver
             android:name=".service.RestartService"

@@ -9,14 +9,15 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sscctv.nursecallapp.R;
-import com.sscctv.nursecallapp.ui.adapter.AllExtItem;
-import com.sscctv.nursecallapp.ui.adapter.OnSelectCall;
+import com.sscctv.nursecallapp.data.AllExtItem;
+import com.sscctv.nursecallapp.ui.utils.OnSelectCall;
 import com.sscctv.nursecallapp.ui.utils.KeyList;
 import com.sscctv.nursecallapp.ui.utils.NurseCallUtils;
 import com.sscctv.nursecallapp.ui.utils.TinyDB;
@@ -24,8 +25,10 @@ import com.sscctv.nursecallapp.ui.utils.TinyDB;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.widget.Toast.makeText;
+
 public class TabListAdapter extends RecyclerView.Adapter<TabListAdapter.ViewHolder> {
-    private static final String TAG = "TabListAdapter";
+    private static final String TAG = TabListAdapter.class.getSimpleName();
     private SparseBooleanArray mSelectedItems = new SparseBooleanArray(0);
     private List<AllExtItem> items;
     private Context context;
@@ -36,6 +39,7 @@ public class TabListAdapter extends RecyclerView.Adapter<TabListAdapter.ViewHold
     private String model, ward, zero, serial;
     private boolean visible;
     private OnSelectCall mCallback;
+    private Toast toast = null;
 
     public TabListAdapter(Context context, List<AllExtItem> items, boolean visible, OnSelectCall listener) {
         super();
@@ -60,54 +64,61 @@ public class TabListAdapter extends RecyclerView.Adapter<TabListAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final int pos = position;
         final AllExtItem item = items.get(position);
+
         holder.num.setText(item.getNum());
+        Log.d(TAG, "Item Name: " + item.getName());
+        if (item.getName().contains("-")) {
+            String[] callerId = item.getName().split("-");
+            if(callerId.length == 4){
+                model = callerId[0];
+                ward = callerId[1];
+                zero = callerId[2];
+                serial = callerId[3];
 
-        String[] callerId = item.getName().split("-");
-        model = callerId[0];
-        ward = callerId[1];
-        zero = callerId[2];
-        serial = callerId[3];
+                switch (model) {
+                    case "NCTB":
+                        model = "간호사 스테이션";
+                        break;
+                    case "NCTS":
+                        model = "보안 스테이션";
+                        break;
+                    case "NCTP":
+                        model = "병리실";
+                        break;
 
-        switch (model) {
-            case "NCTB":
-                model = "간호사 스테이션";
-                break;
-            case "NCTS":
-                model = "보안 스테이션";
-                break;
-            case "NCTP":
-                model = "병리실";
-                break;
+                    default:
+                        model = "주수신기";
+                        break;
+                }
+                holder.name.setText(String.format("%s병동 %s - %s", ward, model, serial));
 
-            default:
-                model = "주수신기";
-                break;
-        }
-
-        holder.name.setText(String.format("%s병동 %s - %s", ward, model, serial));
+            } else {
+                holder.name.setText(item.getName());
+            }
 
 
-        if (item.getName().contains(KeyList.MODEL_TELEPHONE_MASTER)) {
-            holder.image.setImageResource(R.drawable.main_device);
-        } else if (item.getName().contains(KeyList.MODEL_TELEPHONE_SECURITY)) {
-            holder.image.setImageResource(R.drawable.security_device);
 
-        } else if (item.getName().contains(KeyList.MODEL_TELEPHONE_PUBLIC)) {
-            holder.image.setImageResource(R.drawable.public_device);
-        } else {
-            holder.image.setImageResource(R.drawable.etc_device);
-        }
+            if (item.getName().contains(KeyList.MODEL_TELEPHONE_MASTER)) {
+                holder.image.setImageResource(R.drawable.main_device);
+            } else if (item.getName().contains(KeyList.MODEL_TELEPHONE_SECURITY)) {
+                holder.image.setImageResource(R.drawable.security_device);
 
-        holder.btn.setChecked(item.isSelected());
-        holder.btn.setTag(items.get(position));
-        holder.btn.setOnClickListener(view -> {
-            CheckBox cb = (CheckBox) view;
-            AllExtItem extItem = (AllExtItem) cb.getTag();
-            extItem.setSelected(cb.isChecked());
-            items.get(pos).setSelected(cb.isChecked());
-            mCallback.starSelect(pos, item.isSelected());
-            notifyDataSetChanged();
-        });
+            } else if (item.getName().contains(KeyList.MODEL_TELEPHONE_PUBLIC)) {
+                holder.image.setImageResource(R.drawable.public_device);
+            } else {
+                holder.image.setImageResource(R.drawable.etc_device);
+            }
+
+            holder.btn.setChecked(item.isSelected());
+            holder.btn.setTag(items.get(position));
+            holder.btn.setOnClickListener(view -> {
+                CheckBox cb = (CheckBox) view;
+                AllExtItem extItem = (AllExtItem) cb.getTag();
+                extItem.setSelected(cb.isChecked());
+                items.get(pos).setSelected(cb.isChecked());
+                mCallback.starSelect(holder.num.getText().toString(), item.isSelected());
+                notifyDataSetChanged();
+            });
 
 
 //        if (selectedItem == position) {
@@ -121,14 +132,14 @@ public class TabListAdapter extends RecyclerView.Adapter<TabListAdapter.ViewHold
 //        }
 
 
-        holder.itemView.setTag(items.get(position));
-        holder.itemView.setOnClickListener(view -> {
-            int previousItem = selectedItem;
-            selectedItem = position;
-            notifyItemChanged(previousItem);
-            notifyItemChanged(position);
-        });
-
+            holder.itemView.setTag(items.get(position));
+            holder.itemView.setOnClickListener(view -> {
+                int previousItem = selectedItem;
+                selectedItem = position;
+                notifyItemChanged(previousItem);
+                notifyItemChanged(position);
+            });
+        }
     }
 
     @Override
@@ -156,9 +167,9 @@ public class TabListAdapter extends RecyclerView.Adapter<TabListAdapter.ViewHold
                 btn.setVisibility(View.INVISIBLE);
             }
 
-//            cardView.setOnClickListener(view1 -> {
-//                Log.d(TAG, "OnClick Num: " + num.getText().toString() + " Name: " + name.getText().toString());
-//            });
+            cardView.setOnClickListener(view1 -> {
+                toastShow(num.getText().toString() + "번을 호출 하려면 길게 누르세요.");
+            });
 
             cardView.setOnLongClickListener(view1 -> {
                 if (!num.getText().toString().equals("")) {
@@ -178,6 +189,16 @@ public class TabListAdapter extends RecyclerView.Adapter<TabListAdapter.ViewHold
 
         }
 
+    }
+
+    private void toastShow(String message) {
+
+        if (toast == null) {
+            toast = makeText(context, message, Toast.LENGTH_SHORT);
+        } else {
+            toast.setText(message);
+        }
+        toast.show();
     }
 
     public List<AllExtItem> getSelectedItem() {

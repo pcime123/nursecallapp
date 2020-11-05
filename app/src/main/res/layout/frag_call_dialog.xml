@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:id="@+id/mainView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/transparent"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:id="@+id/dg_call_txt"
+            android:layout_width="300dp"
+            android:layout_height="100dp"
+            android:background="#86303030"
+            android:gravity="center"
+            android:text="통화 중.."
+            android:textSize="30dp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/dg_call_btn"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:text="테스트" />
+
+    </LinearLayout>
+</layout>

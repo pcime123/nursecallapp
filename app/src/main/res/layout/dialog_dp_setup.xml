@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/dp_set_layout"
+    android:layout_width="450dp"
+    android:windowSoftInputMode="adjustResize|stateHidden"
+    android:layout_height="wrap_content"
+    android:background="#131313">
+
+    <TextView
+        android:id="@+id/dp_set_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="20dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="설정"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <CheckBox
+        android:id="@+id/dg_dp_chk"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/transparent"
+        android:padding="10dp"
+        android:text="DEMO"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/line_detail"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="10dp"
+        android:background="@color/JBlue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dp_set_title" />
+
+    <LinearLayout
+        android:id="@+id/dp_set_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="visible"
+        app:layout_constraintTop_toBottomOf="@id/line_detail">
+
+        <LinearLayout
+            android:id="@+id/dp_set_ip_layout"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="20dp"
+                android:layout_weight="0.3"
+                android:gravity="center"
+                android:text=" IP 주소"
+                android:textSize="17sp" />
+
+            <EditText
+                android:id="@+id/dp_txt_ip"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="20dp"
+                android:layout_weight="0.5"
+                android:digits="0123456789."
+                android:gravity="center"
+                android:imeOptions="actionDone"
+                android:hint="입력 안됨"
+                android:textColorHint="@color/gray"
+                android:inputType="number|numberDecimal"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/dp_btn_ping"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:layout_weight="0.2"
+                android:background="@drawable/button_darkgreen_ra10"
+                android:text="PING" />
+
+        </LinearLayout>
+
+    <LinearLayout
+            android:id="@+id/dp_set_port_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="20dp"
+            android:layout_weight="0.28"
+            android:gravity="center"
+            android:text="Port"
+            android:textSize="17sp" />
+
+        <EditText
+            android:id="@+id/dp_txt_port"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="20dp"
+            android:layout_weight="0.72"
+            android:digits="0123456789"
+            android:gravity="center"
+            android:imeOptions="actionDone"
+            android:hint="입력 안됨"
+            android:textColorHint="@color/gray"
+            android:inputType="number"
+            android:textSize="16sp" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/dp_btn_apply"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_margin="15dp"
+            android:background="@drawable/button_blue_ra10"
+            android:text="적용"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -10,16 +10,25 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.sscctv.nursecallapp.R;
 import com.sscctv.nursecallapp.databinding.FragSettingsBinding;
-import com.sscctv.nursecallapp.ui.fragment.settings.AudioSettingsFragment;
 import com.sscctv.nursecallapp.ui.utils.EncryptionUtil;
 import com.sscctv.nursecallapp.ui.utils.NurseCallUtils;
 
+import java.util.Objects;
+
 public class SetMainFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = SetMainFragment.class.getSimpleName();
+
+    public static SetMainFragment newInstance() {
+        SetMainFragment fragment = new SetMainFragment();
+        Bundle args = new Bundle();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -56,6 +65,18 @@ public class SetMainFragment extends Fragment implements View.OnClickListener {
         layout.btnAdminSetup.setOnClickListener(this);
         layout.btnInfo.setOnClickListener(this);
 
+        String str;
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            str = bundle.getString("str");
+            Log.d(TAG, "String: " + str);
+
+            if(Objects.requireNonNull(str).equals("sip")) {
+                setChildFragment(SetAccountFragment.newInstance());
+            } else if(Objects.requireNonNull(str).equals("ward")) {
+                setChildFragment(SetInfoFragment.newInstance());
+            }
+        }
         return layout.getRoot();
     }
 
@@ -92,8 +113,11 @@ public class SetMainFragment extends Fragment implements View.OnClickListener {
                 setChildFragment(fragment);
                 break;
             case R.id.btn_admin_setup:
-                NurseCallUtils.startIntent(getContext(), SettingsAdminSetup.class);
+//                NurseCallUtils.startIntent(getContext(), SettingsAdminSetup.class);
+                fragment = SetDpBoardFragment.newInstance();
+                setChildFragment(fragment);
                 break;
+
         }
     }
 
@@ -105,5 +129,15 @@ public class SetMainFragment extends Fragment implements View.OnClickListener {
             childFt.addToBackStack(null);
             childFt.commit();
         }
+    }
+
+    public void replaceFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.detach(fragment);
+        fragmentTransaction.attach(fragment);
+
+        fragmentTransaction.replace(R.id.child_settings_fragment, fragment).commit();
+
     }
 }

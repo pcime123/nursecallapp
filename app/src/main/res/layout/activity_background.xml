@@ -6,31 +6,72 @@
         android:id="@+id/backLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@drawable/sleep_background"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/time"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/nanum_light"
-            android:text="18:00"
-            android:textSize="40sp"
-            android:textColor="@color/black"
-            app:layout_constraintVertical_bias="0.1"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+
+            android:layout_marginTop="100dp"
+            android:layout_marginStart="100dp"
+            >
+
+            <TextView
+                android:id="@+id/hour"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/digitalmono"
+                android:gravity="center"
+                android:singleLine="true"
+                android:text="3"
+                app:layout_constraintTop_toTopOf="@id/colon"
+                app:layout_constraintEnd_toStartOf="@id/colon"
+                android:textColor="#FFFFFF"
+                android:textSize="150sp" />
+
+            <TextView
+                android:id="@+id/colon"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/mapodpp"
+                android:gravity="center"
+                android:text=":"
+                android:textColor="#FFFFFF"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintVertical_bias=".5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:textSize="100sp" />
+
+            <TextView
+                android:id="@+id/minute"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/digitalmono"
+                android:gravity="center"
+                android:singleLine="true"
+                android:text="31"
+                android:textColor="#FFFFFF"
+                app:layout_constraintStart_toEndOf="@id/colon"
+                app:layout_constraintTop_toTopOf="@id/colon"
+
+                android:textSize="150sp" />
+        </LinearLayout>
+
+
+
+        <ImageView
+            android:id="@+id/main_logo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.95"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Thursday, April 7"
-            android:textColor="@color/black"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/time" />
-
+            android:src="@drawable/seeeyes_logo"
+            />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

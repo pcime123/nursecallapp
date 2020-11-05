@@ -28,7 +28,7 @@
 
     <item android:state_enabled="false">
         <shape>
-            <solid android:color="#7ECACACA" />
+            <solid android:color="#CD535353" />
         </shape>
     </item>
 

@@ -3,6 +3,27 @@
     <bool name="first_call_mode">false</bool>
     <bool name="first_speaker_button">false</bool>
     <bool name="first_hook_button">false</bool>
+    <bool name="first_bed_frag">false</bool>
+    <bool name="first_sip_settings">false</bool>
+
+    <integer name="default_log_size">50</integer>
+    <integer name="max_log_size">100</integer>
+    <bool name="missed_call_mode">false</bool>
 
 
-</resources>
+    <string name="first_multicast_ip">239.21.218.198</string>
+    <string name="first_multicast_port">1235</string>
+    <string name="first_tcp_port">59009</string>
+
+    <bool name="screen_touch_lock">false</bool>
+
+    <bool name="audio_front_bypass">false</bool>
+    <integer name="audio_front_speaker_gain">3</integer>
+    <integer name="audio_front_mic_gain">5</integer>
+
+    <integer name="default_headset_volume">16</integer>
+    <integer name="default_speaker_volume">16</integer>
+    <integer name="default_ring_volume">4</integer>
+
+
+    </resources>

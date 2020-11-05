@@ -25,5 +25,14 @@
         <item>20분</item>
         <item>30분</item>
     </string-array>
-    
+
+    <string-array name="dp_speed">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>속도 조절 적용 안함</item>
+    </string-array>
+
 </resources>

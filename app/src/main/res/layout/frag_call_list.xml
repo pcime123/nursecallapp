@@ -6,7 +6,8 @@
         android:id="@+id/mainView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/WhiteSmoke">
+        android:background="@color/White_EA"
+        android:padding="4dp">
 
 
         <LinearLayout
@@ -25,7 +26,7 @@
                 android:paddingEnd="20dp"
                 android:text="호출 목록"
                 android:textColor="@color/black"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <View
@@ -34,19 +35,20 @@
                 android:layout_weight="1" />
 
             <Button
-                android:id="@+id/btn_get_ext"
+                android:id="@+id/btn_list_setup"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
                 android:background="@drawable/button_home"
-                android:drawableStart="@drawable/ic_delete_24dp"
+                android:drawableStart="@drawable/ic_settings_20dp"
                 android:drawablePadding="20dp"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
-
-                android:text="선택 삭제"
+                android:text="설정"
                 android:textColor="@color/black"
-                android:textSize="14sp" />
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:visibility="visible" />
 
         </LinearLayout>
 
@@ -66,20 +68,23 @@
 
 
             <com.google.android.material.tabs.TabLayout
-                app:tabTextAppearance="@style/tab_text"
                 android:id="@+id/callLayout"
-                app:tabIndicatorHeight="4dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
+                android:background="@drawable/back_rifo_green_noradius"
                 app:tabGravity="fill"
-                app:tabMode="fixed"
+                app:tabIndicatorHeight="4dp"
                 app:tabMaxWidth="0dp"
-                android:background="#00897B" />
+                app:tabMode="fixed"
+                app:tabTextAppearance="@style/tab_text" />
 
             <androidx.viewpager.widget.ViewPager
                 android:id="@+id/viewPager"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:background="@color/WhiteSmoke"
+
+                />
 
 
         </LinearLayout>

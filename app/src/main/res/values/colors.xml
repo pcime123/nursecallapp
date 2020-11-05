@@ -1,16 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <color name="pressed1">#ff5959</color>
+    <color name="pressed2">#524fff</color>
+
+    <color name="focused1">#ffe924</color>
+    <color name="focused2">#8bbee8</color>
+
+    <color name="default1">#f044e7</color>
+    <color name="default2">#3676f8</color>
+
     <color name="colorPrimary">#4DB6AC</color>
-    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorPrimaryDark">#2C877A</color>
     <color name="colorAccent">#D81B60</color>
 
     <color name="main">#00897B</color>
     <color name="temp">#7CC70101</color>
 
+    <color name="trans_gray">#86303030</color>
+
     <!-- Gradient Background -->
     <color name="GradientStart">#7F5A83</color>
     <color name="GradientMiddle">#ffffff</color>
     <color name="GradientEnd">#0D324D</color>
+
+    <color name="EmergencyFrom">#DC22A40B</color>
+    <color name="EmergencyTo">#DCA40B0B</color>
 
     <color name="White_EA">#DDDDDD</color>
     <color name="Brown_high">#2E1D1E</color>
@@ -21,12 +36,16 @@
     <color name="JMint_push">#006064</color>
     <color name="JBlue">#2d5fac</color>
     <color name="JGray">#C9C9C9</color>
+    <color name="JRed">#FF3836</color>
+
 
     <color name="DeepGray">#303030</color>
     <color name="LightGray">#C4C4C4</color>
+    <color name="moreLightGray">#E7E7E7</color>
     <color name="homeSub">#2f3233</color>
     <color name="homeMain">#1f2425</color>
     <color name="tiRed">#FF2424</color>
+    <color name="moreLightRed">#FFD2D2</color>
 
     <!-- Standard colors -->
     <color name="dark_sky">#7bc2bb</color>

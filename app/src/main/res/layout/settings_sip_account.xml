@@ -213,7 +213,7 @@
                     android:layout_height="60dp"
                     android:layout_margin="10dp"
                     android:layout_weight="1"
-                    android:background="@drawable/button_default"
+                    android:background="@drawable/button_blue_ra10"
                     android:fontFamily="@font/nanum_normal"
                     android:text="설정"
                     android:textSize="18sp" />

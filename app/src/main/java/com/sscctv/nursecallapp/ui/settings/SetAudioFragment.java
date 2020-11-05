@@ -2,7 +2,9 @@ package com.sscctv.nursecallapp.ui.settings;
 
 import android.content.Context;
 import android.media.AudioManager;
+import android.media.AudioSystem;
 import android.os.Bundle;
+import android.os.SystemProperties;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +20,7 @@ import androidx.fragment.app.Fragment;
 
 import com.sscctv.nursecallapp.R;
 import com.sscctv.nursecallapp.databinding.FragSetAudioBinding;
+import com.sscctv.nursecallapp.ui.utils.KeyList;
 import com.sscctv.nursecallapp.ui.utils.TinyDB;
 
 import java.io.BufferedReader;
@@ -29,12 +32,14 @@ import java.util.Objects;
 import static android.media.AudioManager.STREAM_ALARM;
 import static android.media.AudioManager.STREAM_MUSIC;
 import static android.media.AudioManager.STREAM_RING;
+import static android.media.AudioManager.STREAM_SYSTEM;
 import static android.media.AudioManager.STREAM_VOICE_CALL;
 
 
 public class SetAudioFragment extends Fragment {
 
     private static final String TAG = SetAudioFragment.class.getSimpleName();
+    private static final int[] MAX_STREAM_VOLUME = null;
     private TinyDB tinyDB;
     private EditText id, pw, domain;
     private AudioManager mAudioManager;
@@ -45,6 +50,7 @@ public class SetAudioFragment extends Fragment {
     private static final String ECHO_MIC_GAIN = "02B2";
     private static final String ECHO_RESET = "0006";
     private TextView txtSpeaker;
+    private FragSetAudioBinding mBinding;
 
     static SetAudioFragment newInstance() {
         return new SetAudioFragment();
@@ -68,38 +74,18 @@ public class SetAudioFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        FragSetAudioBinding layout = DataBindingUtil.inflate(inflater, R.layout.frag_set_audio, container, false);
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.frag_set_audio, container, false);
 
         tinyDB = new TinyDB(getContext());
         mAudioManager = ((AudioManager) Objects.requireNonNull(getContext()).getSystemService(Context.AUDIO_SERVICE));
-        txtSpeaker = layout.txtSpGain;
-        GpioPortSet();
 
-        assert mAudioManager != null;
-        layout.barAlarm.setMax(mAudioManager.getStreamMaxVolume(STREAM_ALARM));
-        layout.barAlarm.setProgress(mAudioManager.getStreamVolume(STREAM_ALARM));
-        layout.barAlarm.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        Log.d(TAG, "Get Speaker Volume: " + tinyDB.getInt(KeyList.KEY_SPEAKER_VOLUME));
+        mBinding.barSpeaker.setMax(30);
+        mBinding.barSpeaker.setProgress(tinyDB.getInt(KeyList.KEY_SPEAKER_VOLUME));
+        mBinding.barSpeaker.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                mAudioManager.setStreamVolume(STREAM_ALARM, i, 0);
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
-
-        layout.barMedia.setMax(mAudioManager.getStreamMaxVolume(STREAM_MUSIC));
-        layout.barMedia.setProgress(mAudioManager.getStreamVolume(STREAM_MUSIC));
-        layout.barMedia.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                tinyDB.putInt(KeyList.KEY_SPEAKER_VOLUME, i);
                 mAudioManager.setStreamVolume(STREAM_MUSIC, i, 0);
             }
 
@@ -114,11 +100,32 @@ public class SetAudioFragment extends Fragment {
             }
         });
 
-        layout.barRing.setMax(mAudioManager.getStreamMaxVolume(STREAM_RING));
-        layout.barRing.setProgress(mAudioManager.getStreamVolume(STREAM_RING));
-        layout.barRing.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        Log.d(TAG, "Get Headset Volume: " + tinyDB.getInt(KeyList.KEY_HEADSET_VOLUME));
+        mBinding.barHeadset.setMax(15);
+        mBinding.barHeadset.setProgress(tinyDB.getInt(KeyList.KEY_HEADSET_VOLUME));
+        mBinding.barHeadset.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                tinyDB.putInt(KeyList.KEY_HEADSET_VOLUME, i);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        mBinding.barRing.setMax(mAudioManager.getStreamMaxVolume(STREAM_RING));
+        mBinding.barRing.setProgress(tinyDB.getInt(KeyList.KEY_RING_VOLUME));
+        mBinding.barRing.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                tinyDB.putInt(KeyList.KEY_RING_VOLUME, i);
                 mAudioManager.setStreamVolume(STREAM_RING, i, 0);
             }
 
@@ -133,58 +140,44 @@ public class SetAudioFragment extends Fragment {
             }
         });
 
-        layout.barVoice.setMax(mAudioManager.getStreamMaxVolume(STREAM_VOICE_CALL));
-        layout.barVoice.setProgress(mAudioManager.getStreamVolume(STREAM_VOICE_CALL));
-        layout.barVoice.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                mAudioManager.setStreamVolume(STREAM_VOICE_CALL, i, 0);
-            }
 
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
 
-            }
+//        /* 에코 캔슬러 동작 부분
+        GpioPortSet();
 
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
-
-        layout.barSpGain.setMax(3);
+        mBinding.barSpGain.setMax(3);
         int gain = calSpeakerGain(getSpeakerGain());
-        layout.barSpGain.setProgress(gain);
+        mBinding.barSpGain.setProgress(gain);
         switch (gain) {
             case 0:
-                layout.txtSpGain.setText("0.25x");
+                mBinding.txtSpGain.setText("0.25x");
                 break;
             case 1:
-                layout.txtSpGain.setText("0.33x");
+                mBinding.txtSpGain.setText("0.33x");
                 break;
             case 2:
-                layout.txtSpGain.setText("0.50x");
+                mBinding.txtSpGain.setText("0.50x");
                 break;
             case 3:
-                layout.txtSpGain.setText("1.00x");
+                mBinding.txtSpGain.setText("1.00x");
                 break;
         }
-        layout.barSpGain.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        mBinding.barSpGain.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 tempGain = i;
                 switch (i) {
                     case 0:
-                        layout.txtSpGain.setText("0.25x");
+                        mBinding.txtSpGain.setText("0.25x");
                         break;
                     case 1:
-                        layout.txtSpGain.setText("0.33x");
+                        mBinding.txtSpGain.setText("0.33x");
                         break;
                     case 2:
-                        layout.txtSpGain.setText("0.50x");
+                        mBinding.txtSpGain.setText("0.50x");
                         break;
                     case 3:
-                        layout.txtSpGain.setText("1.00x");
+                        mBinding.txtSpGain.setText("1.00x");
                         break;
                 }
             }
@@ -201,16 +194,15 @@ public class SetAudioFragment extends Fragment {
             }
         });
 
-        layout.barMicGain.setMax(8);
+        mBinding.barMicGain.setMax(8);
         int mGain = calMicGain(getMicGain());
-        layout.barMicGain.setProgress(mGain);
-        Log.d(TAG, "mGain: " + mGain);
-        layout.txtMicGain.setText(mGain +"db");
-        layout.barMicGain.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        mBinding.barMicGain.setProgress(mGain);
+        mBinding.txtMicGain.setText(String.valueOf(mGain));
+        mBinding.barMicGain.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 tempGain = i;
-                layout.txtMicGain.setText(i +"db");
+                mBinding.txtMicGain.setText(String.valueOf(i) + ".");
 
             }
 
@@ -227,47 +219,55 @@ public class SetAudioFragment extends Fragment {
         });
 
 
-        layout.settingsVolume4.setOnClickListener(view -> {
-            if (layout.txtResult2.getText().toString().equals("▲")) {
-                layout.txtResult2.setText("▼");
-                layout.settingsVolume5.setVisibility(View.VISIBLE);
+        mBinding.settingsVolume4.setOnClickListener(view -> {
+            if (mBinding.txtResult2.getText().toString().equals("▲")) {
+                mBinding.txtResult2.setText("▼");
+                mBinding.settingsVolume5.setVisibility(View.VISIBLE);
                 if (getEchoBypass().equals("C0 8")) {
-                    layout.btnBypass.setText("OFF");
-                    layout.btnBypass.setBackgroundResource(R.drawable.button_default_red);
+                    mBinding.btnBypass.setText("OFF");
+                    mBinding.btnBypass.setBackgroundResource(R.drawable.button_red_ra10);
                 } else {
-                    layout.btnBypass.setText("ON");
-                    layout.btnBypass.setBackgroundResource(R.drawable.button_default);
+                    mBinding.btnBypass.setText("ON");
+                    mBinding.btnBypass.setBackgroundResource(R.drawable.button_blue_ra10);
                 }
             } else {
-                layout.txtResult2.setText("▲");
-                layout.settingsVolume5.setVisibility(View.INVISIBLE);
+                mBinding.txtResult2.setText("▲");
+                mBinding.settingsVolume5.setVisibility(View.INVISIBLE);
             }
         });
 
-        layout.btnBypass.setOnClickListener(view -> {
+        mBinding.btnBypass.setOnClickListener(view -> {
             if (getEchoBypass().equals("C0 8")) {
-                layout.btnBypass.setText("ON");
-                layout.btnBypass.setBackgroundResource(R.drawable.button_default);
+                mBinding.btnBypass.setText("ON");
+                mBinding.btnBypass.setBackgroundResource(R.drawable.button_blue_ra10);
 
                 try {
                     opt.writeBytes("echo 0300 c00a > /proc/hbi/dev_145/write_reg\n");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+
+                tinyDB.putBoolean(KeyList.ECHO_FRONT_BYPASS, true);
+
             } else {
-                layout.btnBypass.setText("OFF");
-                layout.btnBypass.setBackgroundResource(R.drawable.button_default_red);
+                mBinding.btnBypass.setText("OFF");
+                mBinding.btnBypass.setBackgroundResource(R.drawable.button_red_ra10);
 
                 try {
                     opt.writeBytes("echo 0300 c008 > /proc/hbi/dev_145/write_reg\n");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+
+                tinyDB.putBoolean(KeyList.ECHO_FRONT_BYPASS, false);
+
             }
         });
 
+        mBinding.settingsVolume4.setVisibility(View.VISIBLE);
+//        */
 //        Log.d(TAG, "Bypass: " + getEchoBypass() + " Speaker: " + getSpeakerGain() + " Mic: " + getMicGain());
-        return layout.getRoot();
+        return mBinding.getRoot();
     }
 
 
@@ -393,6 +393,7 @@ public class SetAudioFragment extends Fragment {
             e.printStackTrace();
         }
 
+        tinyDB.putString(KeyList.ECHO_FRONT_SPEAKER, val);
         resetEcho();
     }
 
@@ -405,6 +406,8 @@ public class SetAudioFragment extends Fragment {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        tinyDB.putString(KeyList.ECHO_FRONT_MIC, val);
 
         resetEcho();
     }

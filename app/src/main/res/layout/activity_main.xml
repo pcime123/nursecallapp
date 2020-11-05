@@ -1,158 +1,411 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/intro_background"
-       >
+        android:background="@color/White_EA"
+        android:orientation="horizontal">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
+
+        <LinearLayout
+            android:id="@+id/main_menu"
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/main_background"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-<!--            <Button-->
-<!--                android:id="@+id/btnCall"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_margin="10dp"-->
-<!--                android:background="@drawable/button_background_gray"-->
-<!--                android:fontFamily="sans-serif-light"-->
-<!--                android:text="Bed Call"-->
-<!--                android:textSize="20sp"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintTop_toTopOf="parent" />-->
+            <ImageView
+                android:id="@+id/main_logo"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:padding="10dp"
+                android:src="@drawable/seeeyes_logo"
+                android:visibility="visible" />
 
-<!--            <Button-->
-<!--                android:id="@+id/btnEtcCall"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_margin="10dp"-->
-<!--                android:background="@drawable/button_background_gray"-->
-<!--                android:fontFamily="sans-serif-light"-->
-<!--                android:text="Etc Call"-->
-<!--                android:textSize="20sp"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintTop_toBottomOf="@id/btnCall" />-->
+            <!--            <View-->
+            <!--                android:id="@+id/not_logo"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="1dp"-->
+            <!--                android:layout_marginTop="10dp"/>-->
+
+
+            <View
+                android:id="@+id/line1"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="10dp"
+                android:background="@color/gray" />
+
+            <LinearLayout
+                android:id="@+id/time_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/time_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/nanum_normal"
+                        android:text="00:00"
+                        android:textColor="@color/White_EA"
+                        android:textSize="34sp" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/date_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="0dp"
+                    android:text="01월 01일 월요일"
+                    android:textColor="@color/White_EA"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <View
+                android:id="@+id/line2"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="10dp"
+                android:background="@color/gray"
+                app:layout_constraintTop_toBottomOf="@id/time_layout" />
+
+            <LinearLayout
+                android:id="@+id/ward_station"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@id/line2">
+
+                <TextView
+                    android:id="@+id/txtWard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:gravity="center"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="5dp"
+                    android:text="12 병동"
+                    android:textColor="@color/orange"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtStation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="간호사 스테이션"
+                    android:textColor="@color/White_EA"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/stat_number"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/background_number"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imgStat"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.4"
+                    android:padding="10dp"
+                    android:src="@drawable/led_connected" />
+
+                <TextView
+                    android:id="@+id/txtNumber"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.7"
+                    android:gravity="center"
+                    android:text="설정 안됨"
+                    android:textColor="@color/White_EA"
+                    android:textSize="16sp" />
+            </LinearLayout>
 
 
             <Button
-                android:id="@+id/btnAccount"
+                android:id="@+id/btn_dash_call"
                 android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_marginTop="25dp"
+                android:background="?selectableItemBackground"
+                android:drawableStart="@drawable/icon_call"
+                android:paddingStart="30dp"
+                android:paddingEnd="0dp"
+                android:text="병상호출"
+                android:textSize="@dimen/main_menu_button_text_size"
+                android:theme="@style/AppTheme.MainMenuButtonRipple" />
+
+            <Button
+                android:id="@+id/btn_dash_normal"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="?selectableItemBackground"
+                android:drawableStart="@drawable/icon_etc"
+                android:paddingStart="30dp"
+                android:paddingEnd="0dp"
+                android:text="일반호출"
+                android:textSize="@dimen/main_menu_button_text_size"
+                android:theme="@style/AppTheme.MainMenuButtonRipple"
+
+                />
+
+            <Button
+                android:id="@+id/btn_dash_list"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="?selectableItemBackground"
+                android:drawableStart="@drawable/icon_list"
+                android:paddingStart="30dp"
+                android:paddingEnd="0dp"
+                android:text="호출목록"
+                android:textSize="@dimen/main_menu_button_text_size"
+                android:theme="@style/AppTheme.MainMenuButtonRipple" />
+
+            <Button
+                android:id="@+id/btn_dash_notice"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="?selectableItemBackground"
+                android:drawableStart="@drawable/icon_notice"
+                android:paddingStart="30dp"
+                android:paddingEnd="0dp"
+                android:text="게시판"
+                android:textSize="@dimen/main_menu_button_text_size"
+                android:theme="@style/AppTheme.MainMenuButtonRipple" />
+
+            <Button
+                android:id="@+id/btn_dash_setup"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="?selectableItemBackground"
+                android:drawableStart="@drawable/icon_setup"
+                android:paddingStart="30dp"
+                android:paddingEnd="0dp"
+                android:text="설정"
+                android:textSize="@dimen/main_menu_button_text_size"
+                android:theme="@style/AppTheme.MainMenuButtonRipple" />
+
+            <!--            <Button-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:textSize="@dimen/main_menu_button_text_size"-->
+            <!--                android:theme="@style/AppTheme.MainMenuButtonRipple"-->
+            <!--                android:background="?selectableItemBackground"-->
+            <!--                android:drawableStart="@drawable/ic_baseline_screen_lock_landscape_24"-->
+            <!--                android:paddingStart="15dp"-->
+            <!--                android:paddingEnd="0dp"-->
+            <!--                />-->
+
+            <ImageButton
+                android:id="@+id/btn_test"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:background="@drawable/button_background_gray"
-                android:fontFamily="sans-serif-light"
-                android:text="Account Setting"
-                android:textSize="20sp"
+                android:layout_gravity="end"
+                android:background="?selectableItemBackground"
+                android:padding="20dp"
+                android:src="@drawable/ic_baseline_screen_lock_landscape_24"
+                android:theme="@style/AppTheme.MainMenuButtonRipple"
+                android:visibility="visible" />
+
+
+            <!--            <Button-->
+            <!--                android:id="@+id/btn_server"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="70dp"-->
+            <!--                android:theme="@style/AppTheme.MainMenuButtonRipple"-->
+            <!--                android:background="?selectableItemBackground"-->
+            <!--                android:drawableStart="@drawable/icon_dash"-->
+            <!--                android:paddingStart="30dp"-->
+            <!--                android:paddingEnd="0dp"-->
+            <!--                android:textSize="@dimen/main_menu_button_text_size"-->
+            <!--                android:text="테스트 버튼"-->
+            <!--                >-->
+            <!--            </Button>-->
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/top_layout"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginStart="200dp"
+            android:layout_marginEnd="4dp"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/emergency_list"
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:layout_weight="0.9"
+                android:background="@drawable/back_emergency"
+                android:paddingStart="16dp"
+                android:paddingTop="4dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="4dp"
+                android:scrollbarSize="3dp"
+                android:scrollbarThumbHorizontal="@color/white"
+                android:scrollbars="horizontal" />
+
+
+            <Button
+                android:id="@+id/btn_alarm"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.15"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="15dp"
+                android:background="@drawable/button_gray_ra10"
+                android:drawableStart="@drawable/ic_baseline_alarm_off_24"
+                android:paddingStart="20dp"
+                android:paddingEnd="0dp"
+                android:textColor="@color/white"
+                android:text="알람 끄기"
+                android:textStyle="bold"
+                android:textSize="@dimen/main_menu_button_text_size"
+                android:theme="@style/AppTheme.MainMenuButtonRipple" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/main_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="200dp"
+            android:layout_marginTop="0dp"
+
+            android:background="@color/WhiteSmoke"
+            app:layout_constraintTop_toBottomOf="@id/top_layout">
+
+            <FrameLayout
+                android:id="@+id/main_frame"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/main_sleep"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/sleep_background"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ImageButton
+                android:id="@+id/btn_touch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="30dp"
+                android:background="@drawable/button_trans_ra100"
+                android:padding="20dp"
+                android:src="@drawable/ic_baseline_lock_open_36"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <LinearLayout
+                android:id="@+id/sleep_time"
+                android:layout_width="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="300dp"
+                android:layout_marginStart="450dp"
+                android:layout_height="wrap_content">
 
-            <Button
-                android:id="@+id/btnSettings"
+                <TextView
+                    android:id="@+id/hour"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/digitalmono"
+                    android:gravity="center"
+                    android:layout_marginTop="20dp"
+                    android:singleLine="true"
+                    android:textColor="#FFFFFF"
+                    android:text="10"
+                    android:textSize="130sp"
+                    />
+
+                <TextView
+                    android:id="@+id/colon"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/mapodpp"
+                    android:gravity="center"
+                    android:text=":"
+                    android:textColor="#FFFFFF"
+                    android:textSize="80sp"
+                    />
+
+                <TextView
+                    android:id="@+id/minute"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/digitalmono"
+                    android:layout_marginTop="20dp"
+
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="30"
+                    android:textColor="#FFFFFF"
+                    android:textSize="130sp"
+                   />
+            </LinearLayout>
+
+
+
+            <ImageView
+                android:id="@+id/sleep_logo"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:background="@drawable/button_background_gray"
-                android:fontFamily="sans-serif-light"
-                android:text="Settings"
-                android:textSize="20sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/btnAccount" />
+                android:layout_height="80dp"
 
-            <Button
-                android:id="@+id/btnPbxEnter"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:background="@drawable/button_background_gray"
-                android:fontFamily="sans-serif-light"
-                android:text="PBX Enter"
-                android:textSize="20sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/btnSettings" />
-
-            <Button
-                android:id="@+id/btnCsv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:background="@drawable/button_background_gray"
-                android:fontFamily="sans-serif-light"
-                android:text="GET CSV LIST"
-                android:textSize="20sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/btnPbxEnter" />
-
-            <!--                <Button-->
-            <!--                    android:id="@+id/btnCallList"-->
-            <!--                    android:layout_width="0dp"-->
-            <!--                    android:layout_height="100dp"-->
-            <!--                    android:layout_marginStart="16dp"-->
-            <!--                    android:layout_marginTop="30dp"-->
-            <!--                    android:layout_marginEnd="16dp"-->
-            <!--                    android:background="@drawable/button_deepskyblue"-->
-            <!--                    android:text="Call List"-->
-            <!--                    android:textColor="@color/text_deepskyblue"-->
-            <!--                    android:textSize="16sp"-->
-            <!--                    app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                    app:layout_constraintStart_toStartOf="parent"-->
-            <!--                    app:layout_constraintTop_toBottomOf="@+id/btnCall" />-->
-
-            <!--                <Button-->
-            <!--                    android:id="@+id/btnAccount"-->
-            <!--                    android:layout_width="0dp"-->
-            <!--                    android:layout_height="100dp"-->
-            <!--                    android:layout_marginStart="16dp"-->
-            <!--                    android:layout_marginTop="30dp"-->
-            <!--                    android:layout_marginEnd="16dp"-->
-            <!--                    android:background="@drawable/button_deepskyblue"-->
-            <!--                    android:text="Account"-->
-            <!--                    android:textColor="@color/text_deepskyblue"-->
-            <!--                    android:textSize="16sp"-->
-            <!--                    app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                    app:layout_constraintStart_toStartOf="parent"-->
-            <!--                    app:layout_constraintTop_toBottomOf="@+id/btnCallList" />-->
-
-            <!--                <Button-->
-            <!--                    android:id="@+id/btnSettings"-->
-            <!--                    android:layout_width="0dp"-->
-            <!--                    android:layout_height="100dp"-->
-            <!--                    android:layout_marginStart="16dp"-->
-            <!--                    android:layout_marginTop="30dp"-->
-            <!--                    android:layout_marginEnd="16dp"-->
-            <!--                    android:background="@drawable/button_deepskyblue"-->
-            <!--                    android:text="Settings"-->
-            <!--                    android:textColor="@color/text_deepskyblue"-->
-            <!--                    android:textSize="16sp"-->
-            <!--                    app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                    app:layout_constraintStart_toStartOf="parent"-->
-            <!--                    app:layout_constraintTop_toBottomOf="@+id/btnAccount" />-->
-
+                android:src="@drawable/seeeyes_logo"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.95" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-        <!--        </LinearLayout>-->
 
-        <!--        <Button-->
-        <!--            android:id="@+id/pbx_login"-->
-        <!--            android:layout_width="200dp"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:text="Login"-->
-        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--            app:layout_constraintStart_toStartOf="parent" />-->
 
-        <!--        <TextView-->
-        <!--            android:id="@+id/testView"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_margin="10dp"-->
-        <!--            android:textColor="@color/Red"-->
-        <!--            android:textSize="20sp"-->
-        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--            app:layout_constraintStart_toEndOf="@id/pbx_login" />-->
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
 </layout>
