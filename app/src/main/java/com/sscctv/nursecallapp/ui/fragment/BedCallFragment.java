@@ -599,6 +599,8 @@ public class BedCallFragment extends Fragment implements IOnBackPressed, OnSelec
 
     }
 
+
+
     @Override
     public void starSelect(String position, boolean chk) {
 

@@ -34,7 +34,7 @@ public class BedCallAdapter extends RecyclerView.Adapter<BedCallAdapter.ViewHold
     private static int lastClieckedPostition = -1;
     private int disableSelectItem;
     private TinyDB tinyDB;
-    private OnSelectCall mCallback;
+    private final OnSelectCall mCallback;
 
     public BedCallAdapter(Context context, List<RoomItem> items, OnSelectCall listener) {
         super();

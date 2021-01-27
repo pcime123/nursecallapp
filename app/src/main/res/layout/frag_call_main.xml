@@ -360,7 +360,7 @@
             android:layout_marginTop="110dp"
             android:background="@drawable/button_deepgray_trans_ra40"
             android:orientation="vertical"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintStart_toEndOf="@id/layout_menu"
             app:layout_constraintTop_toTopOf="@id/layout_menu">
 

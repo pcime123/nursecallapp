@@ -179,6 +179,7 @@ public class MainCallService extends Service {
 
                         }
                         break;
+                    case OutgoingProgress:
                     case OutgoingRinging:
                         sendMessage(NurseCallUtils.CALL_OUTGOING);
                         break;
